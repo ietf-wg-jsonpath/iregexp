@@ -2,7 +2,7 @@
 title: >
   I-Regexp: An Interoperable Regexp Format
 abbrev: I-Regexp
-docname: draft-bormann-jsonpath-iregexp-01
+docname: draft-bormann-jsonpath-iregexp-latest
 date: 2021-05-13
 
 stand_alone: true
