@@ -2,8 +2,8 @@
 title: >
   I-Regexp: An Interoperable Regexp Format
 abbrev: I-Regexp
-docname: draft-bormann-jsonpath-iregexp-00
-date: 2021-05-12
+docname: draft-bormann-jsonpath-iregexp-01
+date: 2021-05-13
 
 stand_alone: true
 
@@ -183,7 +183,10 @@ exceptions:
 
 # Formal definition of I-Regexp
 
-I-Regexp is defined by the ABNF specification in {{iregexp-abnf}}.
+The syntax of I-Regexp is defined by the ABNF specification in
+{{iregexp-abnf}}.
+This syntax is a subset of that of {{XSD2}};
+the semantics of all the constructs allowed by this ABNF are the same as those in {{XSD2}}.
 
 ~~~ ABNF
 {::include iregexp.abnf}
