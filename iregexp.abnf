@@ -1,0 +1,59 @@
+i-regexp = branch *( "|" branch )
+branch = *piece
+piece = atom [ quantifier ]
+quantifier = ( %x2A-2B ; '*'-'+'
+ / "?" ) / ( "{" quantity "}" )
+quantity = quantRange / quantMin / QuantExact
+quantRange = QuantExact "," QuantExact
+quantMin = QuantExact ","
+QuantExact = 1*%x30-39 ; '0'-'9'
+
+atom = NormalChar / charClass / ( "(" i-regexp ")" )
+NormalChar = ( %x00-27 / %x2C-2D ; ','-'-'
+ / %x2F-3E ; '/'-'>'
+ / %x40-5A ; '@'-'Z'
+ / %x5E-7A ; '^'-'z'
+ / %x7E-10FFFF )
+charClass = SingleCharEsc / charClassEsc / charClassExpr / WildcardEsc
+charClassExpr = "[" charGroup "]"
+charGroup = negCharGroup / posCharGroup
+posCharGroup = 1*charGroupPart [ bareHyphen ]
+negCharGroup = "^" posCharGroup
+charGroupPart = singleCharSeq / charRange / charClassEsc
+bareHyphen = "-"
+singleCharSeq = ( bareHyphen / singleCharNonHyphen ) *singleCharNonHyphen
+singleCharNonHyphen = SingleCharEsc / SingleCharNoEscHyphen
+singleChar = SingleCharEsc / SingleCharNoEsc
+charRange = singleChar "-" singleChar
+SingleCharNoEsc = ( %x00-5A / "\" / %x5E-10FFFF )
+SingleCharNoEscHyphen = ( %x00-2C / %x2E-5A ; '.'-'Z'
+ / "\" / %x5E-10FFFF )
+SingleCharEsc = "\" ( %x28-2B ; '('-'+'
+ / %x2D-2E ; '-'-'.'
+ / "?" / "[" / %x5D-5E ; ']'-'^'
+ / %s"n" / %s"r" / %s"t" / %x7B-7D ; '{'-'}'
+ )
+charClassEsc = ( MultiCharEsc / catEsc / complEsc )
+catEsc = %s"\p{" charProp "}"
+complEsc = %s"\P{" charProp "}"
+charProp = IsCategory / IsBlock
+IsCategory = Letters / Marks / Numbers / Punctuation / Separators / Symbols / Others
+Letters = %s"L" [ ( %x6C-6D ; 'l'-'m'
+ / %s"o" / %x74-75 ; 't'-'u'
+ ) ]
+Marks = %s"M" [ ( %s"c" / %s"e" / %s"n" ) ]
+Numbers = %s"N" [ ( %s"d" / %s"l" / %s"o" ) ]
+Punctuation = %s"P" [ ( %x63-66 ; 'c'-'f'
+ / %s"i" / %s"o" / %s"s" ) ]
+Separators = %s"Z" [ ( %s"l" / %s"p" / %s"s" ) ]
+Symbols = %s"S" [ ( %s"c" / %s"k" / %s"m" / %s"o" ) ]
+Others = %s"C" [ ( %s"c" / %s"f" / %x6E-6F ; 'n'-'o'
+ ) ]
+IsBlock = %s"Is" 1*( "-" / %x30-39 ; '0'-'9'
+ / %x41-5A ; 'A'-'Z'
+ / %x61-7A ; 'a'-'z'
+ )
+MultiCharEsc = "\" ( %x43-44 ; 'C'-'D'
+ / %s"I" / %s"S" / %s"W" / %x63-64 ; 'c'-'d'
+ / %s"i" / %s"s" / %s"w" )
+WildcardEsc = "."
