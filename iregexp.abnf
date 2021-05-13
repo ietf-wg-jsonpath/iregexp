@@ -14,14 +14,16 @@ NormalChar = ( %x00-27 / %x2C-2D ; ','-'-'
  / %x40-5A ; '@'-'Z'
  / %x5E-7A ; '^'-'z'
  / %x7E-10FFFF )
-charClass = SingleCharEsc / charClassEsc / charClassExpr / WildcardEsc
+charClass = SingleCharEsc / charClassEsc / charClassExpr /
+    WildcardEsc
 charClassExpr = "[" charGroup "]"
 charGroup = negCharGroup / posCharGroup
 posCharGroup = 1*charGroupPart [ bareHyphen ]
 negCharGroup = "^" posCharGroup
 charGroupPart = singleCharSeq / charRange / charClassEsc
 bareHyphen = "-"
-singleCharSeq = ( bareHyphen / singleCharNonHyphen ) *singleCharNonHyphen
+singleCharSeq = ( bareHyphen / singleCharNonHyphen )
+    *singleCharNonHyphen
 singleCharNonHyphen = SingleCharEsc / SingleCharNoEscHyphen
 singleChar = SingleCharEsc / SingleCharNoEsc
 charRange = singleChar "-" singleChar
@@ -37,7 +39,8 @@ charClassEsc = ( MultiCharEsc / catEsc / complEsc )
 catEsc = %s"\p{" charProp "}"
 complEsc = %s"\P{" charProp "}"
 charProp = IsCategory / IsBlock
-IsCategory = Letters / Marks / Numbers / Punctuation / Separators / Symbols / Others
+IsCategory = Letters / Marks / Numbers / Punctuation / Separators /
+    Symbols / Others
 Letters = %s"L" [ ( %x6C-6D ; 'l'-'m'
  / %s"o" / %x74-75 ; 't'-'u'
  ) ]
