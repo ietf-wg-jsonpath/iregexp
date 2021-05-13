@@ -19,10 +19,10 @@ singleCharSeq = (bareHyphen / singleCharNonHyphen) *singleCharNonHyphen
 singleCharNonHyphen = SingleCharEsc / SingleCharNoEscHyphen
 singleChar = SingleCharEsc / SingleCharNoEsc
 charRange = singleChar "-" singleChar
-SingleCharNoEsc = <<^\]\[>>
-SingleCharNoEscHyphen = <<^\]\[->>
+SingleCharNoEsc = <<^[]>>
+SingleCharNoEscHyphen = <<^[]->>
 
-SingleCharEsc = "\" <<nrt\|.?*+(){}\-\[\]\^>>
+SingleCharEsc = "\" <<nrt\|.?*+(){}\-[\\]\^>>
 charClassEsc = ( MultiCharEsc / catEsc / complEsc )
 catEsc = "\p{" charProp "}"
 complEsc = "\P{" charProp "}"

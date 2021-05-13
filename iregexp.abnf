@@ -32,7 +32,7 @@ SingleCharNoEscHyphen = ( %x00-2C / %x2E-5A ; '.'-'Z'
  / "\" / %x5E-10FFFF )
 SingleCharEsc = "\" ( %x28-2B ; '('-'+'
  / %x2D-2E ; '-'-'.'
- / "?" / "[" / %x5D-5E ; ']'-'^'
+ / "?" / %x5B-5E ; '['-'^'
  / %s"n" / %s"r" / %s"t" / %x7B-7D ; '{'-'}'
  )
 charClassEsc = ( MultiCharEsc / catEsc / complEsc )
