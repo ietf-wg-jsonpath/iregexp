@@ -3,7 +3,7 @@ title: >
   I-Regexp: An Interoperable Regexp Format
 abbrev: I-Regexp
 docname: draft-bormann-jsonpath-iregexp-latest
-date: 2021-05-13
+date: 2021-11-13
 
 stand_alone: true
 
@@ -13,6 +13,10 @@ cat: std
 consensus: true
 
 pi: [toc, sortrefs, symrefs, compact, comments]
+
+venue:
+  mail: JSONpath@ietf.org
+  github: cabo/iregexp
 
 author:
   -
@@ -67,7 +71,8 @@ implemented pattern languages used in data modeling formats and query
 languages that is available in many dialects.
 This specification defines an interoperable flavor of regexps, I-Regexp.
 
-The present version -00 of this document is a trial balloon, meant to
+The present version -01 of this document is a slight update of the
+original trial balloon, meant to
 determine whether this approach is useful for the JSONPath WG.
 
 --- middle
@@ -104,8 +109,8 @@ common set of functions available in parsing regexp dialects, offered
 in a widely available library.
 
 With continuing accretion of complex features, parsing regexp
-libraries have become susceptible to bugs, in particular those that
-can be exploited in DoS attacks.
+libraries have become susceptible to bugs and performance degradation,
+in particular those that can be exploited in DoS attacks.
 The library RE2 that is compatible with Go language regexps strives to
 be immune to DoS attacks, making it attractive to applications such as
 query languages where an attacker could control the input.
@@ -119,7 +124,9 @@ Implementations of YANG and CDDL often struggle with providing true
 XSD regexps; some instead cheat by providing one of the parsing regexp
 varieties, sometime without even advertising this fact.
 
-A matching regexp that does not use the more complex XSD features ({{subsetting}}) can usually be converted into a parsing regexp of many dialects by surrounding it with anchors of that dialect (e.g., `^` or `\A` and `$` or `\z`).
+A matching regexp that does not use the more complex XSD features
+({{subsetting}}) can usually be converted into a parsing regexp of many
+dialects by simply surrounding it with anchors of that dialect (e.g., `^` or `\A` and `$` or `\z`).
 If the original matching regexps exceed the envelope of compatibility
 between dialects, this can lead to interoperability problems, or,
 worse, security vulnerabilities.
@@ -149,10 +156,13 @@ exceptions:
   specifications, but it is unfortunately mostly absent from parsing
   regexp dialects.
 
-  * **Issue**: This absence can be addressed by translating character
-    class subtraction into positive character classes, or by leaving
-    out subtraction.  The current draft opts for the latter, but that
-    decision is up for discussion.
+  * **Issue**: This absence can often be addressed by translating
+    character class subtraction into positive character classes
+    (possibly requiring significant expansion) and/or inserting
+    negative lookahead assertions (which are not universally supported
+    by regexp libraries, most notably not by RE2 {{RE2}}).
+    This specification therefore opts for leaving out character class
+    subtraction, but that decision is up for discussion.
 
 * Unicode.
   While there is no doubt that a regexp flavor meant to last needs to
@@ -181,17 +191,35 @@ exceptions:
     `flex` tool; this is intended to be close to `\d`, `\p{L}`, `\w`
     in an ASCII subset.)
 
-# Formal definition of I-Regexp
+# Formal definition of I-Regexp {#defn}
 
 The syntax of I-Regexp is defined by the ABNF specification in
-{{iregexp-abnf}}.
+{{iregexp-abnf}}, with the following additional restriction:
+
+* `\w` or `\S` MUST NOT occur in negative charClassExpr, i.e.,
+  in charClassExpr that include the optional "^" at the start.
+
+  * **Rationale**: an exact implementation of XSD `\w` or `\S` in a
+    negative charClassExpr essentially requires character class
+    subtraction, which is not supported in I-Regexp ({{subsetting}}).
+  * **Issue**: the ABNF grammar could express this restriction (by
+    splitting `charClassExpr`, `CCE1`, `charClassEsc`, and
+    `MultiCharExp` into positive and negative branches each), but would
+    be harder to read.
+
 This syntax is a subset of that of {{XSD2}};
-the semantics of all the constructs allowed by this ABNF are the same as those in {{XSD2}}.
+the semantics of all the constructs allowed by this ABNF grammar are the same as those in {{XSD2}}.
 
 ~~~ abnf
 {::include iregexp.abnf}
 ~~~
 {: #iregexp-abnf}
+
+About a third of the complexity of this ABNF grammar comes from going
+into details on the Unicode IsCategory classes.  Additional complexity
+stems from the way hyphens can be used inside character classes to denote
+ranges; the grammar deliberately excludes questionable usage such as
+`/[a-z-A-Z]/`.
 
 * **Issue**: This is essentially XSD regexp without character class
   subtraction.
@@ -211,19 +239,54 @@ the semantics of all the constructs allowed by this ABNF are the same as those i
 Any I-Regexp also is an XSD Regexp {{XSD2}}, so the mapping is an identify
 function.
 
-## ECMAScript Regexps
+## ECMAScript Regexps {#toESreg}
 
-An I-Regexp, enveloped in `^` and `$`, is an ECMAScript regexp
-{{ECMA-262}}.
+Perform the following steps on an I-Regexp to obtain an ECMAScript
+regexp {{ECMA-262}}:
+
+* Replace any MultiCharEsc and dots (`.`) outside character classes as
+  in {{tbl-mce}}.
+* For any MultiCharEsc that show a charClassEsp (and not a
+  charClassExpr) in the second column of {{tbl-mce}}, replace them
+  inside the charClassExpr of the regexp as per {{tbl-mce}}.
+* For MultiCharEsc that do show a charClassExpr in the second column
+  of {{tbl-mce}} ("CCE2"), replace them inside charClassExpr of the
+  regexp ("CCE1") as follows:
+  * Examine for both charChlassExpr whether it is negative (has a "^"
+    at the start).
+  * Strip the brackets and any leading "^" from CCE2, yielding CC2.
+  * If CCE2 is not negative, replace the MultiCharEsc by CC2.
+  * If CCE2 is negative but CCE1 is not, remove the MultiCharEsc from
+    CCE1 and replace the entire CCE1 by the construct `(CCE1 | CCE2)`.
+  * If both CCE1 and CCE2 are negative, fail (see {{defn}}).
+* Envelope the result in `^` and `$`.
+
+Note that where a regexp literal is required, this needs to enclose
+the actual regexp in `/`.
+
+| I-Regexp | ECMAScript equivalent | charClassExp |
+| `.`      | [^\n\r]               | f            |
+| `\d`     | \p{Nd}                | t            |
+| `\s`     | [ \t\n\r]             | f            |
+| `\w`     | [^\p{P}\p{Z}\p{C}]    | f            |
+| `\D`     | \P{Nd}                | t            |
+| `\S`     | [^ \t\n\r]            | f            |
+| `\W`     | [\p{P}\p{Z}\p{C}]     | f            |
+{: #tbl-mce title="ECMAScript equivalents of MultiCharEsc"}
+
 The performance can be increased by turning parenthesized regexps
 (production `atom`) into `(?:...)` constructions.
 
 ## PCRE, RE2, Ruby Regexps
 
-An I-Regexp, enveloped in `\A` and `\z`, is a valid regexp in PCRE
-{{PCRE2}}, the Go programming language {{RE2}}, and the Ruby programming language.
-The performance can be increased by turning parenthesized regexps
-(production `atom`) into `(?:...)` constructions.
+Perform the same steps as in {{toESreg}} to obtain a valid regexp in
+PCRE {{PCRE2}}, the Go programming language {{RE2}}, and the Ruby
+programming language, except that the last step is:
+
+* Envelope the result in `\A` and `\z`.
+
+Again, the performance can be increased by turning parenthesized
+regexps (production `atom`) into `(?:...)` constructions.
 
 ## << Your kind of Regexp here >>
 
