@@ -176,7 +176,7 @@ exceptions:
     contains a lone instance of `\p{IsBasicLatin}{0,255}`, which is
     needed to describe a transition from a legacy character set to
     Unicode.  The author believes that this would be a rare
-    application and can be left out.  RFC2622 contans `[[:digit:]]`,
+    application and can be left out.  RFC2622 contains `[[:digit:]]`,
     `[[:alpha:]]`, `[[:alnum:]]`, albeit in a  specification for the
     `flex` tool; this is intended to be close to `\d`, `\p{L}`, `\w`
     in an ASCII subset.)
@@ -188,7 +188,7 @@ The syntax of I-Regexp is defined by the ABNF specification in
 This syntax is a subset of that of {{XSD2}};
 the semantics of all the constructs allowed by this ABNF are the same as those in {{XSD2}}.
 
-~~~ ABNF
+~~~ abnf
 {::include iregexp.abnf}
 ~~~
 {: #iregexp-abnf}

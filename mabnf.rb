@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 spec = ARGF.read
 
 # ruby mabnf.rb iregexp.abnf-in | bap -k -o RFC7405 | ruby abnfbreak.rb >iregexp.abnf
