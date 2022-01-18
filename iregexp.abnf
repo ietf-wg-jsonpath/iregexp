@@ -18,8 +18,7 @@ SingleCharEsc = "\" ( %x28-2B ; '('-'+'
  / "?" / %x5B-5E ; '['-'^'
  / %s"n" / %s"r" / %s"t" / %x7B-7D ; '{'-'}'
  )
-charClassEsc = MultiCharEsc / catEsc / complEsc
-MultiCharEsc = "\" ( %s"D" / %s"S" / %s"W" / %s"d" / %s"s" / %s"w" )
+charClassEsc = catEsc / complEsc
 charClassExpr = "[" [ "^" ] ( "-" / CCE1 ) *CCE1 [ "-" ] "]"
 CCE1 = ( CCchar [ "-" CCchar ] ) / charClassEsc
 CCchar = ( %x00-2C / %x2E-5A ; '.'-'Z'

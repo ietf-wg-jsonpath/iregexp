@@ -3,7 +3,7 @@ title: >
   I-Regexp: An Interoperable Regexp Format
 abbrev: I-Regexp
 docname: draft-bormann-jsonpath-iregexp-latest
-date: 2022-01-03
+date: 2022-01-18
 
 stand_alone: true
 
@@ -71,7 +71,7 @@ implemented pattern languages used in data modeling formats and query
 languages that is available in many dialects.
 This specification defines an interoperable flavor of regexps, I-Regexp.
 
-The present version -01 of this document is a slight update of the
+The present version -02 of this document is a more streamlined update of the
 original trial balloon, meant to
 determine whether this approach is useful for the JSONPath WG.
 
@@ -162,21 +162,26 @@ exceptions:
     negative lookahead assertions (which are not universally supported
     by regexp libraries, most notably not by RE2 {{RE2}}).
     This specification therefore opts for leaving out character class
-    subtraction, but that decision is up for discussion.
+    subtraction.
+
+* Multi-character escapes.  `\d`, `\w`, `\s` and their uppercase
+  equivalents (complement classes) exhibit a
+  large amount of variation between Regexp flavors.
+  (E.g., predefined character classes such as `\w` may be meant
+  to be ASCII only, or they may encompass all letters and digits
+  defined in Unicode.    The latter is usually of interest in query
+  languages, while the former is of interest to a subset of
+  applications in data model specifications.)
 
 * Unicode.
   While there is no doubt that a regexp flavor meant to last needs to
   be Unicode enabled, there are a number of aspects of this that need
   discussion.
-  First of all, predefined character classes such as `\w` may be meant
-  to be ASCII only, or they may encompass all letters and digits
-  defined in Unicode.
-  The latter is usually of interest in query languages, while the
-  former is of interest to a subset of applications in data model
-  specifications.
-  Second, not all regexp implementations that one might want to map
+  Not all regexp implementations that one might want to map
   I-Regexps to will support accesses to Unicode tables that enable
   executing on constructs such as `\p{IsCoptic}`.
+  Fortunately, the `\p`/`\P` feature in general is now quite
+  widely available.
 
   * **Issue**: The ASCII focus can partially be addressed by adding a
     constraint that the matched text has to be ASCII in the first
@@ -194,18 +199,7 @@ exceptions:
 # Formal definition of I-Regexp {#defn}
 
 The syntax of I-Regexp is defined by the ABNF specification in
-{{iregexp-abnf}}, with the following additional restriction:
-
-* `\w` or `\S` MUST NOT occur in negative charClassExpr, i.e.,
-  in charClassExpr that include the optional "^" at the start.
-
-  * **Rationale**: an exact implementation of XSD `\w` or `\S` in a
-    negative charClassExpr essentially requires character class
-    subtraction, which is not supported in I-Regexp ({{subsetting}}).
-  * **Issue**: the ABNF grammar could express this restriction (by
-    splitting `charClassExpr`, `CCE1`, `charClassEsc`, and
-    `MultiCharExp` into positive and negative branches each), but would
-    be harder to read.
+{{iregexp-abnf}}.
 
 This syntax is a subset of that of {{XSD2}};
 the semantics of all the constructs allowed by this ABNF grammar are the same as those in {{XSD2}}.
@@ -222,8 +216,8 @@ ranges; the grammar deliberately excludes questionable usage such as
 `/[a-z-A-Z]/`.
 
 * **Issue**: This is essentially XSD regexp without character class
-  subtraction.
-  There is probably potential for simplification in IsBlock (leave
+  subtraction and multi-character escapes.
+  There might be further potential for simplification in IsBlock (leave
   out) and possibly in the rather large part for IsCategory as well.
   The ABNF has been automatically generated and maybe could use some
   polishing.
@@ -244,35 +238,12 @@ function.
 Perform the following steps on an I-Regexp to obtain an ECMAScript
 regexp {{ECMA-262}}:
 
-* Replace any MultiCharEsc and dots (`.`) outside character classes as
-  in {{tbl-mce}}.
-* For any MultiCharEsc that show a charClassEsp (and not a
-  charClassExpr) in the second column of {{tbl-mce}}, replace them
-  inside the charClassExpr of the regexp as per {{tbl-mce}}.
-* For MultiCharEsc that do show a charClassExpr in the second column
-  of {{tbl-mce}} ("CCE2"), replace them inside charClassExpr of the
-  regexp ("CCE1") as follows:
-  * Examine for both charChlassExpr whether it is negative (has a "^"
-    at the start).
-  * Strip the brackets and any leading "^" from CCE2, yielding CC2.
-  * If CCE2 is not negative, replace the MultiCharEsc by CC2.
-  * If CCE2 is negative but CCE1 is not, remove the MultiCharEsc from
-    CCE1 and replace the entire CCE1 by the construct `(CCE1 | CCE2)`.
-  * If both CCE1 and CCE2 are negative, fail (see {{defn}}).
+* Replace any dots (`.`) outside character classes (first alternative
+  of `charClass` production) by `[^\n\r]`.
 * Envelope the result in `^` and `$`.
 
 Note that where a regexp literal is required, this needs to enclose
 the actual regexp in `/`.
-
-| I-Regexp | ECMAScript equivalent | charClassExp |
-| `.`      | [^\n\r]               | f            |
-| `\d`     | \p{Nd}                | t            |
-| `\s`     | [ \t\n\r]             | f            |
-| `\w`     | [^\p{P}\p{Z}\p{C}]    | f            |
-| `\D`     | \P{Nd}                | t            |
-| `\S`     | [^ \t\n\r]            | f            |
-| `\W`     | [\p{P}\p{Z}\p{C}]     | f            |
-{: #tbl-mce title="ECMAScript equivalents of MultiCharEsc"}
 
 The performance can be increased by turning parenthesized regexps
 (production `atom`) into `(?:...)` constructions.
@@ -308,13 +279,14 @@ this is covered in part in {{intro}}.)
 
 --- back
 
-Regexps and Similar Constructs in Published RFCs {#rfcs}
-================================================
+Regexps and Similar Constructs in Recent Published RFCs {#rfcs}
+========================================================
 
 This appendix contains a number of regular expressions that have been
-extracted from published RFCs based on some ad-hoc matching.
+extracted from some recently published RFCs based on some ad-hoc matching.
 Multi-line constructions were not included.
-All regular expressions validate against the ABNF in {{iregexp-abnf}}.
+With the exception of some (often surprisingly dubious) usage of multi-character
+escapes, all regular expressions validate against the ABNF in {{iregexp-abnf}}.
 
 ~~~
 {::include iregexp.rfc.out}
