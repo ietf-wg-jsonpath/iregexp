@@ -3,7 +3,7 @@ title: >
   I-Regexp: An Interoperable Regexp Format
 abbrev: I-Regexp
 docname: draft-bormann-jsonpath-iregexp-latest
-date: 2021-11-13
+date: 2022-01-03
 
 stand_alone: true
 
@@ -110,7 +110,7 @@ in a widely available library.
 
 With continuing accretion of complex features, parsing regexp
 libraries have become susceptible to bugs and performance degradation,
-in particular those that can be exploited in DoS attacks.
+in particular those that can be exploited in Denial of Service (DoS) attacks.
 The library RE2 that is compatible with Go language regexps strives to
 be immune to DoS attacks, making it attractive to applications such as
 query languages where an attacker could control the input.
@@ -236,7 +236,7 @@ ranges; the grammar deliberately excludes questionable usage such as
 
 ## XSD Regexps
 
-Any I-Regexp also is an XSD Regexp {{XSD2}}, so the mapping is an identify
+Any I-Regexp also is an XSD Regexp {{XSD2}}, so the mapping is an identity
 function.
 
 ## ECMAScript Regexps {#toESreg}
