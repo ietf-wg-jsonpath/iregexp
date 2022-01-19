@@ -78,8 +78,8 @@ Introduction        {#intro}
 
 The present specification defines an interoperable regular expression flavor, I-Regexp.
 
-This document uses the abbreviation "regexp" for what is usually
-called regular expression in programming.
+This document uses the abbreviation "regexp" for what are usually
+called regular expressions in programming.
 "I-Regexp" is used as a noun meaning a character string which conforms to the requirements
 in this specification; the plural is "I-Regexps".
 
