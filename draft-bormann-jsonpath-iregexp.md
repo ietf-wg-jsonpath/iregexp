@@ -19,9 +19,7 @@ venue:
   github: cabo/iregexp
 
 author:
-  -
-    ins: C. Bormann
-    name: Carsten Bormann
+  - name: Carsten Bormann
     org: Universität Bremen TZI
     street: Postfach 330440
     city: Bremen
@@ -29,7 +27,9 @@ author:
     country: Germany
     phone: +49-421-218-63921
     email: cabo@tzi.org
-
+  - name: Tim Bray
+    org: Textuality
+    email: tbray@textuality.com
 
 normative:
   XSD2: W3C.REC-xmlschema-2-20041028
