@@ -78,16 +78,21 @@ Introduction        {#intro}
 
 The present specification defines an interoperable regular expression flavor, I-Regexp.
 
-This document uses the abbreviation "regexp" for regular expression.
+This document uses the abbreviation "regexp" for what are usually
+called regular expressions in programming.
 "I-Regexp" is used as a noun meaning a character string which conforms to the requirements
 in this specification; the plural is "I-Regexps".
 
-I-Regexp does not provide advanced regexp features such as capture groups or backreferences.
+I-Regexp does not provide advanced regexp features such as capture groups, lookahead, or backreferences.
 It supports only a Boolean matching capability, i.e. testing whether a given regexp matches a given piece of text.
 
-I-Regexp is a subset of XSD regexps.
+I-Regexp is a subset of XSD regexps {{XSD2}}.
 
 This document includes rules for converting I-Regexps for use with several well-known regexp libraries.
+
+## Terminology
+
+{::boilerplate bcp14-tagged}
 
 # Requirements
 
@@ -97,7 +102,8 @@ language expression.
 
 A brief survey of published RFCs yielded the regexp patterns in
 Appendix A (with no attempt at completeness).
-These should be covered by I-Regexps, both syntactically and with
+With certain exceptions as discussed there,
+these should be covered by I-Regexps, both syntactically and with
 their intended semantics.
 
 # I-Regexp Syntax {#defn}
@@ -108,12 +114,12 @@ An I-Regexp MUST conform to the ABNF specification in
 ~~~ abnf
 {::include iregexp.abnf}
 ~~~
-{: #iregexp-abnf}
+{: #iregexp-abnf title="I-Regexp Syntax in ABNF"}
 
 This is essentially XSD regexp without character class
 subtraction and multi-character escapes.
 
-* **Issue**: There might be further potential for simplification in IsBlock (leave
+* **Issues**: There might be further potential for simplification in IsBlock (leave
   out) and possibly in the rather large part for IsCategory as well.
   The ABNF has been automatically generated and maybe could use some
   polishing.
@@ -171,8 +177,8 @@ regexps (production `atom`) into `(?:...)` constructions.
 
 (Please submit the mapping needed for your favorite kind of regexp.)
 
-Motivation and Background
-==================
+Motivation and Background {#background}
+=========================
 
 Data modeling formats (YANG, CDDL) as well as query languages
 (jsonpath) often need a regular expression (regexp) sublanguage.
@@ -229,7 +235,7 @@ Also, features of the target dialect such as capture groups may be triggered ina
 
 ## Subsetting XSD Regexps {#subsetting}
 
-XSD Regexps are relatively easy to implement or map to widely
+XSD regexps are relatively easy to implement or map to widely
 implemented parsing regexp dialects, with a small number of notable
 exceptions:
 
@@ -247,7 +253,7 @@ exceptions:
 
 * Multi-character escapes.  `\d`, `\w`, `\s` and their uppercase
   equivalents (complement classes) exhibit a
-  large amount of variation between Regexp flavors.
+  large amount of variation between regexp flavors.
   (E.g., predefined character classes such as `\w` may be meant
   to be ASCII only, or they may encompass all letters and digits
   defined in Unicode.    The latter is usually of interest in query
@@ -290,7 +296,7 @@ Security considerations
 TBD
 
 (Discuss security issues of regexp implementations, both DoS and RCE;
-this is covered in part in {{intro}}.)
+this is covered in part in {{background}}.)
 
 --- back
 
