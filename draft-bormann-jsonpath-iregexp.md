@@ -66,19 +66,113 @@ informative:
 
 --- abstract
 
-"Regular expressions" (regexps) are a set of related, widely
-implemented pattern languages used in data modeling formats and query
-languages that is available in many dialects.
-This specification defines an interoperable flavor of regexps, I-Regexp.
-
-The present version -02 of this document is a more streamlined update of the
-original trial balloon, meant to
-determine whether this approach is useful for the JSONPath WG.
+This document specifies I-Regexp, a flavor of regular expressions that is
+limited in scope with the goal of interoperation across many different
+regular-expression libraries.
 
 --- middle
 
 Introduction        {#intro}
 ============
+
+
+The present specification defines an interoperable regular expression flavor, I-Regexp.
+
+This document uses the abbreviation "regexp" for regular expression.
+"I-Regexp" is used as a noun meaning a character string which conforms to the requirements
+in this specification; the plural is "I-Regexps".
+
+I-Regexp does not provide advanced regexp features such as capture groups or backreferences.
+It supports only a Boolean matching capability, i.e. testing whether a given regexp matches a given piece of text.
+
+I-Regexp is a subset of XSD regexps.
+
+This document includes rules for converting I-Regexps for use with several well-known regexp libraries.
+
+# Requirements
+
+I-Regexps should handle the vast majority of practical cases where a
+matching regexp is needed in a data model specification or a query
+language expression.
+
+A brief survey of published RFCs yielded the regexp patterns in
+Appendix A (with no attempt at completeness).
+These should be covered by I-Regexps, both syntactically and with
+their intended semantics.
+
+# I-Regexp Syntax {#defn}
+
+An I-Regexp MUST conform to the ABNF specification in
+{{iregexp-abnf}}.
+
+~~~ abnf
+{::include iregexp.abnf}
+~~~
+{: #iregexp-abnf}
+
+This is essentially XSD regexp without character class
+subtraction and multi-character escapes.
+
+* **Issue**: There might be further potential for simplification in IsBlock (leave
+  out) and possibly in the rather large part for IsCategory as well.
+  The ABNF has been automatically generated and maybe could use some
+  polishing.
+  The ABNF has been verified against {{rfcs}}, but a wider corpus of
+  regular expressions should be examined.
+  About a third of the complexity of this ABNF grammar comes from going
+  into details on the Unicode IsCategory classes.  Additional complexity
+  stems from the way hyphens can be used inside character classes to denote
+  ranges; the grammar deliberately excludes questionable usage such as
+  `/[a-z-A-Z]/`.
+
+
+# I-Regexp Semantics
+
+This syntax is a subset of that of {{XSD2}}.
+Implementations which interpret I-Regexps MUST
+yield Boolean results as specified in {{XSD2}}.
+
+# Mapping I-Regexp to Regexp Dialects
+
+(TBD; these mappings need to be thoroughly verified.)
+
+## XSD Regexps
+
+Any I-Regexp also is an XSD Regexp {{XSD2}}, so the mapping is an identity
+function.
+
+## ECMAScript Regexps {#toESreg}
+
+Perform the following steps on an I-Regexp to obtain an ECMAScript
+regexp {{ECMA-262}}:
+
+* Replace any dots (`.`) outside character classes (first alternative
+  of `charClass` production) by `[^\n\r]`.
+* Envelope the result in `^` and `$`.
+
+Note that where a regexp literal is required, this needs to enclose
+the actual regexp in `/`.
+
+The performance can be increased by turning parenthesized regexps
+(production `atom`) into `(?:...)` constructions.
+
+## PCRE, RE2, Ruby Regexps
+
+Perform the same steps as in {{toESreg}} to obtain a valid regexp in
+PCRE {{PCRE2}}, the Go programming language {{RE2}}, and the Ruby
+programming language, except that the last step is:
+
+* Envelope the result in `\A` and `\z`.
+
+Again, the performance can be increased by turning parenthesized
+regexps (production `atom`) into `(?:...)` constructions.
+
+## << Your kind of Regexp here >>
+
+(Please submit the mapping needed for your favorite kind of regexp.)
+
+Motivation and Background
+==================
 
 Data modeling formats (YANG, CDDL) as well as query languages
 (jsonpath) often need a regular expression (regexp) sublanguage.
@@ -132,21 +226,8 @@ between dialects, this can lead to interoperability problems, or,
 worse, security vulnerabilities.
 Also, features of the target dialect such as capture groups may be triggered inadvertently, reducing performance.
 
-The present specification defines an interoperable regexp flavor for matching, I-Regexp.
-This flavor is a subset of XSD regexps.  It also comes with defined rules for converting the regexp into common parsing regexp dialects.
 
-# Requirements
-
-I-Regexps should handle the vast majority of practical cases where a
-matching regexp is needed in a data model specification or a query
-language expression.
-
-A brief survey of published RFCs yielded the regexp patterns in
-Appendix A (with no attempt at completeness).
-These should be covered by I-Regexps, both syntactically and with
-their intended semantics.
-
-# Subsetting XSD Regexps {#subsetting}
+## Subsetting XSD Regexps {#subsetting}
 
 XSD Regexps are relatively easy to implement or map to widely
 implemented parsing regexp dialects, with a small number of notable
@@ -196,72 +277,6 @@ exceptions:
     `flex` tool; this is intended to be close to `\d`, `\p{L}`, `\w`
     in an ASCII subset.)
 
-# Formal definition of I-Regexp {#defn}
-
-The syntax of I-Regexp is defined by the ABNF specification in
-{{iregexp-abnf}}.
-
-This syntax is a subset of that of {{XSD2}};
-the semantics of all the constructs allowed by this ABNF grammar are the same as those in {{XSD2}}.
-
-~~~ abnf
-{::include iregexp.abnf}
-~~~
-{: #iregexp-abnf}
-
-About a third of the complexity of this ABNF grammar comes from going
-into details on the Unicode IsCategory classes.  Additional complexity
-stems from the way hyphens can be used inside character classes to denote
-ranges; the grammar deliberately excludes questionable usage such as
-`/[a-z-A-Z]/`.
-
-* **Issue**: This is essentially XSD regexp without character class
-  subtraction and multi-character escapes.
-  There might be further potential for simplification in IsBlock (leave
-  out) and possibly in the rather large part for IsCategory as well.
-  The ABNF has been automatically generated and maybe could use some
-  polishing.
-  The ABNF has been verified against {{rfcs}}, but a wider corpus of
-  regular expressions should be examined.
-
-# Mapping I-Regexp to Regexp Dialects
-
-(TBD; these mappings need to be thoroughly verified.)
-
-## XSD Regexps
-
-Any I-Regexp also is an XSD Regexp {{XSD2}}, so the mapping is an identity
-function.
-
-## ECMAScript Regexps {#toESreg}
-
-Perform the following steps on an I-Regexp to obtain an ECMAScript
-regexp {{ECMA-262}}:
-
-* Replace any dots (`.`) outside character classes (first alternative
-  of `charClass` production) by `[^\n\r]`.
-* Envelope the result in `^` and `$`.
-
-Note that where a regexp literal is required, this needs to enclose
-the actual regexp in `/`.
-
-The performance can be increased by turning parenthesized regexps
-(production `atom`) into `(?:...)` constructions.
-
-## PCRE, RE2, Ruby Regexps
-
-Perform the same steps as in {{toESreg}} to obtain a valid regexp in
-PCRE {{PCRE2}}, the Go programming language {{RE2}}, and the Ruby
-programming language, except that the last step is:
-
-* Envelope the result in `\A` and `\z`.
-
-Again, the performance can be increased by turning parenthesized
-regexps (production `atom`) into `(?:...)` constructions.
-
-## << Your kind of Regexp here >>
-
-(Please submit the mapping needed for your favorite kind of regexp.)
 
 IANA Considerations
 ==================
