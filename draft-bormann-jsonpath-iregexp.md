@@ -32,7 +32,8 @@ author:
     email: tbray@textuality.com
 
 normative:
-  XSD2: W3C.REC-xmlschema-2-20041028
+  XSD-2: W3C.REC-xmlschema-2-20041028
+  XSD11-2: W3C.REC-xmlschema11-2-20120405
 
 informative:
   RFC8610: cddl
@@ -86,7 +87,7 @@ in this specification; the plural is "I-Regexps".
 I-Regexp does not provide advanced regexp features such as capture groups, lookahead, or backreferences.
 It supports only a Boolean matching capability, i.e. testing whether a given regexp matches a given piece of text.
 
-I-Regexp is a subset of XSD regexps {{XSD2}}.
+I-Regexp is a subset of XSD regexps {{XSD-2}}.
 
 This document includes rules for converting I-Regexps for use with several well-known regexp libraries.
 
@@ -134,9 +135,10 @@ subtraction and multi-character escapes.
 
 # I-Regexp Semantics
 
-This syntax is a subset of that of {{XSD2}}.
+This syntax is a subset of that of {{XSD-2}}.
 Implementations which interpret I-Regexps MUST
-yield Boolean results as specified in {{XSD2}}.
+yield Boolean results as specified in {{XSD-2}}.
+(See also {{xsd-regexps}}.)
 
 # Mapping I-Regexp to Regexp Dialects
 
@@ -144,8 +146,15 @@ yield Boolean results as specified in {{XSD2}}.
 
 ## XSD Regexps
 
-Any I-Regexp also is an XSD Regexp {{XSD2}}, so the mapping is an identity
+Any I-Regexp also is an XSD Regexp {{XSD-2}}, so the mapping is an identity
 function.
+
+Note that a few errata for {{XSD-2}} have been fixed in {{XSD11-2}}, which
+is therefore also included as a normative reference.
+XSD 1.1 is less widely implemented than XSD 1.0, and implementations
+of XSD 1.0 are likely to include these bugfixes, so for the intents
+and purposes of this specification an implementation of XSD 1.0
+regexps is equivalent to an implementation of XSD 1.1 regexps.
 
 ## ECMAScript Regexps {#toESreg}
 
@@ -193,7 +202,7 @@ that actually are context-free (Chomsky type 2) instead of the regular
 languages (Chomsky type 3) that regular expressions are named for.
 
 YANG ({{Section 9.4.5 of -yang}}) and CDDL ({{Section 3.8.3 of
--cddl}}) have adopted the regexp language from W3C Schema {{XSD2}}.
+-cddl}}) have adopted the regexp language from W3C Schema {{XSD-2}}.
 XSD regexp is a pure matching language, i.e., XSD regexps can be used
 to match a string against them and yield a simple true or false
 result.
