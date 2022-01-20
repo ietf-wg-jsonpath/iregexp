@@ -315,6 +315,62 @@ escapes, all regular expressions validate against the ABNF in {{iregexp-abnf}}.
 {: #iregexp-examples title="Example regular expressions extracted from
 RFCs"}
 
+Of the multi-character escapes found in these examples, 6 are `\S`,
+and 39 are `\d`.  The latter are most likely not really intended to
+abbreviate the whole set of Unicode digits `\p{Nd}`; they probably
+need to be replaced by `[0-9]` for the regexp to operate as actually
+intended.
+The `\S` can be replaced by `[^ \t\n\r]` to conform to I-Regexp; the
+construct `[\S ]` can be put as `[^\t\n\r]`.
+
+## Multi-character Escape Substitution
+
+A general substitution rule that can be used to obtain a regexp
+free of multi-character escapes from XSD regexps is given here.
+Note that this subsection is not a normative part of I-Regexp, as
+syntax and semantics of I-Regexp is not affected; this section is
+advice for obtaining an I-Regexp.
+
+These rules do not address `\w` or `\S` in negative charClassExpr,
+i.e., in charClassExpr that include the optional "^" at the start,
+which however can be substituted by employing character class
+subtraction.
+
+* Replace any multi-character escape outside character classes as
+  in {{tbl-mce}}.
+* For any multi-character escape that show a charClassEsc (and not a
+  charClassExpr) in the second column of {{tbl-mce}}, replace them
+  inside the charClassExpr of the regexp as per {{tbl-mce}}.
+* For multi-character escape that do show a charClassExpr in the second column
+  of {{tbl-mce}} ("CCE2"), replace them inside charClassExpr of the
+  regexp ("CCE1") as follows:
+  * Examine for both charChlassExpr whether it is negative (has a "^"
+    at the start).
+  * Strip the brackets and any leading "^" from CCE2, yielding CC2.
+  * If CCE2 is not negative, replace the multi-character escape by CC2.
+  * If CCE2 is negative but CCE1 is not, remove the multi-character escape from
+    CCE1 and replace the entire CCE1 by the construct `(CCE1 | CCE2)`.
+  * If both CCE1 and CCE2 are negative (`\w`/`\S` in negative
+    charClassExpr, see above), more complex transformation may be required.
+    <!-- which sometimes requires character class subtraction,
+     (e.g., `[^-\w_]` means `[\p{P}\p{Z}\p{C}-[-_]]`, which requires
+    taking apart \p{P} and within that \p{Pc} and \p{Pd}; but,
+    really, [^-A-Za-z0-9_] may be what was actually meant).  -->
+
+| MCE  | I-Regexp equivalent | charClassEsc |
+| `\d` | \p{Nd}              | t            |
+| `\s` | [ \t\n\r]           | f            |
+| `\w` | [^\p{P}\p{Z}\p{C}]  | f            |
+| `\D` | \P{Nd}              | t            |
+| `\S` | [^ \t\n\r]          | f            |
+| `\W` | [\p{P}\p{Z}\p{C}]   | f            |
+{: #tbl-mce title="Substituting multi-character escapes (MCE)"}
+
+Further simplification may be obvious, e.g. `[\S ]` transforms into
+`([ ]|[^ \t\n\r])`, which can be simplified into `[^\t\n\r]`.
+
+(TBD: Point to a tool that does this automatically.)
+
 Acknowledgements
 ================
 {: numbered="no"}
