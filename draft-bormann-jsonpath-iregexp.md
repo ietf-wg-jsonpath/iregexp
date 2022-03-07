@@ -115,6 +115,10 @@ An I-Regexp MUST conform to the ABNF specification in
 ~~~
 {: #iregexp-abnf title="I-Regexp Syntax in ABNF"}
 
+As an additional restriction, `charClassExpr` is not allowed to
+match `[^]`, which according to this grammar would parse as a
+positive character class containing the single character `^`.
+
 This is essentially XSD regexp without character class
 subtraction and multi-character escapes.
 
