@@ -306,10 +306,16 @@ This document makes no requests of IANA.
 Security considerations
 =======================
 
-TBD
+As discussed in {{background}}, more complex regexp libraries are likely
+to contain exploitable bugs leading to crashes and remote code
+execution.  There is also the problem that such libraries often have
+hard to predict performance characteristics, leading to attack vectors
+that overload an implementation by matching against an expensive
+attacked controlled regexp.
 
-(Discuss security issues of regexp implementations, both DoS and RCE;
-this is covered in part in {{background}}.)
+I-Regexps have been designed to allow implementation in a way that is
+resilient to both threats; this objective needs to be addressed
+throughout the implementation effort.
 
 --- back
 
