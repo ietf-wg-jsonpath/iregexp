@@ -334,6 +334,21 @@ escapes, all regular expressions validate against the ABNF in {{iregexp-abnf}}.
 {: #iregexp-examples title="Example regular expressions extracted from
 RFCs"}
 
+The multi-character escapes (MCE) or the character classes built
+around them used here can be substituted as shown in {{tbl-sub}}.
+
+| MCE/class | Substitute class |
+|-----------|------------------|
+| `\S`      | `[^ \t\n\r]`     |
+| `[\S ]`   | `[^\t\n\r]`      |
+| `\d`      | `[0-9]`          |
+{: #tbl-sub title="Substitutes for multi-character escapes in examples"}
+
+Note that the semantics of `\d` in XSD regular expressions is that of
+`\p{Nd}`; however, this would include all Unicode characters that are
+digits in various writing systems and certainly is not actually meant
+in the RFCs listed.
+
 Acknowledgements
 ================
 {:unnumbered}
