@@ -144,7 +144,7 @@ yield Boolean results as specified in {{XSD-2}}.
 
 # Mapping I-Regexp to Regexp Dialects
 
-(TBD; these mappings need to be thoroughly verified.)
+(TBD; these mappings need to be further verified in implementation work.)
 
 ## XSD Regexps
 
@@ -254,7 +254,7 @@ exceptions:
   specifications, but it is unfortunately mostly absent from parsing
   regexp dialects.
 
-  * **Issue**: This absence can often be addressed by translating
+  Discussion: This absence can often be addressed by translating
     character class subtraction into positive character classes
     (possibly requiring significant expansion) and/or inserting
     negative lookahead assertions (which are not universally supported
@@ -281,7 +281,7 @@ exceptions:
   Fortunately, the `\p`/`\P` feature in general is now quite
   widely available.
 
-  * **Issue**: The ASCII focus can partially be addressed by adding a
+  Discussion: The ASCII focus can partially be addressed by adding a
     constraint that the matched text has to be ASCII in the first
     place.  This often is all that is needed where regexps are used to
     define lexical elements of a computer language.  The access to
