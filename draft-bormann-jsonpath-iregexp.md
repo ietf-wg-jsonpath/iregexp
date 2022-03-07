@@ -324,7 +324,7 @@ RFCs"}
 
 Acknowledgements
 ================
-{: numbered="no"}
+{:unnumbered}
 
 This draft has been motivated by the discussion in the IETF JSONPATH
 WG about whether to include a regexp mechanism into the JSONPath query
