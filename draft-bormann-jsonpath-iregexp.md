@@ -1,18 +1,16 @@
 ---
+v: 3
+
 title: >
   I-Regexp: An Interoperable Regexp Format
 abbrev: I-Regexp
 docname: draft-bormann-jsonpath-iregexp-latest
-date: 2022-01-18
+date: 2022-03-07
 
-stand_alone: true
-
-ipr: trust200902
 keyword: Internet-Draft
 cat: std
 consensus: true
-
-pi: [toc, sortrefs, symrefs, compact, comments]
+submissiontype: IETF
 
 venue:
   mail: JSONpath@ietf.org
@@ -85,7 +83,7 @@ called regular expressions in programming.
 in this specification; the plural is "I-Regexps".
 
 I-Regexp does not provide advanced regexp features such as capture groups, lookahead, or backreferences.
-It supports only a Boolean matching capability, i.e. testing whether a given regexp matches a given piece of text.
+It supports only a Boolean matching capability, i.e., testing whether a given regexp matches a given piece of text.
 
 I-Regexp is a subset of XSD regexps {{XSD-2}}.
 
@@ -117,16 +115,25 @@ An I-Regexp MUST conform to the ABNF specification in
 ~~~
 {: #iregexp-abnf title="I-Regexp Syntax in ABNF"}
 
+As an additional restriction, `charClassExpr` is not allowed to
+match `[^]`, which according to this grammar would parse as a
+positive character class containing the single character `^`.
+
 This is essentially XSD regexp without character class
 subtraction and multi-character escapes.
 
-* **Issues**: There might be further potential for simplification in IsBlock (leave
-  out) and possibly in the rather large part for IsCategory as well.
-  The ABNF has been automatically generated and maybe could use some
+An I-Regexp implementation MUST be a complete implementation of this
+limited subset.
+In particular, full Unicode support is REQUIRED; the implementation
+MUST NOT limit itself to 7- or 8-bit character sets such as ASCII and
+MUST support the Unicode character property set in character classes.
+
+* **Issues**:
+  The ABNF has been automatically generated and maybe could use some further
   polishing.
   The ABNF has been verified against {{rfcs}}, but a wider corpus of
-  regular expressions should be examined.
-  About a third of the complexity of this ABNF grammar comes from going
+  regular expressions will need to be examined.
+  Note that about a third of the complexity of this ABNF grammar comes from going
   into details on the Unicode IsCategory classes.  Additional complexity
   stems from the way hyphens can be used inside character classes to denote
   ranges; the grammar deliberately excludes questionable usage such as
@@ -142,7 +149,7 @@ yield Boolean results as specified in {{XSD-2}}.
 
 # Mapping I-Regexp to Regexp Dialects
 
-(TBD; these mappings need to be thoroughly verified.)
+(TBD; these mappings need to be further verified in implementation work.)
 
 ## XSD Regexps
 
@@ -161,15 +168,15 @@ regexps is equivalent to an implementation of XSD 1.1 regexps.
 Perform the following steps on an I-Regexp to obtain an ECMAScript
 regexp {{ECMA-262}}:
 
-* Replace any dots (`.`) outside character classes (first alternative
-  of `charClass` production) by `[^\n\r]`.
+* For any dots (`.`) outside character classes (first alternative
+  of `charClass` production): replace dot by `[^\n\r]`.
 * Envelope the result in `^` and `$`.
 
 Note that where a regexp literal is required, this needs to enclose
 the actual regexp in `/`.
 
-The performance can be increased by turning parenthesized regexps
-(production `atom`) into `(?:...)` constructions.
+The performance of an ECMAScript matcher can be increased by turning parenthesized regexps
+(last choice in production `atom`) into `(?:...)` constructions.
 
 ## PCRE, RE2, Ruby Regexps
 
@@ -194,7 +201,8 @@ Data modeling formats (YANG, CDDL) as well as query languages
 There are many dialects of regular expressions in use in platforms,
 programming languages, and data modeling formats.
 
-While regular expressions originally were intended to provide a
+While regular expressions originally were intended to describe a
+formal language, i.e., to provide a
 Boolean matching function, they have turned into parsing functions for
 many applications, with capture groups, greedy/lazy/possessive variants, etc.
 Language features such as backreferences allow specifying languages
@@ -231,7 +239,7 @@ such bugs, with 23 matches for arbitrary code execution).
 
 Implementations of YANG and CDDL often struggle with providing true
 XSD regexps; some instead cheat by providing one of the parsing regexp
-varieties, sometime without even advertising this fact.
+varieties, sometimes without even advertising this fact.
 
 A matching regexp that does not use the more complex XSD features
 ({{subsetting}}) can usually be converted into a parsing regexp of many
@@ -252,7 +260,7 @@ exceptions:
   specifications, but it is unfortunately mostly absent from parsing
   regexp dialects.
 
-  * **Issue**: This absence can often be addressed by translating
+  Discussion: This absence can often be addressed by translating
     character class subtraction into positive character classes
     (possibly requiring significant expansion) and/or inserting
     negative lookahead assertions (which are not universally supported
@@ -265,8 +273,9 @@ exceptions:
   large amount of variation between regexp flavors.
   (E.g., predefined character classes such as `\w` may be meant
   to be ASCII only, or they may encompass all letters and digits
-  defined in Unicode.    The latter is usually of interest in query
-  languages, while the former is of interest to a subset of
+  defined in Unicode.    The latter is usually of interest in the
+  application of query
+  languages to text in human languages, while the former is of interest to a subset of
   applications in data model specifications.)
 
 * Unicode.
@@ -274,21 +283,22 @@ exceptions:
   be Unicode enabled, there are a number of aspects of this that need
   discussion.
   Not all regexp implementations that one might want to map
-  I-Regexps to will support accesses to Unicode tables that enable
-  executing on constructs such as `\p{IsCoptic}`.
+  I-Regexps into will support accesses to Unicode tables that enable
+  executing on constructs such as `\p{IsCoptic}`, for mapping into such
+  implementations, translation needs to be provided.
   Fortunately, the `\p`/`\P` feature in general is now quite
   widely available.
 
-  * **Issue**: The ASCII focus can partially be addressed by adding a
-    constraint that the matched text has to be ASCII in the first
-    place.  This often is all that is needed where regexps are used to
-    define lexical elements of a computer language.  The access to
-    Unicode tables can simply be ruled out.  (Note that RFC 6643
-    contains a lone instance of `\p{IsBasicLatin}{0,255}`, which is
-    needed to describe a transition from a legacy character set to
-    Unicode.  The author believes that this would be a rare
-    application and can be left out.  RFC2622 contains `[[:digit:]]`,
-    `[[:alpha:]]`, `[[:alnum:]]`, albeit in a  specification for the
+  Discussion: The ASCII focus can partially be addressed by adding a
+    constraint outside the regexp that the matched text has to be
+    ASCII in the first place.  This often is all that is needed where
+    regexps are used to define lexical elements of a computer
+    language.  This reduces the size of the Unicode tables required in
+    such a constrained implementation considerably.  (In {{rfcs}}, RFC
+    6643 contains a lone instance of `\p{IsBasicLatin}{0,255}`, which
+    is needed to describe a transition from a legacy character set to
+    Unicode.  RFC2622 contains `[[:digit:]]`,
+    `[[:alpha:]]`, `[[:alnum:]]`, albeit in a specification for the
     `flex` tool; this is intended to be close to `\d`, `\p{L}`, `\w`
     in an ASCII subset.)
 
@@ -302,10 +312,16 @@ This document makes no requests of IANA.
 Security considerations
 =======================
 
-TBD
+As discussed in {{background}}, more complex regexp libraries are likely
+to contain exploitable bugs leading to crashes and remote code
+execution.  There is also the problem that such libraries often have
+hard to predict performance characteristics, leading to attack vectors
+that overload an implementation by matching against an expensive
+attacked controlled regexp.
 
-(Discuss security issues of regexp implementations, both DoS and RCE;
-this is covered in part in {{background}}.)
+I-Regexps have been designed to allow implementation in a way that is
+resilient to both threats; this objective needs to be addressed
+throughout the implementation effort.
 
 --- back
 
@@ -324,9 +340,24 @@ escapes, all regular expressions validate against the ABNF in {{iregexp-abnf}}.
 {: #iregexp-examples title="Example regular expressions extracted from
 RFCs"}
 
+The multi-character escapes (MCE) or the character classes built
+around them used here can be substituted as shown in {{tbl-sub}}.
+
+| MCE/class | Substitute class |
+|-----------|------------------|
+| `\S`      | `[^ \t\n\r]`     |
+| `[\S ]`   | `[^\t\n\r]`      |
+| `\d`      | `[0-9]`          |
+{: #tbl-sub title="Substitutes for multi-character escapes in examples"}
+
+Note that the semantics of `\d` in XSD regular expressions is that of
+`\p{Nd}`; however, this would include all Unicode characters that are
+digits in various writing systems and certainly is not actually meant
+in the RFCs listed.
+
 Acknowledgements
 ================
-{: numbered="no"}
+{:unnumbered}
 
 This draft has been motivated by the discussion in the IETF JSONPATH
 WG about whether to include a regexp mechanism into the JSONPath query
