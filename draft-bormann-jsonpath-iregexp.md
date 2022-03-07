@@ -163,15 +163,15 @@ regexps is equivalent to an implementation of XSD 1.1 regexps.
 Perform the following steps on an I-Regexp to obtain an ECMAScript
 regexp {{ECMA-262}}:
 
-* Replace any dots (`.`) outside character classes (first alternative
-  of `charClass` production) by `[^\n\r]`.
+* For any dots (`.`) outside character classes (first alternative
+  of `charClass` production): replace dot by `[^\n\r]`.
 * Envelope the result in `^` and `$`.
 
 Note that where a regexp literal is required, this needs to enclose
 the actual regexp in `/`.
 
-The performance can be increased by turning parenthesized regexps
-(production `atom`) into `(?:...)` constructions.
+The performance of an ECMAScript matcher can be increased by turning parenthesized regexps
+(last choice in production `atom`) into `(?:...)` constructions.
 
 ## PCRE, RE2, Ruby Regexps
 
@@ -196,7 +196,8 @@ Data modeling formats (YANG, CDDL) as well as query languages
 There are many dialects of regular expressions in use in platforms,
 programming languages, and data modeling formats.
 
-While regular expressions originally were intended to provide a
+While regular expressions originally were intended to describe a
+formal language, i.e., to provide a
 Boolean matching function, they have turned into parsing functions for
 many applications, with capture groups, greedy/lazy/possessive variants, etc.
 Language features such as backreferences allow specifying languages
@@ -267,8 +268,9 @@ exceptions:
   large amount of variation between regexp flavors.
   (E.g., predefined character classes such as `\w` may be meant
   to be ASCII only, or they may encompass all letters and digits
-  defined in Unicode.    The latter is usually of interest in query
-  languages, while the former is of interest to a subset of
+  defined in Unicode.    The latter is usually of interest in the
+  application of query
+  languages to text in human languages, while the former is of interest to a subset of
   applications in data model specifications.)
 
 * Unicode.
@@ -276,7 +278,7 @@ exceptions:
   be Unicode enabled, there are a number of aspects of this that need
   discussion.
   Not all regexp implementations that one might want to map
-  I-Regexps to will support accesses to Unicode tables that enable
+  I-Regexps into will support accesses to Unicode tables that enable
   executing on constructs such as `\p{IsCoptic}`.
   Fortunately, the `\p`/`\P` feature in general is now quite
   widely available.
@@ -288,7 +290,7 @@ exceptions:
     Unicode tables can simply be ruled out.  (Note that RFC 6643
     contains a lone instance of `\p{IsBasicLatin}{0,255}`, which is
     needed to describe a transition from a legacy character set to
-    Unicode.  The author believes that this would be a rare
+    Unicode.  The authors believe that this would be a rare
     application and can be left out.  RFC2622 contains `[[:digit:]]`,
     `[[:alpha:]]`, `[[:alnum:]]`, albeit in a  specification for the
     `flex` tool; this is intended to be close to `\d`, `\p{L}`, `\w`
