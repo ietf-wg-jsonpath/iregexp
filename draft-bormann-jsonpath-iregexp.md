@@ -83,7 +83,7 @@ called regular expressions in programming.
 in this specification; the plural is "I-Regexps".
 
 I-Regexp does not provide advanced regexp features such as capture groups, lookahead, or backreferences.
-It supports only a Boolean matching capability, i.e. testing whether a given regexp matches a given piece of text.
+It supports only a Boolean matching capability, i.e., testing whether a given regexp matches a given piece of text.
 
 I-Regexp is a subset of XSD regexps {{XSD-2}}.
 
@@ -229,7 +229,7 @@ such bugs, with 23 matches for arbitrary code execution).
 
 Implementations of YANG and CDDL often struggle with providing true
 XSD regexps; some instead cheat by providing one of the parsing regexp
-varieties, sometime without even advertising this fact.
+varieties, sometimes without even advertising this fact.
 
 A matching regexp that does not use the more complex XSD features
 ({{subsetting}}) can usually be converted into a parsing regexp of many
