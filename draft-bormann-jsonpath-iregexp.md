@@ -122,13 +122,18 @@ positive character class containing the single character `^`.
 This is essentially XSD regexp without character class
 subtraction and multi-character escapes.
 
-* **Issues**: There might be further potential for simplification in IsBlock (leave
-  out) and possibly in the rather large part for IsCategory as well.
-  The ABNF has been automatically generated and maybe could use some
+An I-Regexp implementation MUST be a complete implementation of this
+limited subset.
+In particular, full Unicode support is REQUIRED; the implementation
+MUST NOT limit itself to 7- or 8-bit character sets such as ASCII and
+MUST support the Unicode character property set in character classes.
+
+* **Issues**:
+  The ABNF has been automatically generated and maybe could use some further
   polishing.
   The ABNF has been verified against {{rfcs}}, but a wider corpus of
-  regular expressions should be examined.
-  About a third of the complexity of this ABNF grammar comes from going
+  regular expressions will need to be examined.
+  Note that about a third of the complexity of this ABNF grammar comes from going
   into details on the Unicode IsCategory classes.  Additional complexity
   stems from the way hyphens can be used inside character classes to denote
   ranges; the grammar deliberately excludes questionable usage such as
@@ -279,20 +284,21 @@ exceptions:
   discussion.
   Not all regexp implementations that one might want to map
   I-Regexps into will support accesses to Unicode tables that enable
-  executing on constructs such as `\p{IsCoptic}`.
+  executing on constructs such as `\p{IsCoptic}`, for mapping into such
+  implementations, translation needs to be provided.
   Fortunately, the `\p`/`\P` feature in general is now quite
   widely available.
 
   Discussion: The ASCII focus can partially be addressed by adding a
-    constraint that the matched text has to be ASCII in the first
-    place.  This often is all that is needed where regexps are used to
-    define lexical elements of a computer language.  The access to
-    Unicode tables can simply be ruled out.  (Note that RFC 6643
-    contains a lone instance of `\p{IsBasicLatin}{0,255}`, which is
-    needed to describe a transition from a legacy character set to
-    Unicode.  The authors believe that this would be a rare
-    application and can be left out.  RFC2622 contains `[[:digit:]]`,
-    `[[:alpha:]]`, `[[:alnum:]]`, albeit in a  specification for the
+    constraint outside the regexp that the matched text has to be
+    ASCII in the first place.  This often is all that is needed where
+    regexps are used to define lexical elements of a computer
+    language.  This reduces the size of the Unicode tables required in
+    such a constrained implementation considerably.  (In {{rfcs}}, RFC
+    6643 contains a lone instance of `\p{IsBasicLatin}{0,255}`, which
+    is needed to describe a transition from a legacy character set to
+    Unicode.  RFC2622 contains `[[:digit:]]`,
+    `[[:alpha:]]`, `[[:alnum:]]`, albeit in a specification for the
     `flex` tool; this is intended to be close to `\d`, `\p{L}`, `\w`
     in an ASCII subset.)
 
