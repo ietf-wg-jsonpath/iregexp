@@ -1,18 +1,16 @@
 ---
+v: 3
+
 title: >
   I-Regexp: An Interoperable Regexp Format
 abbrev: I-Regexp
 docname: draft-bormann-jsonpath-iregexp-latest
-date: 2022-01-18
+date: 2022-03-07
 
-stand_alone: true
-
-ipr: trust200902
 keyword: Internet-Draft
 cat: std
 consensus: true
-
-pi: [toc, sortrefs, symrefs, compact, comments]
+submissiontype: IETF
 
 venue:
   mail: JSONpath@ietf.org
