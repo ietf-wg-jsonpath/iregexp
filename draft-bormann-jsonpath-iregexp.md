@@ -317,7 +317,7 @@ to contain exploitable bugs leading to crashes and remote code
 execution.  There is also the problem that such libraries often have
 hard to predict performance characteristics, leading to attack vectors
 that overload an implementation by matching against an expensive
-attacked controlled regexp.
+attacker-controlled regexp.
 
 I-Regexps have been designed to allow implementation in a way that is
 resilient to both threats; this objective needs to be addressed
