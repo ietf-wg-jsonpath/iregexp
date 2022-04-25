@@ -36,8 +36,6 @@ normative:
   RFC7405: abnf-cs
 
 informative:
-  RFC8610: cddl
-  RFC7950: yang
   RE2:
     title: >
       RE2 is a fast, safe, thread-friendly alternative to backtracking regular expression engines like those used in PCRE, Perl, and Python. It is a C++ library.
@@ -54,16 +52,6 @@ informative:
     date: 2020-06
     seriesinfo:
       ECMA: Standard ECMA-262, 11th Edition
-#  cddlc:
-#    title: CDDL conversion utilities
-#    target: https://github.com/cabo/cddlc
-#  jsonpath:
-#    target: https://jsonpath.com
-#    title: jsonpath online evaluator
-  REGEX-CVE:
-    target: "https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=regex"
-    title: >
-      CVE - Search Results
 
 --- abstract
 
