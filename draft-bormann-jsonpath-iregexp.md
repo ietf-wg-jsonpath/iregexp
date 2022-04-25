@@ -33,6 +33,7 @@ normative:
   XSD-2: W3C.REC-xmlschema-2-20041028
   XSD11-2: W3C.REC-xmlschema11-2-20120405
   RFC5234: abnf
+  RFC7405: abnf-cs
 
 informative:
   RFC8610: cddl
@@ -97,7 +98,7 @@ This document includes rules for converting I-Regexps for use with several well-
 {::boilerplate bcp14-tagged}
 
 The grammatical rules in this document are to be interpreted as ABNF,
-as described in {{-abnf}}.
+as described in {{-abnf}} and {{-abnf-cs}}.
 
 # Requirements
 
