@@ -88,6 +88,12 @@ This document includes rules for converting I-Regexps for use with several well-
 The grammatical rules in this document are to be interpreted as ABNF,
 as described in {{-abnf}} and {{-abnf-cs}}.
 
+Additional terms used in this specification are defined below.
+
+Strict I-Regexp implementation:
+: An implementation of this specification which supports only regular expressions that conform to the
+  ABNF syntax in this specification.
+
 # Requirements
 
 I-Regexps should handle the vast majority of practical cases where a
@@ -124,8 +130,9 @@ In particular, full Unicode support is REQUIRED; the implementation
 MUST NOT limit itself to 7- or 8-bit character sets such as ASCII and
 MUST support the Unicode character property set in character classes.
 
-An I-Regexp implementation MAY report errors for regular expressions
-outside this limited subset.
+An I-Regexp implementation SHOULD be a strict I-Regexp implementation.
+the advantages of strictness are improved interoperability with other strict
+implementations and improved security.
 
 # I-Regexp Semantics
 
@@ -134,7 +141,7 @@ Implementations which interpret I-Regexps MUST
 yield Boolean results as specified in {{XSD-2}}.
 (See also {{xsd-regexps}}.)
 
-Implementations MAY yield errors for regular expressions which are not I-Regexps.
+Strict implementations MAY yield errors for regular expressions which are not I-Regexps.
 
 # Mapping I-Regexp to Regexp Dialects
 
@@ -231,9 +238,9 @@ attacker-controlled regexp.
 
 I-Regexps have been designed to allow implementation in a way that is
 resilient to both threats; this objective needs to be addressed
-throughout the implementation effort. For example, implementations MAY
-protect themselves from some of these threats by yielding errors for
-regular expressions which are not I-Regexps.
+throughout the implementation effort. For example, strict I-Regexp
+implementations protect themselves from some of these threats by
+yielding errors for regular expressions which are not I-Regexps.
 
 --- back
 
