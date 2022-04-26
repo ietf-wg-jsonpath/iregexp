@@ -124,12 +124,17 @@ In particular, full Unicode support is REQUIRED; the implementation
 MUST NOT limit itself to 7- or 8-bit character sets such as ASCII and
 MUST support the Unicode character property set in character classes.
 
+An I-Regexp implementation MAY report errors for regular expressions
+outside this limited subset.
+
 # I-Regexp Semantics
 
 This syntax is a subset of that of {{XSD-2}}.
 Implementations which interpret I-Regexps MUST
 yield Boolean results as specified in {{XSD-2}}.
 (See also {{xsd-regexps}}.)
+
+Implementations MAY yield errors for regular expressions which are not I-Regexps.
 
 # Mapping I-Regexp to Regexp Dialects
 
@@ -226,7 +231,9 @@ attacker-controlled regexp.
 
 I-Regexps have been designed to allow implementation in a way that is
 resilient to both threats; this objective needs to be addressed
-throughout the implementation effort.
+throughout the implementation effort. For example, implementations MAY
+protect themselves from some of these threats by yielding errors for
+regular expressions which are not I-Regexps.
 
 --- back
 
