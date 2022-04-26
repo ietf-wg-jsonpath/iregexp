@@ -131,7 +131,7 @@ MUST NOT limit itself to 7- or 8-bit character sets such as ASCII and
 MUST support the Unicode character property set in character classes.
 
 An I-Regexp implementation SHOULD be a strict I-Regexp implementation.
-the advantages of strictness are improved interoperability with other strict
+The advantages of strictness are improved interoperability with other strict
 implementations and improved security.
 
 # I-Regexp Semantics
