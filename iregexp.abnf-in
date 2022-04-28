@@ -9,8 +9,7 @@ NormalChar = <<^.\?*+{}()|[\\]>>
 
 charClass = "." / SingleCharEsc / charClassEsc / charClassExpr
 SingleCharEsc = "\" <<nrt\|.?*+(){}\-[\\]\^>>
-charClassEsc = MultiCharEsc / catEsc / complEsc
-MultiCharEsc = "\" <<sSdDwW>>
+charClassEsc = catEsc / complEsc
 charClassExpr = "[" ["^"] ("-" / CCE1) *CCE1 ["-"] "]"
 CCE1 = (CCchar ["-" CCchar]) / charClassEsc
 CCchar = <<^-[]\\>> / SingleCharEsc
