@@ -4,8 +4,8 @@ v: 3
 title: >
   I-Regexp: An Interoperable Regexp Format
 abbrev: I-Regexp
-docname: draft-bormann-jsonpath-iregexp-latest
-date: 2022-04-25
+docname: draft-ietf-jsonpath-iregexp-latest
+date: 2022-04-28
 
 keyword: Internet-Draft
 cat: std
