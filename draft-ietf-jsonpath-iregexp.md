@@ -13,7 +13,7 @@ consensus: true
 submissiontype: IETF
 
 venue:
-  mail: JSONpath@ietf.org
+  mail: JSONPath@ietf.org
   github: cabo/iregexp
 
 author:
