@@ -124,6 +124,24 @@ In particular, full Unicode support is REQUIRED; the implementation
 MUST NOT limit itself to 7- or 8-bit character sets such as ASCII and
 MUST support the Unicode character property set in character classes.
 
+## Checking Implementations {#checking}
+
+A *checking* I-Regexp implementation is one that checks a supplied
+regexp for compliance with this specification and reports any problems.
+Checking implementations give their users confidence that they didn't
+accidentally insert non-interoperable syntax, so checking is RECOMMENDED.
+Exceptions to this rule may be made for low-effort implementations
+that map I-Regexp to another regexp library by simple steps such as
+performing the mapping operations discussed in {{mapping}}; here, the
+effort needed to do full checking may dwarf the rest of the
+implementation effort.
+Implementations SHOULD document whether they are checking or not.
+
+Specifications that employ I-Regexp may want to define in which
+cases their implementations can work with a non-checking I-Regexp
+implementation and when full checking is needed, possibly in the
+process of defining their own implementation classes.
+
 # I-Regexp Semantics
 
 This syntax is a subset of that of {{XSD-2}}.
@@ -131,7 +149,7 @@ Implementations which interpret I-Regexps MUST
 yield Boolean results as specified in {{XSD-2}}.
 (See also {{xsd-regexps}}.)
 
-# Mapping I-Regexp to Regexp Dialects
+# Mapping I-Regexp to Regexp Dialects {#mapping}
 
 (TBD; these mappings need to be further verified in implementation work.)
 
@@ -227,6 +245,10 @@ attacker-controlled regexp.
 I-Regexps have been designed to allow implementation in a way that is
 resilient to both threats; this objective needs to be addressed
 throughout the implementation effort.
+Non-checking implementations (see {{checking}}) are likely to expose
+security limitations of any regexp engine they use, which may be less
+problematic if that engine has been built with security considerations
+in mind (e.g., {{RE2}}); a checking implementation is still RECOMMENDED.
 
 --- back
 
