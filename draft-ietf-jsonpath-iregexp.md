@@ -126,8 +126,8 @@ MUST support the Unicode character property set in character classes.
 
 ## Checking Implementations {#checking}
 
-A *checking* I-Regexp implementation only accepts the I-Regexp syntax
-defined here.
+A *checking* I-Regexp implementation is one that checks a supplied
+regexp for compliance with this specification and reports any problems.
 Checking implementations give their users confidence that they didn't
 accidentally insert non-interoperable syntax, so checking is RECOMMENDED.
 Exceptions to this rule may be made for low-effort implementations
