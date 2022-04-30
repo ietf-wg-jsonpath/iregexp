@@ -124,7 +124,7 @@ In particular, full Unicode support is REQUIRED; the implementation
 MUST NOT limit itself to 7- or 8-bit character sets such as ASCII and
 MUST support the Unicode character property set in character classes.
 
-## Checking I-Regexp Implementations {#checking}
+## Checking Implementations {#checking}
 
 A *checking* I-Regexp implementation only accepts the I-Regexp syntax
 defined here.
