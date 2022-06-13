@@ -5,7 +5,7 @@ title: >
   I-Regexp: An Interoperable Regexp Format
 abbrev: I-Regexp
 docname: draft-ietf-jsonpath-iregexp-latest
-date: 2022-04-28
+date: 2022-06-13
 
 keyword: Internet-Draft
 cat: std
@@ -115,8 +115,8 @@ match `[^]`, which according to this grammar would parse as a
 positive character class containing the single character `^`.
 
 This is essentially XSD regexp without character class
-subtraction and multi-character escapes such as `\s`,
-`\S`, and `\w`.
+subtraction, without multi-character escapes such as `\s`,
+`\S`, and `\w`, and without Unicode blocks.
 
 An I-Regexp implementation MUST be a complete implementation of this
 limited subset.
@@ -218,10 +218,10 @@ exceptions:
 
 * Not all regexp implementations
   support accesses to Unicode tables that enable
-  executing on constructs such as `\p{IsCoptic}`,
+  executing on constructs such as `\p{Nd}`,
   although the `\p`/`\P` feature in general is now quite
   widely available. While in principle it’s possible to
-  translate these into codepoint-range matches, this also requires
+  translate these into character-class matches, this also requires
   access to those tables. Thus, regexp libraries in severely
   constrained environments may not be able to support I-Regexp
   conformance.
@@ -259,7 +259,8 @@ This appendix contains a number of regular expressions that have been
 extracted from some recently published RFCs based on some ad-hoc matching.
 Multi-line constructions were not included.
 With the exception of some (often surprisingly dubious) usage of multi-character
-escapes, all regular expressions validate against the ABNF in {{iregexp-abnf}}.
+escapes and a reference to the `IsBasicLatin` Unicode block, all
+regular expressions validate against the ABNF in {{iregexp-abnf}}.
 
 ~~~
 {::include iregexp.rfc.out}
@@ -281,6 +282,10 @@ Note that the semantics of `\d` in XSD regular expressions is that of
 `\p{Nd}`; however, this would include all Unicode characters that are
 digits in various writing systems and certainly is not actually meant
 in the RFCs listed.
+
+The construct `\p{IsBasicLatin}` is essentially a reference to legacy
+ASCII, it can be replaced by the somewhat more accessible character
+class `[\u0000-\u007f]`.
 
 Acknowledgements
 ================

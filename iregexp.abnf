@@ -25,7 +25,7 @@ CCchar = ( %x00-2C / %x2E-5A ; '.'-'Z'
  / %x5E-10FFFF ) / SingleCharEsc
 catEsc = %s"\p{" charProp "}"
 complEsc = %s"\P{" charProp "}"
-charProp = IsCategory / IsBlock
+charProp = IsCategory
 IsCategory = Letters / Marks / Numbers / Punctuation / Separators /
     Symbols / Others
 Letters = %s"L" [ ( %x6C-6D ; 'l'-'m'
@@ -39,7 +39,3 @@ Separators = %s"Z" [ ( %s"l" / %s"p" / %s"s" ) ]
 Symbols = %s"S" [ ( %s"c" / %s"k" / %s"m" / %s"o" ) ]
 Others = %s"C" [ ( %s"c" / %s"f" / %x6E-6F ; 'n'-'o'
  ) ]
-IsBlock = %s"Is" 1*( "-" / %x30-39 ; '0'-'9'
- / %x41-5A ; 'A'-'Z'
- / %x61-7A ; 'a'-'z'
- )

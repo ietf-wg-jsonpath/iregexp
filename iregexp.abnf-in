@@ -16,7 +16,7 @@ CCchar = <<^-[]\\>> / SingleCharEsc
 
 catEsc = "\p{" charProp "}"
 complEsc = "\P{" charProp "}"
-charProp = IsCategory / IsBlock
+charProp = IsCategory
 IsCategory = Letters / Marks / Numbers / Punctuation / Separators / Symbols / Others
 Letters = "L" <<ultmo>>?
 Marks = "M" <<nce>>?
@@ -25,4 +25,3 @@ Punctuation = "P" <<cdseifo>>?
 Separators = "Z" <<slp>>?
 Symbols = "S" <<mcko>>?
 Others = "C" <<cfon>>?
-IsBlock = "Is" <<a-zA-Z0-9\->>+
