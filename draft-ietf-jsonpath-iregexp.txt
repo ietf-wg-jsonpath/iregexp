@@ -5,8 +5,8 @@
 Network Working Group                                         C. Bormann
 Internet-Draft                                    Universität Bremen TZI
 Intended status: Standards Track                                 T. Bray
-Expires: 30 October 2022                                      Textuality
-                                                           28 April 2022
+Expires: 28 December 2022                                     Textuality
+                                                            26 June 2022
 
 
                 I-Regexp: An Interoperable Regexp Format
@@ -30,7 +30,7 @@ About This Document
    https://mailarchive.ietf.org/arch/browse/JSONPath/.
 
    Source for this draft and an issue tracker can be found at
-   https://github.com/cabo/iregexp.
+   https://github.com/ietf-wg-jsonpath/iregexp.
 
 Status of This Memo
 
@@ -47,7 +47,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 October 2022.
+   This Internet-Draft will expire on 28 December 2022.
 
 Copyright Notice
 
