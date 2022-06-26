@@ -5,7 +5,7 @@ title: >
   I-Regexp: An Interoperable Regexp Format
 abbrev: I-Regexp
 docname: draft-ietf-jsonpath-iregexp-latest
-date: 2022-04-28
+# date: 2022-04-28
 
 keyword: Internet-Draft
 cat: std
@@ -14,7 +14,7 @@ submissiontype: IETF
 
 venue:
   mail: JSONPath@ietf.org
-  github: cabo/iregexp
+  github: ietf-wg-jsonpath/iregexp
 
 author:
   - name: Carsten Bormann
