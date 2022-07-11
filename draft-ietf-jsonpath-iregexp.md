@@ -218,7 +218,7 @@ exceptions:
 
 * Not all regexp implementations
   support accesses to Unicode tables that enable
-  executing on constructs such as `\p{Nd}`,
+  executing constructs such as `\p{Nd}`,
   although the `\p`/`\P` feature in general is now quite
   widely available. While in principle it’s possible to
   translate these into character-class matches, this also requires
