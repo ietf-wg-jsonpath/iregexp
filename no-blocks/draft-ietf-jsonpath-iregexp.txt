@@ -283,7 +283,7 @@ Table of Contents
       regexp flavors.  Thus, they are omitted from I-Regexp.
 
    *  Not all regexp implementations support accesses to Unicode tables
-      that enable executing on constructs such as \p{Nd}, although the
+      that enable executing constructs such as \p{Nd}, although the
       \p/\P feature in general is now quite widely available.  While in
       principle it's possible to translate these into character-class
       matches, this also requires access to those tables.  Thus, regexp
