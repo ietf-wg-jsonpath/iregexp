@@ -67,21 +67,21 @@ Introduction        {#intro}
 
 This specification describes an interoperable regular expression flavor, I-Regexp.
 
+I-Regexp does not provide advanced regular expression features such as capture groups, lookahead, or backreferences.
+It supports only a Boolean matching capability, i.e., testing whether a given regular expression matches a given piece of text.
+
+I-Regexp supports the entire repertoire of Unicode characters.
+
+I-Regexp is a subset of XSD regular expressions {{XSD-2}}.
+
+This document includes guidance for converting I-Regexps for use with several well-known regular expression idioms.
+
+## Terminology
+
 This document uses the abbreviation "regexp" for what are usually
 called regular expressions in programming.
 "I-Regexp" is used as a noun meaning a character string which conforms to the requirements
 in this specification; the plural is "I-Regexps".
-
-I-Regexp does not provide advanced regexp features such as capture groups, lookahead, or backreferences.
-It supports only a Boolean matching capability, i.e., testing whether a given regexp matches a given piece of text.
-
-I-Regexp supports the entire repertoire of Unicode characters.
-
-I-Regexp is a subset of XSD regexps {{XSD-2}}.
-
-This document includes rules for converting I-Regexps for use with several well-known regexp libraries.
-
-## Terminology
 
 {::boilerplate bcp14-tagged}
 
@@ -94,11 +94,11 @@ I-Regexps should handle the vast majority of practical cases where a
 matching regexp is needed in a data model specification or a query
 language expression.
 
-A brief survey of published RFCs yielded the regexp patterns in
-Appendix A (with no attempt at completeness).
-With certain exceptions as discussed there,
-these should be covered by I-Regexps, both syntactically and with
-their intended semantics.
+The editors of this document conducted a survey of the regexp syntax
+used in published RFCs. All examples found there should be covered by I-Regexps,
+both syntactically and with their intended semantics.
+The exception is the use of multi-character escapes, for which
+workaround guidance is provided in {{mapping}}.
 
 # I-Regexp Syntax {#defn}
 
@@ -151,7 +151,30 @@ yield Boolean results as specified in {{XSD-2}}.
 
 # Mapping I-Regexp to Regexp Dialects {#mapping}
 
-(TBD; these mappings need to be further verified in implementation work.)
+The material in this section is non-normative, provided as guidance
+to developers who want to use I-Regexps in the context of other
+regular expression dialects.
+
+## Multi-Character Escapes
+
+Common multi-character escapes (MCEs), and character classes built around them,
+which are not supported in I-Regexp, can usually
+be replaced as shown in {{tbl-sub}}.
+
+| MCE/class | Replace with     |
+|-----------|------------------|
+| `\S`      | `[^ \t\n\r]`     |
+| `[\S ]`   | `[^\t\n\r]`      |
+| `\d`      | `[0-9]`          |
+{: #tbl-sub title="Substitutes for multi-character escapes in examples"}
+
+Note that the semantics of `\d` in XSD regular expressions is that of
+`\p{Nd}`; however, this would include all Unicode characters that are
+digits in various writing systems, which is almost certainly not what is
+required in IETF publications.
+
+The construct `\p{IsBasicLatin}` is essentially a reference to legacy
+ASCII, it can be replaced by the character class `[\u0000-\u007f]`.
 
 ## XSD Regexps
 
@@ -255,6 +278,8 @@ in mind (e.g., {{RE2}}); a checking implementation is still RECOMMENDED.
 Regexps and Similar Constructs in Recent Published RFCs {#rfcs}
 ========================================================
 
+**THIS APPENDIX TO BE REMOVED BY THE RFC EDITOR**
+
 This appendix contains a number of regular expressions that have been
 extracted from some recently published RFCs based on some ad-hoc matching.
 Multi-line constructions were not included.
@@ -267,25 +292,6 @@ regular expressions validate against the ABNF in {{iregexp-abnf}}.
 ~~~
 {: #iregexp-examples title="Example regular expressions extracted from
 RFCs"}
-
-The multi-character escapes (MCE) or the character classes built
-around them used here can be substituted as shown in {{tbl-sub}}.
-
-| MCE/class | Substitute class |
-|-----------|------------------|
-| `\S`      | `[^ \t\n\r]`     |
-| `[\S ]`   | `[^\t\n\r]`      |
-| `\d`      | `[0-9]`          |
-{: #tbl-sub title="Substitutes for multi-character escapes in examples"}
-
-Note that the semantics of `\d` in XSD regular expressions is that of
-`\p{Nd}`; however, this would include all Unicode characters that are
-digits in various writing systems and certainly is not actually meant
-in the RFCs listed.
-
-The construct `\p{IsBasicLatin}` is essentially a reference to legacy
-ASCII, it can be replaced by the somewhat more accessible character
-class `[\u0000-\u007f]`.
 
 Acknowledgements
 ================
