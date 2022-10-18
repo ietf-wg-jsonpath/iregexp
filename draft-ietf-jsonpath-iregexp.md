@@ -159,14 +159,14 @@ regular expression dialects.
 
 Common multi-character escapes (MCEs), and character classes built around them,
 which are not supported in I-Regexp, can usually
-be replaced as shown in {{tbl-sub}}.
+be replaced as shown for example in {{tbl-sub}}.
 
 | MCE/class | Replace with     |
 |-----------|------------------|
 | `\S`      | `[^ \t\n\r]`     |
 | `[\S ]`   | `[^\t\n\r]`      |
 | `\d`      | `[0-9]`          |
-{: #tbl-sub title="Substitutes for multi-character escapes in examples"}
+{: #tbl-sub title="Example substitutes for multi-character escapes"}
 
 Note that the semantics of `\d` in XSD regular expressions is that of
 `\p{Nd}`; however, this would include all Unicode characters that are
