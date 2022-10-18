@@ -5,7 +5,7 @@ title: >
   I-Regexp: An Interoperable Regexp Format
 abbrev: I-Regexp
 docname: draft-ietf-jsonpath-iregexp-latest
-date: 2022-07-11
+date: 2022-10-18
 
 keyword: Internet-Draft
 cat: std
