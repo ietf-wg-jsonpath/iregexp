@@ -27,6 +27,7 @@ author:
     email: cabo@tzi.org
   - name: Tim Bray
     org: Textuality
+    country: Canada
     email: tbray@textuality.com
 
 normative:
