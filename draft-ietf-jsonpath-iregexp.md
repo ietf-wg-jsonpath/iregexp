@@ -277,8 +277,7 @@ in mind (e.g., {{RE2}}); a checking implementation is still RECOMMENDED.
 
 Regexps and Similar Constructs in Recent Published RFCs {#rfcs}
 ========================================================
-
-**THIS APPENDIX TO BE REMOVED BY THE RFC EDITOR**
+{:removeinrfc}
 
 This appendix contains a number of regular expressions that have been
 extracted from some recently published RFCs based on some ad-hoc matching.
