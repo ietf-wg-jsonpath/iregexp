@@ -37,6 +37,10 @@ normative:
   RFC7405: abnf-cs
 
 informative:
+  JSONPATH:
+    title: >
+      JSONPath: Query expressions for JSON
+    target: https://www.ietf.org/archive/id/draft-ietf-jsonpath-base-11.html
   RE2:
     title: >
       RE2 is a fast, safe, thread-friendly alternative to backtracking regular expression engines like those used in PCRE, Perl, and Python. It is a C++ library.
@@ -76,6 +80,10 @@ I-Regexp supports the entire repertoire of Unicode characters.
 I-Regexp is a subset of XSD regular expressions {{XSD-2}}.
 
 This document includes guidance for converting I-Regexps for use with several well-known regular expression idioms.
+
+The development of I-Regexp was motivated by the work of the JSONPath Working Group. The Working Group wanted to include
+in its draft{{JSONPATH}} support for the use of regular expressions in JSONPath filters, but was unable to find a useful
+specification for regular expressions which would be interoperable across the popular libraries.
 
 ## Terminology
 
