@@ -5,7 +5,7 @@ title: >
   I-Regexp: An Interoperable Regexp Format
 abbrev: I-Regexp
 docname: draft-ietf-jsonpath-iregexp-latest
-date: 2022-10-18
+date: 2023-02-04
 
 keyword: Internet-Draft
 cat: std
@@ -196,7 +196,10 @@ regexp {{ECMA-262}}:
 
 * For any dots (`.`) outside character classes (first alternative
   of `charClass` production): replace dot by `[^\n\r]`.
-* Envelope the result in `^` and `$`.
+* Envelope the result in `^(?:` and `)$`.
+
+The ECMAScript regexp is to be interpreted as a Unicode pattern ("u"
+flag; see Section 21.2.2 "Pattern Semantics" of {{ECMA-262}}).
 
 Note that where a regexp literal is required,
 the actual regexp needs to be enclosed in `/`.
@@ -207,7 +210,7 @@ Perform the same steps as in {{toESreg}} to obtain a valid regexp in
 PCRE {{PCRE2}}, the Go programming language {{RE2}}, and the Ruby
 programming language, except that the last step is:
 
-* Enclose the regexp in `\A` and `\z`.
+* Enclose the regexp in `\A(?:` and `)\z`.
 
 Motivation and Background {#background}
 =========================
