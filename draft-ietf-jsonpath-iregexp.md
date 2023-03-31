@@ -37,7 +37,7 @@ normative:
   RFC7405: abnf-cs
 
 informative:
-  I-D.draft-ietf-jsonpath-base: jsonpath
+  I-D.ietf-jsonpath-base: jsonpath
   RE2:
     title: >
       RE2 is a fast, safe, thread-friendly alternative to backtracking regular expression engines like those used in PCRE, Perl, and Python. It is a C++ library.
