@@ -2,16 +2,16 @@
 
 This is the working area for the IETF [JSONPATH Working Group](https://datatracker.ietf.org/wg/jsonpath/documents/) Internet-Draft, "I-Regexp: An Interoperable Regexp Format".
 
-* [Editor's Copy](https://cabo.github.io/iregexp/#go.draft-ietf-jsonpath-iregexp.html)
+* [Editor's Copy](https://ietf-wg-jsonpath.github.io/iregexp/#go.draft-ietf-jsonpath-iregexp.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-jsonpath-iregexp)
 * [Working Group Draft](https://datatracker.ietf.org/doc/html/draft-ietf-jsonpath-iregexp)
-* [Compare Editor's Copy to Working Group Draft](https://cabo.github.io/iregexp/#go.draft-ietf-jsonpath-iregexp.diff)
+* [Compare Editor's Copy to Working Group Draft](https://ietf-wg-jsonpath.github.io/iregexp/#go.draft-ietf-jsonpath-iregexp.diff)
 
 
 ## Contributing
 
 See the
-[guidelines for contributions](https://github.com/cabo/iregexp/blob/main/CONTRIBUTING.md).
+[guidelines for contributions](https://github.com/ietf-wg-jsonpath/iregexp/blob/main/CONTRIBUTING.md).
 
 Contributions can be made by creating pull requests.
 The GitHub interface supports creating pull requests using the Edit (✏) button.
