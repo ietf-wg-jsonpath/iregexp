@@ -126,7 +126,8 @@ subtraction, without multi-character escapes such as `\s`,
 
 An I-Regexp implementation MUST be a complete implementation of this
 limited subset.
-In particular, full Unicode support is REQUIRED; the implementation
+In particular, full support for the Unicode functionality defined in
+this specification is REQUIRED; the implementation
 MUST NOT limit itself to 7- or 8-bit character sets such as ASCII and
 MUST support the Unicode character property set in character classes.
 
