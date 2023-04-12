@@ -1,7 +1,7 @@
 <note title="Discussion Venues" removeInRFC="true">
 <t>Discussion of this document takes place on the
-  JSON Path Working Group mailing list (jsonpath@ietf.org),
-  which is archived at <eref target="https://mailarchive.ietf.org/arch/browse/jsonpath/"/>.</t>
+    JSON Path Working Group mailing list (jsonpath@ietf.org),
+    which is archived at <eref target="https://mailarchive.ietf.org/arch/browse/jsonpath/"/>.</t>
 <t>Source for this draft and an issue tracker can be found at
-  <eref target="https://github.com/cabo/iregexp"/>.</t>
+    <eref target="https://github.com/cabo/iregexp"/>.</t>
 </note>

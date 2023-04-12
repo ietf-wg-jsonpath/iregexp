@@ -1,2 +1,3 @@
-# Automatically generated CODEOWNERS file.
-draft-bormann-jsonpath-iregexp.md cabo@tzi.org
+# Automatically generated CODEOWNERS
+# Regenerate with `make update-codeowners`
+draft-ietf-jsonpath-iregexp.md cabo@tzi.org tbray@textuality.com
