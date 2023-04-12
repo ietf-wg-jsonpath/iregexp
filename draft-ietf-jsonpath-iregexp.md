@@ -92,7 +92,8 @@ in this specification; the plural is "I-Regexps".
 {::boilerplate bcp14-tagged}
 
 The grammatical rules in this document are to be interpreted as ABNF,
-as described in {{-abnf}} and {{-abnf-cs}}.
+as described in {{-abnf}} and {{-abnf-cs}}, where the "characters" of
+{{Section 2.3 of -abnf}} are Unicode scalar values.
 
 # Requirements
 
