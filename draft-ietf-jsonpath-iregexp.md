@@ -72,7 +72,8 @@ This specification describes an interoperable regular expression flavor, I-Regex
 I-Regexp does not provide advanced regular expression features such as capture groups, lookahead, or backreferences.
 It supports only a Boolean matching capability, i.e., testing whether a given regular expression matches a given piece of text.
 
-I-Regexp supports the entire repertoire of Unicode characters.
+I-Regexp supports the entire repertoire of Unicode characters (Unicode
+scalar values).
 
 I-Regexp is a subset of XSD regular expressions {{XSD-2}}.
 
@@ -86,7 +87,8 @@ specification for regular expressions which would be interoperable across the po
 
 This document uses the abbreviation "regexp" for what are usually
 called regular expressions in programming.
-"I-Regexp" is used as a noun meaning a character string which conforms to the requirements
+"I-Regexp" is used as a noun meaning a character string (sequence of
+Unicode scalar values) that conforms to the requirements
 in this specification; the plural is "I-Regexps".
 
 {::boilerplate bcp14-tagged}
