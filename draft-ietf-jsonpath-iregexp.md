@@ -38,6 +38,12 @@ normative:
 
 informative:
   I-D.ietf-jsonpath-base: jsonpath
+  UNICODE-GLOSSARY:
+    title: Glossary of Unicode Terms
+    target: https://unicode.org/glossary/
+    author:
+      org: Unicode, Inc.
+    date: false
   RE2:
     title: >
       RE2 is a fast, safe, thread-friendly alternative to backtracking regular expression engines like those used in PCRE, Perl, and Python. It is a C++ library.
@@ -90,6 +96,9 @@ called regular expressions in programming.
 "I-Regexp" is used as a noun meaning a character string (sequence of
 Unicode scalar values) that conforms to the requirements
 in this specification; the plural is "I-Regexps".
+
+This specification uses Unicode terminology.
+A good entry point into that is provided by {{UNICODE-GLOSSARY}}.
 
 {::boilerplate bcp14-tagged}
 
