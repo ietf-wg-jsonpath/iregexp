@@ -199,7 +199,7 @@ regexps is equivalent to an implementation of XSD 1.1 regexps.
 Perform the following steps on an I-Regexp to obtain an ECMAScript
 regexp {{ECMA-262}}:
 
-* For any dots (`.`) outside character classes (first alternative
+* For any unescaped dots (`.`) outside character classes (first alternative
   of `charClass` production): replace dot by `[^\n\r]`.
 * Envelope the result in `^(?:` and `)$`.
 
