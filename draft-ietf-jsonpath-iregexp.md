@@ -38,6 +38,12 @@ normative:
 
 informative:
   I-D.ietf-jsonpath-base: jsonpath
+  UNICODE-GLOSSARY:
+    title: Glossary of Unicode Terms
+    target: https://unicode.org/glossary/
+    author:
+      org: Unicode, Inc.
+    date: false
   RE2:
     title: >
       RE2 is a fast, safe, thread-friendly alternative to backtracking regular expression engines like those used in PCRE, Perl, and Python. It is a C++ library.
@@ -72,7 +78,8 @@ This specification describes an interoperable regular expression flavor, I-Regex
 I-Regexp does not provide advanced regular expression features such as capture groups, lookahead, or backreferences.
 It supports only a Boolean matching capability, i.e., testing whether a given regular expression matches a given piece of text.
 
-I-Regexp supports the entire repertoire of Unicode characters.
+I-Regexp supports the entire repertoire of Unicode characters (Unicode
+scalar values).
 
 I-Regexp is a subset of XSD regular expressions {{XSD-2}}.
 
@@ -86,13 +93,18 @@ specification for regular expressions which would be interoperable across the po
 
 This document uses the abbreviation "regexp" for what are usually
 called regular expressions in programming.
-"I-Regexp" is used as a noun meaning a character string which conforms to the requirements
+"I-Regexp" is used as a noun meaning a character string (sequence of
+Unicode scalar values) that conforms to the requirements
 in this specification; the plural is "I-Regexps".
+
+This specification uses Unicode terminology.
+A good entry point into that is provided by {{UNICODE-GLOSSARY}}.
 
 {::boilerplate bcp14-tagged}
 
 The grammatical rules in this document are to be interpreted as ABNF,
-as described in {{-abnf}} and {{-abnf-cs}}.
+as described in {{-abnf}} and {{-abnf-cs}}, where the "characters" of
+{{Section 2.3 of -abnf}} are Unicode scalar values.
 
 # Requirements
 
@@ -126,7 +138,8 @@ subtraction, without multi-character escapes such as `\s`,
 
 An I-Regexp implementation MUST be a complete implementation of this
 limited subset.
-In particular, full Unicode support is REQUIRED; the implementation
+In particular, full support for the Unicode functionality defined in
+this specification is REQUIRED; the implementation
 MUST NOT limit itself to 7- or 8-bit character sets such as ASCII and
 MUST support the Unicode character property set in character classes.
 
