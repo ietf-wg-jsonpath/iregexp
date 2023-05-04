@@ -5,7 +5,7 @@ title: >
   I-Regexp: An Interoperable Regexp Format
 abbrev: I-Regexp
 docname: draft-ietf-jsonpath-iregexp-latest
-date: 2023-04-26
+date: 2023-05-04
 
 keyword: Internet-Draft
 cat: std
@@ -73,7 +73,8 @@ Introduction        {#intro}
 ============
 
 
-This specification describes an interoperable regular expression flavor, I-Regexp.
+This specification describes an interoperable regular expression ("regexp") flavor, I-Regexp.
+
 
 I-Regexp does not provide advanced regular expression features such as capture groups, lookahead, or backreferences.
 It supports only a Boolean matching capability, i.e., testing whether a given regular expression matches a given piece of text.
