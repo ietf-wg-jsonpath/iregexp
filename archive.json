@@ -1,0 +1,2112 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2023-04-27T01:04:28.479161+00:00",
+  "repo": "ietf-wg-jsonpath/iregexp",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 7,
+      "id": "I_kwDOFeByHs5FVvu7",
+      "title": "What does the final draft look like?",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/issues/7",
+      "state": "CLOSED",
+      "author": "timbray",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The purpose of this issue is to start discussion about how to turn this into a completed draft to send to the IESG.  Perhaps the most important issue is how much of the explanatory and motivational material to leave in.  There is a case to be made for taking *all* of it out, so you get a nice short RFC that just says what I-Regexp is.  So here's my initial straw-person proposal on what should be removed and changed:\r\n\r\n- Remove the \"issues\" para in Section 3.\r\n- Section 5.2, 5.3, remove the trailing note about improving performance. This is an implementation artifact, no?\r\n- Section 6. Replace with a single short paragraph somewhat as follows: \"While regular expressions originally were intended to describe a formal language, i.e., to provide a Boolean matching function, they have turned into parsing functions for many applications. With this accretion of features, parsing regexp libraries have become susceptible to bugs and performance degradation, in particular those that can be exploited in Denial of Service (DoS) attacks in the case where an attacker controls the regex submitted for processing.  I-Regexp is designed to offer interoperability, and to be less vulnerable to such attacks, with the trade-off that its only function is to offer a boolean response as to whether a character sequence is matched by a regex. [ If we really feel that other parts of this discussion add value, they could migrate into an appendix.]\r\n- 6.1 - cut this down, retaining the first para of the first bullet point, the first sentence of the second bullet point, and that's all. The Unicode discussion can migrate into Appendix A.\r\n\r\n",
+      "createdAt": "2022-03-08T23:45:24Z",
+      "updatedAt": "2022-06-13T16:30:03Z",
+      "closedAt": "2022-06-13T16:30:01Z",
+      "comments": [
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "Resolved by #8 ",
+          "createdAt": "2022-06-13T16:30:01Z",
+          "updatedAt": "2022-06-13T16:30:01Z"
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "id": "I_kwDOFeByHs5Ic-Ri",
+      "title": "Better to support Unicode scripts rather than blocks in `\\p` and `\\P`",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/issues/10",
+      "state": "CLOSED",
+      "author": "jclark",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I think it is better to support script names than block names for `\\p` and `\\P`.\r\n\r\nUnicode block names are not supported by regexp implementations an interoperable way.  Block names as specified in\r\n\r\nhttps://www.unicode.org/Public/UNIDATA/Blocks.txt\r\n\r\nallow ASCII alpha-numerics, hyphens and spec.  Unicode says these names are supposed to be matched using\r\n\r\nhttp://www.unicode.org/reports/tr44/#UAX44-LM3\r\n\r\n(which says to ignore case, whitespace, underscore, hyphens, and any initial prefix string \"is\"). But implementations don't do this and compare names using a wide variety of different rules (as partially described by \"Unicode blocks\" section of https://www.regular-expressions.info/unicode.html).\r\n\r\nUsage of block names can easily be replaced by ranges.  Furthermore, block names are not covered by the Unicode stability policy.\r\n\r\nScripts names don't have such a wide range of characters (there are also 4-char short script names) and scripts are generally preferable to blocks for regexps as explained here:\r\n\r\nhttps://unicode.org/reports/tr18/#Character_Blocks\r\n\r\nScript is in the minimal list of properties that Unicode requires but block is not\r\n\r\nhttp://unicode.org/reports/tr18/#RL1.2\r\n\r\n",
+      "createdAt": "2022-04-26T07:53:26Z",
+      "updatedAt": "2022-07-11T21:53:17Z",
+      "closedAt": "2022-07-11T21:53:17Z",
+      "comments": [
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "Thank you!  Very useful input.\r\nWe are having an interim meeting (per web conference) of the JSONPath WG at this very moment; I'll look at this later today.",
+          "createdAt": "2022-04-26T08:00:43Z",
+          "updatedAt": "2022-04-26T08:00:43Z"
+        },
+        {
+          "author": "jclark",
+          "authorAssociation": "NONE",
+          "body": "I just looked again at XSD and see that sadly it doesn't support scripts in `\\p`.  Every major regex implementation that I am aware of that does Unicode and `\\p` does support scripts (Go, PCRE, Java, C#, Ruby).  So if XSD compatibility is crucial (not sure why it would be at this point), my suggestion would be just to get rid of blocks.\r\n\r\nOne could argue that supporting only the general category in `\\p` is consistent with not supporting character set intersection/difference: once you have multiple things (e.g. script and category), you really need to be able to have intersections/differences of them.\r\n\r\n",
+          "createdAt": "2022-04-26T08:35:33Z",
+          "updatedAt": "2022-04-26T08:35:33Z"
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "id": "I_kwDOFeByHs5UYoS5",
+      "title": "Why is this based on XSD usage?",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/issues/15",
+      "state": "CLOSED",
+      "author": "gregsdennis",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I have concerns that this spec being [based on XSD-2](https://www.ietf.org/archive/id/draft-ietf-jsonpath-iregexp-02.html#section-4) may not be suitable for JSON Path, as was the original intent.\r\n\r\nPrimarily, XSD is an XML technology, while JSON Path is a JSON technology.  While the argument _could_ be made that JSON Path is the JSON analogy for XPath, it doesn't follow that all the conventions must come with it.  This specification should, at a minimum, follow the conventions and expectations already established by the JSON development community.  It follows that, if anything, the basis for this specification should be ECMA-262 from ECMAScript, a.k.a. Javascript, from which JSON is derived.\r\n\r\nSecondarily, the feature set in XSD is not representative of the majority of implementations (e.g. implicit anchoring).  The original intent for this specification was interoperability, and in that interest, it seems more appropriate for this specification to define the intersection of features amongst the most common and popular regular expression dialect.  Instead, it takes one dialect (which arguably is less common and less well-known) as the basis and providing conversion instructions to the more common ones.  This practice seems antithetical to the goal of interoperability.",
+      "createdAt": "2022-10-20T00:41:10Z",
+      "updatedAt": "2022-11-24T19:31:40Z",
+      "closedAt": "2022-11-24T19:31:40Z",
+      "comments": [
+        {
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I speak as someone who is on the record as loathing XSD generally.  But I'm supportive of borrowing that regexp idiom because (a) it has a stable immutable specification and (b) it looks to me like an attractively sized clean subset of the other well-known flavors.  Implicit anchoring is easy to understand and doesn't feel like a problem - are there any other significant ways in which this flavor is not representative?",
+          "createdAt": "2022-10-20T00:49:10Z",
+          "updatedAt": "2022-10-20T00:49:10Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "body": "The genesis of this spec (through conversations in JSON Path interim meetings) was dissatisfaction with the current variability of existing dialects and the desire to support a dialect that was interoperable\n\nTo achieve this, we should have surveyed existing dialects for features and independently defined the intersection of those features here.  But there is no evidence that this was done.  Instead, XSD seems to have been arbitrarily chosen as a basis (and implicit anchors along with it).\n\nWe SHOULD NOT be assuming one (any one) dialect as a basis.  We should be defining our own _based on_ common usage in the community.\n\nThere has been no evidential argument presented as to why XSD should be a basis for this spec nor that the XSD dialect is still commonly used.  To the contrary, I present these online evaluators, which were the top 5 results of a Google search:\n\n- https://regex101.com/\n- https://regexr.com/\n- https://www.regextester.com/\n- https://www.freeformatter.com/regex-tester.html\n- https://www.debuggex.com/\n\nMany of these sites even offer different language-based rulesets so that different dialect behaviors can be compared.  Even an [online grep](https://www.online-utility.org/text/grep.jsp) agrees with their behavior.\n\nI expect the intersection of the features provided by these sites very closely matches the ABNF present in the spec.  However, none of these support implicit anchoring as their default behavior.\n\nThe evidence shows that implicit anchoring would be an unexpected behavior for developers, which is a bad experience.  To best encourage adoption of JSON Path (and even I-Regexp in general by other specifications, like JSON Schema), common, well-known behaviors need to be included, and less common, unsupported behaviors need to be excluded.\n\nLastly, with implicit anchoring enabled, how does one explicitly _exclude_ anchors?",
+          "createdAt": "2022-10-20T02:12:53Z",
+          "updatedAt": "2022-10-20T03:49:32Z"
+        },
+        {
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The reason we based this on XSD is because it has a freely available, immutable specification that other people wrote so we don't have to, and that its features are an attractive subset of many existing dialects.  I do not have sufficient spare time to engage in recreating specifications that other people have already written.\r\n\r\nI agree that a variety of different approaches to this work would produce pretty well the same ABNF, and if you're aware of another such spec that has the same advantages but is preferable for some reason, I'd have no objection to switching.\r\n\r\nI haven't seen any data that establishes that either anchored or unanchored regexps are more generally useful. \r\n\r\n> Lastly, with implicit anchoring enabled, how does one explicitly _exclude_ anchors?\r\n\r\nAs it says in [the XSD regexp spec](https://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#regexs): \"including .* at the beginning and ending of the regular expression will achieve the desired results\"\r\n\r\n",
+          "createdAt": "2022-10-24T23:07:17Z",
+          "updatedAt": "2022-10-24T23:07:17Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "body": "> I do not have sufficient spare time to engage in recreating specifications that other people have already written.\r\n\r\nBut that's exactly what we're doing!  We're not referencing XSD and saying, \"This spec does the same as XSD except...\" We're completely redefining the behavior, starting by _copying_ from what's in XSD.  That means we can change it where we feel it falls short.\r\n\r\n> I haven't seen any data that establishes that either anchored or unanchored regexps are more generally useful.\r\n\r\nI'm not saying one or the other is more or less _useful_.  I'm saying that implicit anchoring is less _common_.  The majority of developers expect a regex engine to require explicit anchors because this is the behavior that modern implementations employ. \r\n Implicit anchoring is a significant gotcha that will cause many people to encounter unexpected behavior as they work with JSON Path.\r\n\r\nI believe basing this on XSD (and holding fast to that basis) is unreasonable.  Regardless of whether XSD stable, it's a lesser known dialect, and I fear that will inevitably hurt JSON Path.",
+          "createdAt": "2022-10-25T01:07:42Z",
+          "updatedAt": "2022-10-25T01:17:06Z"
+        },
+        {
+          "author": "handrews",
+          "authorAssociation": "NONE",
+          "body": "> I haven't seen any data that establishes that either anchored or unanchored regexps are more generally useful.\r\n\r\nIt's not about what's \"more generally useful\", it's about what fits the target ecosystem.  If this is supposed to benefit JSON-based projects, that is an ECMA-based world, not an XML-based one.  And ECMA, as well as most of the most popular relevant programming languages including JavaScript, Java, Python, Perl, Ruby, C++ and even current hot language Rust all either have entirely unanchored regexes or have different functions/methods that impose different anchor behavior on regexes that are written as unanchored.  In all cases, the expectation is that the regex as written is unanchored, even if the desired usage is anchored on both ends.",
+          "createdAt": "2022-10-25T21:43:48Z",
+          "updatedAt": "2022-10-25T21:43:48Z"
+        },
+        {
+          "author": "glyn",
+          "authorAssociation": "NONE",
+          "body": "On regexp anchoring, http://www.rexegg.com/regex-anchors.html is both\ninformative and disturbing. It seems the semantics of ^ and $ vary between\nregexp implementations and so cannot be taken for granted.\n\nThis example raises an interesting question: https://regex101.com/r/fQGLTr/1\n- the regexp implementations there give two matches of e$ in the string\n\"one\\napple\\n\". Does the XSD-2 regexp .*e match against that string? That\nis, does its implicit anchoring ignore trailing newlines?\n\nThe spec appears to be silent about this and some aspects of so-called\n\"multiline mode\" (see the regex101 link above). I presume XSD-2 regexp\nanchoring operates like some other regexp implementations when multiline\nmode is off, but it's hard to be sure from the spec.\n\nOn Tue, 25 Oct 2022 at 22:43, Henry Andrews ***@***.***>\nwrote:\n\n> I haven't seen any data that establishes that either anchored or\n> unanchored regexps are more generally useful.\n>\n> It's not about what's \"more generally useful\", it's about what fits the\n> target ecosystem. If this is supposed to benefit JSON-based projects, that\n> is an ECMA-based world, not an XML-based one. And ECMA, as well as most of\n> the most popular relevant programming languages including JavaScript, Java,\n> Python, Perl, Ruby, C++ and even current hot language Rust all either have\n> entirely unanchored regexes or have different functions/methods that impose\n> different anchor behavior on regexes that are written as unanchored. In all\n> cases, the expectation is that the regex as written is unanchored, even if\n> the desired usage is anchored on both ends.\n>\n> \u2014\n> Reply to this email directly, view it on GitHub\n> <https://github.com/ietf-wg-jsonpath/iregexp/issues/15#issuecomment-1291175987>,\n> or unsubscribe\n> <https://github.com/notifications/unsubscribe-auth/AAAXF2OS72JV7UMSOUK6EALWFBIB5ANCNFSM6AAAAAARJUGE4M>\n> .\n> You are receiving this because you are subscribed to this thread.Message\n> ID: ***@***.***>\n>\n",
+          "createdAt": "2022-10-26T09:39:48Z",
+          "updatedAt": "2022-10-26T09:39:48Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "> On regexp anchoring, http://www.rexegg.com/regex-anchors.html is both informative and disturbing. It seems the semantics of ^ and $ vary between regexp implementations and so cannot be taken for granted. \r\n\r\nIndeed.  That was an additional reason not to use explicit anchors in iregexp (the main reasons are that an anchored string is actually what is desired in the vast majority of the use cases, and that it is too easy to use anchors in the wrong way).\r\n\r\n> This example raises an interesting question: https://regex101.com/r/fQGLTr/1 - the regexp implementations there give two matches of e$ in the string \"one\\napple\\n\". \r\n\r\nYes, a sliding regexp with the usual (non-JS) semantics of `$` will match all `e` characters that are at the end of lines.\r\n\r\n> Does the XSD-2 regexp .*e match against that string? \r\n\r\nNo, as the string does not end with `e`.\r\n(There also is the problem that .* does not match newlines, so `(.|[^x])*` or some such needs to be used for a 2d [multiline] match.  Stupidly, XSD does not support [^], but that would not be interoperable with other implementations anyway.)\r\n\r\n> That is, does its implicit anchoring ignore trailing newlines? The spec appears to be silent about this and some aspects of so-called \"multiline mode\" (see the regex101 link above). \r\n\r\nIt is silent because XSD doesn't do anything extra here.\r\n(Functionality not described is to be assumed to be not there.)\r\n\r\n> I presume XSD-2 regexp anchoring operates like some other regexp implementations when multiline mode is off, but it's hard to be sure from the spec.\r\n\r\niregexp currently does not provide a way to attach a \"mode\" to a regexp.\r\n\"mode\"s are probably the most non-interoperable part of the regexp zoo, so I'm not sure that this should be added -- it would most certainly need translation when transforming into an existing implementation.\r\n",
+          "createdAt": "2022-10-26T09:53:30Z",
+          "updatedAt": "2022-10-26T09:53:30Z"
+        },
+        {
+          "author": "handrews",
+          "authorAssociation": "NONE",
+          "body": "@cabo \r\n\r\n> Indeed. That was an additional reason not to use explicit anchors in iregexp (the main reasons are that an anchored string is actually what is desired in the vast majority of the use cases, and that it is too easy to use anchors in the wrong way).\r\n\r\nYou keep making this claim but I see no evidence of it.  The XSD spec says something like this, but _only_ in the context of their specific `pattern` attribute.\r\n\r\nI spent many years as a technical lead for test automation, where I inherited a large Perl automation system for CLI testing which was used by multiple teams across a product line.  It relied heavily on matching using regexes, and anchored regexes were _not_ what was desired in the vast majority of cases.\r\n\r\nIt's also worth noting that over the past six or so years of JSON Schema work, while occasionally people ask about anchoring or want it clarified in the spec (for some reason that bit of information has migrated around the documents over time), there has never been anything remotely resembling a significant or steady demand for anchored regexes.",
+          "createdAt": "2022-10-26T16:31:28Z",
+          "updatedAt": "2022-10-26T16:31:28Z"
+        },
+        {
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Let me pick apart the arguments here in an effort to help us achieve consensus. I think there are three distinct issues here; I'll list them and maybe it would be more productive to separate them out into separate issues?  \r\n\r\n1. Rather than adopting someone else's regular expression specification, we should write our own from scratch based on a survey of the overlap between popular idioms. \r\n2. If we are going to base I-Regexp on another regexp specification, it shouldn't be XSD's, because that is XML-tainted and not ECMA-flavored enough. We should base on X for some value of X. (Comment: Suggestions for X?)\r\n3. IRegexps should not be anchored by default. (Comment: This could be fixed by amendment to the current draft I think?)\r\n\r\nDo we agree on what we're arguing about?",
+          "createdAt": "2022-10-27T17:49:16Z",
+          "updatedAt": "2022-10-27T17:49:16Z"
+        },
+        {
+          "author": "handrews",
+          "authorAssociation": "NONE",
+          "body": "@timbray thanks for laying this out.  For me, I'm arguing points 2 and 3.  I have no strong opinion on point 1, although I tend to lean towards adopting an existing dialect _if_ it is otherwise suitable.\r\n\r\nPoint 2 is less about being \"XML-tainted\" and more about XML not aligning with ECMA world and ECMA world being more relevant.  We cite XML sources for JSON Schema where it makes sense, for example when aligning plain-name fragment syntax.  For our referencing and identification discussion, I filed an issue to take a look at XML Include for inspiration and, if relevant, compatibility.\r\n\r\nThe concern here is that the ECMA dialect is more relevant and familiar for JSON-based usage.  Perhaps there needs to be a more thorough explanation of IRegexp's target audience before the relevance can truly be assessed.\r\n\r\nRegarding Point 3, yes, \"XSD but not implicitly anchored\" could be a path forwards.  If I were considering that for JSON Schema (and to be clear, what happens there is not my person decision), I'd look and see how often and in what circumstances I'd need to process such regexps before I could use them in my environment.  This is where question of likely programming languages and libraries should also be considered.  If the majority of such languages and libraries assume _explicit_ anchoring only, that means a lot of little bits of processing code have to be inserted all over the place, which introduces a lot of opportunity for error.",
+          "createdAt": "2022-10-27T18:01:43Z",
+          "updatedAt": "2022-10-27T18:01:43Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "> 3\\. IRegexps should not be anchored by default. (Comment: This could be fixed by amendment to the current draft I think?)\r\n\r\nExplicit anchors means that we need to define their semantics, work I haven't done so far because I consider it pointless.  (Compare Glyn's example above why this is not trivial.)\r\n\r\nJSONPath provides for delimiting strings with single quotes.  Given the arguments here, I don't understand why that isn't at least as bad as implicitly anchoring regexps.",
+          "createdAt": "2022-10-27T18:27:16Z",
+          "updatedAt": "2022-10-27T18:27:16Z"
+        },
+        {
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I am also a bit concerned by the occasionally slippery interaction between anchoring and behavior around embedded \\n and \\r.\r\n\r\nMy preference would probably be to stay with the current anchored behavior but I could be persuaded by concrete data supporting the proposition that unanchored would be more useful.",
+          "createdAt": "2022-11-02T22:37:23Z",
+          "updatedAt": "2022-11-02T22:37:23Z"
+        },
+        {
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Point 2 is less about being \"XML-tainted\" and more about XML not aligning with ECMA world and ECMA world being more relevant. We cite XML sources for JSON Schema where it makes sense, for example when aligning plain-name fragment syntax. For our referencing and identification discussion, I filed an issue to take a look at XML Include for inspiration and, if relevant, compatibility.\r\n\r\nHmm, I just went and re-read the XSD definition and it's generally OK.  Specifying regexp syntax/semantics is really non-trivial and someone has put in a lot of work here. Once again, I'd be happy with a better alternative, but to date nobody has proposed one. ",
+          "createdAt": "2022-11-02T22:40:07Z",
+          "updatedAt": "2022-11-02T22:40:07Z"
+        },
+        {
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "body": "With my co-chair hat on, which always means I'm looking for a path to consensus, I'm going to suggest that the only really outstanding issue is on anchored-or-not.  We know what @cabo, @handrews, and @gregsdennis think (My co-chair-hat-off position is not strongly held enough to be interesting).  Any other voices?",
+          "createdAt": "2022-11-02T22:44:36Z",
+          "updatedAt": "2022-11-02T22:44:36Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "It would be good to have a corpus of actual regexp uses in JSONPath -- not made-up examples, but actual use.\r\nThe question I'm interested is not whether these have explicit anchors, but whether sliding regexps are used much in JSONPath.\r\n",
+          "createdAt": "2022-11-02T22:57:28Z",
+          "updatedAt": "2022-11-02T22:57:28Z"
+        },
+        {
+          "author": "handrews",
+          "authorAssociation": "NONE",
+          "body": "@timbray I second the call for other voices, and i want to raise a sincere question about how we are measuring the concept of \"useful\".  The interoperability of `^` and `$` is a valid concern, but what do we weigh that against?\r\n\r\nWhile @cabo 's question of what is used in JSON Path is certainly relevant, it again raises the question of the target audience of this specification.  It is impossible to evaluate \"usefulness\" without understanding the audience.  And not just their needs in terms of functionality, but their likely assumptions.\r\n\r\nWe've already [established](https://github.com/ietf-wg-jsonpath/iregexp/issues/15#issuecomment-1291175987) that a lot of very popular programming languages either _require_ unanchored regexps, or require that you choose a different function/method or otherwise configure something to get implicit anchoring on one or both ends.  Most people will assume regexps work the way they are used to.  XSD-oriented folks will expect implicit anchoring, but who know regexps from their usual programming languages will not.\r\n\r\nThe next question should be:  What would the translations look like for an interoperable non-implicitly-anchored regexps?  Particularly ones using `^`, `$`, and those where `\\n` or `\\r` appear in the string being matched (@timbray I assume that's what you meant by \"embedded\"?).\r\n\r\nThese should be compared to the translations already listed, plus consideration of how to translate those implicitly-anchored XSD-style regexps in the presence of `\\n` or `\\r`.  I'm not convinced that what is currently present is comprehensive.  For example, I don't see anything that addresses the lack of \\\\z in Python, which AFAICT should be covered by [\u00a75.4](https://www.ietf.org/archive/id/draft-ietf-jsonpath-iregexp-02.html#section-5.4).  I'm also confused about the lack of mention of multiline mode, given that I don't think you can turn it off in Ruby (perhaps I'm just overlooking the mention in I-Regexp?  The only appearance of \"line\" near \"multi\" involve excluding \"multi-line constructs\" from a set of examples.\r\n",
+          "createdAt": "2022-11-02T23:20:53Z",
+          "updatedAt": "2022-11-02T23:20:53Z"
+        },
+        {
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Like I said, I don't really have much of an opinion about this.  The argument from the way languages do it is real but tbh doesn't seem like that big a deal, assuming the RFC is nice and clear. Anyone who's mature enough to have coded in >1 programming language is going to be smart enough to check the reference. Like Carsten says, it'd be nice to have a corpus to look at, but I don't think that's gonna happen.\r\n\r\nBut, I do agree that the spec probably needs to proactively highlight the anchoring issue, including a discussion of multiline - because no matter which we pick, some subset of users are going to be surprised.\r\n\r\nAnother fact that's in my mind, not sure if it helps choose though. If we choose anchored mode, then you use `.*` at the beginning and end to un-anchor. If you choose un-anchored, then you have to use `^` and `$` to anchor. Neither is really much of an irritant?\r\n\r\nIn any case, I'm pretty convinced that when we make a consensus call, the penalty for being wrong will be pretty mild.",
+          "createdAt": "2022-11-03T00:39:16Z",
+          "updatedAt": "2022-11-03T00:39:16Z"
+        },
+        {
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> While @cabo 's question of what is used in JSON Path is certainly relevant, it again raises the question of the target audience of this specification. It is impossible to evaluate \"usefulness\" without understanding the audience. And not just their needs in terms of functionality, but their likely assumptions.\r\n\r\nI think trying to characterize the target audience is probably not useful, because regexp is about as low-level and horizontal a programming technology as exists.  The only reasonable answer is \"anyone who wants boolean matches against strings\" which rounds to \"more or less anyone doing more or less anything\".  If someone wants to propose a characterization, go ahead, but I'm dubious.",
+          "createdAt": "2022-11-03T00:44:06Z",
+          "updatedAt": "2022-11-03T00:44:06Z"
+        },
+        {
+          "author": "handrews",
+          "authorAssociation": "NONE",
+          "body": "> If we choose anchored mode, then you use `.*` at the beginning and end to un-anchor.\r\n\r\nI'm pretty sure you need the non-greedy `.*?` syntax at the beginning.\r\n\r\nRegarding audiences, I've gone into some detail about communities, expectations, and assumptions, but apparently none of that is of interest.  And yet @cabo didn't hesitate to [exclude JSON Schema from the audience](https://github.com/json-schema-org/json-schema-spec/issues/1327#issuecomment-1292322839) and [assert a broader intended audience than just JSON Path](https://github.com/json-schema-org/json-schema-spec/issues/1327#issuecomment-1292522683).  So someone here has some concept of what the audience is.\r\n\r\nPlease note that I am not bothered by JSON Schema's interests being excluded (BTW, I assumed that meant excluding JSON Schema's current usage of regexps in `pattern` and `patternProperties`, not that there was a desire to prevent I-Regexp from being useful for some aspect of JSON Schema somewhere).  That is not a problem and does not require a \"solution.\"  But if we're going to strike down arguments in favor of something because the person/project making them is not part of the target audience... well, it would be a lot easier to figure out what's going on here if we had more to go on than \"more than JSON Path, but not JSON Schema.\"\r\n\r\nI proposed some heuristics, and I honestly have no idea what conclusion those heuristics would produce.  It wasn't an attempt to get a specific outcome.  It was an attempt to get beyond \"people A, B, and C like implicit anchoring, and people X, Y, and Z do not\".  Arguing by opinion just means that whoever is in control will probably put in their opinion (that's not a criticism, I've done it myself b/c sometimes you have to pick _something_  and \"whoever is doing the work\" is not the worst criteria).",
+          "createdAt": "2022-11-03T01:04:58Z",
+          "updatedAt": "2022-11-03T01:04:58Z"
+        },
+        {
+          "author": "glyn",
+          "authorAssociation": "NONE",
+          "body": "Checking the JSONPath comparison project, there is no consensus in the regexp tests, but it seems that most implementations that support regexps reasonably do not support implicit anchoring (see the results of [this test](https://cburgmer.github.io/json-path-comparison/results/filter_expression_with_regular_expression.html)).\r\n\r\nIn terms of JSONPath's use of i-Regexp, I think we need to call out implicit anchoring in the JSONPath spec. But there would still remain the surprise factor for users (who haven't read the spec, probably the majority) when migrating queries that require no implicit anchoring to a JSONPath implementation.",
+          "createdAt": "2022-11-04T07:58:25Z",
+          "updatedAt": "2022-11-04T07:58:25Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "One way to maybe prepare for that surprise would be to use a different operator than `=~`",
+          "createdAt": "2022-11-04T07:59:59Z",
+          "updatedAt": "2022-11-04T07:59:59Z"
+        },
+        {
+          "author": "glyn",
+          "authorAssociation": "NONE",
+          "body": "If we jettison `=~`, it would be tempting to defer regexp support to extension points so implementers and users can pick their preferred regexp semantics:\r\n\r\n* iregexp_match(..., regexp)\r\n* regexp2_match(..., regexp)\r\n* etc.",
+          "createdAt": "2022-11-04T08:11:23Z",
+          "updatedAt": "2022-11-04T08:11:48Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "body": "> see the results of this test\n\nThat test is invalid for arguing about anchoring because it only works for implementations that support `=~`, which many do not.  (Granted, regex is useless/invalid without that operator.)",
+          "createdAt": "2022-11-04T11:39:28Z",
+          "updatedAt": "2022-11-04T11:39:28Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "> * iregexp_match(..., regexp)\r\n\r\nThis may be what we'll do if we can't find consensus.\r\n\r\nSplitting up the ecosystem would be a terrible outcome.\r\nSo I'd rather try for a single (~ preferred) solution -- of course, alternatives can be registered at any time.\r\n\r\n\r\n\r\n",
+          "createdAt": "2022-11-04T15:04:18Z",
+          "updatedAt": "2022-11-04T15:04:18Z"
+        },
+        {
+          "author": "handrews",
+          "authorAssociation": "NONE",
+          "body": "> * iregexp_match(..., regexp)\r\n> * regexp2_match(..., regexp)\r\n\r\nThis would be a little like what Python and C++ do.  Both have a `match()` and a `search()`.  In both, `search()` is unanchored.  In Python, `match()` implicitly anchors the beginning but not the end, while in C++ `match()` implicitly anchors both ends.  So whether the different functions are standardized or extensions, offering two with different anchoring semantics, particularly if `search()` is the unanchored one, would be less surprising.\r\n\r\nHaving come here from the JSON Schema issue rather than JSON Path, I did not realize you were planning to use `=~`.\r\n\r\nAs someone who has worked with Perl way more than I like to think about, I feel ***very*** strongly that if you use Perl's `=~` (which Ruby also borrowed), it really has to be unanchored.  Regular expressions in Perl are _never_ implicitly anchored.  AFAICT the operator is never implicitly anchored in Ruby either.  Making `=~` implicitly anchored would completely contradict the expectations of literally everyone who has ever used it.\r\n\r\nBut if you offer `match()` and `search()` (or some other pair), people will at least realize they have to choose an anchoring behavior.  You could document the additional interoperability challenges of the unanchored one.",
+          "createdAt": "2022-11-04T15:55:24Z",
+          "updatedAt": "2022-11-04T15:55:24Z"
+        },
+        {
+          "author": "glyn",
+          "authorAssociation": "NONE",
+          "body": "I agree about the anchoring semantics of `=~`. It has to be unanchored or JSONPath should ditch `=~`.\r\n\r\nMaybe  naming I-Regexp extensions `match()` and/or `search()` and defining such in the JSONPath spec would be a way of minimising any fragmentation of the ecosystem.\r\n\r\nAlternatively, if we wanted the benefits of `=~`, the JSONPath spec could define a mapping of an unanchored regexp to I-Regexp. (If some implementations were lucky that mapping composed with the mapping of I-Regexp to the chosen, not implicitly anchored, regexp engine would be simpler than the mapping of I-Regexp to the same engine.)",
+          "createdAt": "2022-11-04T16:07:04Z",
+          "updatedAt": "2022-11-04T16:07:04Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "OK, that surely simplifies the grammar.\r\nmatch(re, s) should be a Boolean function.\r\nI'd say that for search(re, s) as well, but I don't know what people expect.\r\nIf there is a choice of which position can match (and people are using that position), suddenly things like greedy vs. non-greedy start to have an influence again, and things become complicated.\r\nDidn't know about the left-anchored semantics in Python!  Do we need that, too?",
+          "createdAt": "2022-11-05T11:42:33Z",
+          "updatedAt": "2022-11-05T11:42:33Z"
+        },
+        {
+          "author": "handrews",
+          "authorAssociation": "NONE",
+          "body": "> OK, that surely simplifies the grammar.\r\n> match(re, s) should be a Boolean function.\r\n> I'd say that for search(re, s) as well, but I don't know what people expect.\r\n\r\nYes, in Python both `match()` and `search()` return a match object that is truthy if the regexp matched anything (but can also access capture groups and do other things not relevant here).  They return `None` (which is false-y) on failure.\r\n\r\n> If there is a choice of which position can match (and people are using that position), suddenly things like greedy vs. non-greedy start to have an influence again, and things become complicated.\r\n\r\nPerl's `=~` and Python's `search()` start matching at the first occurrence.  I believe JavaScript's `search()` (which returns -1 if the search fails and the match position if it succeeds- `test()` is JavaScript's boolean unanchored function) also matches the first occurrence.  JavaScript's `match()` is rather different, which I think just means that there's no cross-language convention for `match()` and defining whatever makes sense should work.  `search()` appears to always be unanchored, with only minor differences in how the return value is handled.\r\n\r\n> Didn't know about the left-anchored semantics in Python! Do we need that, too?\r\n\r\nI've also written quite a bit of Python and rarely if ever use `match()`.  At some point I led the migration of that very large Perl automation library to Python (not that we replaced everything, but we replaced the core functionality and wrote new automation on that).  `=~` was used heavily in Perl automation, but in Python we tended to use string functions more and regexps less.  I don't know what the stats were for that project (it was was spread across many teams in a large org so I didn't watch every line of code).  Coming from Perl, `search()` felt more natural to the team so we were probably biased against it.\r\n\r\nIn my own Python work, I only use `match()` if I have a beginning-anchored regex and happen to think the semantics are more clear that way.\r\n\r\nUnanchored vs anchored at both ends seems sufficient to me, although I'm sure someone out there loves beginning-anchored.\r\n\r\n",
+          "createdAt": "2022-11-05T18:58:48Z",
+          "updatedAt": "2022-11-05T18:58:48Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "body": "I, too, am happy with the dual-function approach.  It seems that one can be implemented as depending on the other pretty easily.\r\n\r\nAre other people happy with removing `=~` and replacing with functions?\r\n\r\n(side note: `` `=~` ``</code> is really hard to type)",
+          "createdAt": "2022-11-14T21:26:30Z",
+          "updatedAt": "2022-11-14T21:26:30Z"
+        },
+        {
+          "author": "fiestajetsam",
+          "authorAssociation": "MEMBER",
+          "body": "As was discussed at the JSONPath November Interim meeting - anchoring is defined in part within [sections 5.3 and 5.4](https://ietf-wg-jsonpath.github.io/iregexp/draft-ietf-jsonpath-iregexp.html#section-5.3).",
+          "createdAt": "2022-11-22T08:27:19Z",
+          "updatedAt": "2022-11-22T08:27:19Z"
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "id": "I_kwDOFeByHs5iZ23x",
+      "title": "Escape sequences singleCharEsc",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/issues/18",
+      "state": "CLOSED",
+      "author": "springcomp",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "The various expressions referred to at the end of the document make for a reasonably complete compliance test suite.\r\n\r\nI'm creating a [quick checker](https://github.com/springcomp/iregexp/blob/main/src/Checker.ts) that I think could be useful to this project as I will need to embed and process Regex expressions in one of my projects.\r\n\r\nThat said, I fail to see how: ` \\S ` and ` \\d ` validate with the BNF. The way I read the spec is that a very small subset of characters support escaping.\r\n\r\nCan you please clarify what I am missing ?",
+      "createdAt": "2023-04-02T13:21:21Z",
+      "updatedAt": "2023-04-03T03:47:32Z",
+      "closedAt": "2023-04-03T03:47:32Z",
+      "comments": [
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "The introduction for the Appendix says \"With the exception of some (often surprisingly dubious) usage of multi-character escapes\".  You found those exceptions.  Please see Table 1 for how to handle them.\r\n\r\nThank you for your input!",
+          "createdAt": "2023-04-02T22:06:29Z",
+          "updatedAt": "2023-04-02T22:06:29Z"
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "id": "I_kwDOFeByHs5iaDKF",
+      "title": "rfc6021.txt  938",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/issues/19",
+      "state": "CLOSED",
+      "author": "springcomp",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "It seems to me the following expression is invalid:\r\n\r\n``  (([^:]+:){6}(([^:]+:[^:]+)|(.*\\..*)))| ``\r\n\r\nAs it ends with a dangling `|` without a completed branch?\r\nIs my analysis correct?",
+      "createdAt": "2023-04-02T15:43:46Z",
+      "updatedAt": "2023-04-03T03:46:54Z",
+      "closedAt": "2023-04-03T03:46:54Z",
+      "comments": [
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "In YANG, you need to reconstruct the the regex from the whole pattern:\r\n\r\n```\r\n pattern '(([^:]+:){6}(([^:]+:[^:]+)|(.*\\..*)))|'\r\n             + '((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)'\r\n             + '(%.+)?';\r\n```\r\n\r\n(the plus signs outside the strings mean concatenation).\r\n\r\nMy simple extractor program for Appendix A didn't do this (which also helped with keeping the regexes with the 69-character limit of RFCs, which was relevant before we decided to make this a \"to be removed in RFC\" section).\r\n\r\nBut note that the grammar says:\r\n\r\n```\r\ni-regexp = branch *( \"|\" branch )\r\nbranch = *piece\r\n```\r\n\r\nSo a branch with zero pieces is valid.\r\n\r\nIf you are aware of a situation where this would lead to interoperability problems, we would like to hear!",
+          "createdAt": "2023-04-02T22:01:01Z",
+          "updatedAt": "2023-04-02T22:01:01Z"
+        },
+        {
+          "author": "springcomp",
+          "authorAssociation": "NONE",
+          "body": "> So a branch with zero pieces is valid.\r\n\r\nThank you. That's where I mistakenly read _one or more_ instead. Thank you for the clarification.",
+          "createdAt": "2023-04-03T03:46:50Z",
+          "updatedAt": "2023-04-03T03:46:50Z"
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "id": "I_kwDOFeByHs5iaWr9",
+      "title": "Please, can you give an example of a mapping to ECMAScript",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/issues/20",
+      "state": "CLOSED",
+      "author": "springcomp",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "cabo"
+      ],
+      "labels": [],
+      "body": "I have difficult time to understand this paragraph from the draft:\r\n\r\n> For any dots (`.`) outside character classes (first alternative of `charClass` production): replace dot by `[^\\n\\r]`.\r\n\r\nI assume this means:\r\n\r\n- replace `.` in `` .* `` to `` [^\\n\\r]* ``\r\n- do not replace `.` in `` [a-z.] `` (as it is in a character class)\r\n- do not replace `.` in `` \\. `` (obviously as it is escaped)\r\n\r\nIs my understanding correct?",
+      "createdAt": "2023-04-02T20:02:28Z",
+      "updatedAt": "2023-04-26T18:09:20Z",
+      "closedAt": "2023-04-26T18:09:20Z",
+      "comments": [
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "Your understanding is correct, and I take this as input that \"dots\" needs to be replaced with \"unescaped dots\" in this sentence.",
+          "createdAt": "2023-04-02T21:53:17Z",
+          "updatedAt": "2023-04-02T21:53:17Z"
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "id": "I_kwDOFeByHs5iaePS",
+      "title": "The README points to an older draft",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/issues/21",
+      "state": "CLOSED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "cabo"
+      ],
+      "labels": [],
+      "body": "Please see https://www.ietf.org/archive/id/draft-ietf-jsonpath-iregexp-04.html until this is fixed",
+      "createdAt": "2023-04-02T21:51:58Z",
+      "updatedAt": "2023-04-12T08:33:50Z",
+      "closedAt": "2023-04-12T08:33:50Z",
+      "comments": [
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "Fixed by updating template boilerplate.",
+          "createdAt": "2023-04-12T08:33:50Z",
+          "updatedAt": "2023-04-12T08:33:50Z"
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "id": "I_kwDOFeByHs5jCPxZ",
+      "title": "Support for UTF-16 surrogate pairs is not interoperable",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/issues/22",
+      "state": "CLOSED",
+      "author": "gregsdennis",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "~Unicode characters~ Surrogate pairs are not supported in .Net.  See example [here](http://regexstorm.net/tester?p=a.b&i=a%f0%90%84%81bc). \r\n\r\nThe main goal of this specification as stated is to provide an interoperable subset of major Regex implementations (from the [abstract](https://www.ietf.org/archive/id/draft-ietf-jsonpath-iregexp-03.html#abstract), emphasis mine):\r\n\r\n> This document specifies I-Regexp, a flavor of regular expressions that is limited in scope with the _goal of interoperation across many different regular-expression libraries_.\r\n\r\nMention of full unicode support needs to be ~removed~ downgraded to UTF-8 support.\r\n\r\n- Introduction\r\n    > I-Regexp supports the entire repertoire of Unicode characters.\r\n- I-Regexp Syntax\r\n    > In particular, full Unicode support is REQUIRED; the implementation MUST NOT limit itself to 7- or 8-bit character sets such as ASCII and MUST support the Unicode character property set in character classes.\r\n\r\nRef: https://github.com/jsonpath-standard/jsonpath-compliance-test-suite/pull/30/files#r1162157209\r\n\r\nI'm not sure the reasoning behind adding this requirement.",
+      "createdAt": "2023-04-10T23:17:03Z",
+      "updatedAt": "2023-04-26T18:11:01Z",
+      "closedAt": "2023-04-26T18:11:01Z",
+      "comments": [
+        {
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Umm\u2026 https://learn.microsoft.com/en-us/dotnet/standard/base-types/character-encoding-introduction\r\n\r\nIt looks like the underlying APIs support Unicode just fine, although UTF-16 is annoying. I think your reference is some particular regexp implementation being buggy?\r\n\r\nThe chances of the IETF shipping an RFC  dealing with textual data that excludes Unicode is more or less exactly zero.  That would exclude the languages of a very large majority of Earth's population.",
+          "createdAt": "2023-04-10T23:52:03Z",
+          "updatedAt": "2023-04-10T23:52:03Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "body": "Yes, I believe the problem is that specifically UTF-16 is not supported ([Ref](https://github.com/dotnet/runtime/issues/36425), [OtherRef](https://github.com/dotnet/runtime/issues/16922)).  This is a common question among .Net users. ([Example](https://stackoverflow.com/q/364009/878701))\r\n\r\n> I think your reference is some particular regexp implementation being buggy?\r\n\r\nI have only ever used the built-in `Regex` class for regular expressions.",
+          "createdAt": "2023-04-11T00:16:21Z",
+          "updatedAt": "2023-04-11T00:35:03Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "body": "It also [appears](https://github.com/dotnet/runtime/issues/16922#issuecomment-1486826548) that Rust doesn't support UTF-16 either.",
+          "createdAt": "2023-04-11T00:36:31Z",
+          "updatedAt": "2023-04-11T00:36:31Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "body": "I've updated the title and opening issue for more clarity.",
+          "createdAt": "2023-04-11T00:38:14Z",
+          "updatedAt": "2023-04-11T00:38:14Z"
+        },
+        {
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Hmm\u2026 the network serialization format and the programming-language runtime format are often different things; for example, Java & .NET are UTF-16 internally, while Go is UTF-8.  It would be very surprising (almost certainly a bug) for a UTF-16 surrogate to appear in stored or network-transmitted text. For that reason, I-JSON forbids UTF-16 surrogates in member names or string values. \r\n\r\nSo, the idea of JSONPath also forbidding surrogate codepoints strikes me as sensible. Full Unicode support does *not require* surrogate support, so there is no contradiction between forbidding surrogates and requiring full Unicode support.\r\n\r\nPardon me for over-reacting, I spent several years of my career forcing people who didn't want to to support Unicode. \r\n\r\n\r\n",
+          "createdAt": "2023-04-11T00:58:58Z",
+          "updatedAt": "2023-04-11T00:58:58Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "body": "> Pardon me for over-reacting, I spent several years of my career forcing people who didn't want to to support Unicode.\n\nI have a preconception that UTF-8 = extended ASCII (256 chars), so I default \"Unicode\" to being surrogate pairs in my mind.  I wasn't specific enough.",
+          "createdAt": "2023-04-11T04:27:19Z",
+          "updatedAt": "2023-04-11T04:27:19Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "> the problem is that specifically UTF-16 is not supported\r\n\r\nNobody needs UTF-16.\r\n\r\nBoth JSON and JSONPath are UTF-8.\r\nSurrogate pairs do not exist in UTF-8 (and definitely not individual surrogates).\r\n\r\nCan you explain the problem in a way that somebody familiar with Unicode could understand?",
+          "createdAt": "2023-04-11T05:27:45Z",
+          "updatedAt": "2023-04-11T05:27:45Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "Note that much of the confusion in the referenced articles is about regexes that operate on UTF-16 code units and not on Unicode scalar values.  That kind of regexp is irrelevant for iregexp.  As a simple indicator, note that there is no `\\p{Cs}` in iregexp, because surrogates do not occur in the inputs; any discussion that uses `\\p{Cs}` probably is in the confused set.",
+          "createdAt": "2023-04-11T06:07:21Z",
+          "updatedAt": "2023-04-11T06:07:21Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "body": "> Both JSON and JSONPath are UTF-8.\n> Surrogate pairs do not exist in UTF-8 (and definitely not individual surrogates).\n\nBut the test in question uses an escaped pair sequence.   That escaped sequence itself is UTF-8.\n\nThat test I referenced says the escaped pair sequence denotes a single UTF-16 code point that apparently the regex is supposed to consider as a single character, matched by `.`.",
+          "createdAt": "2023-04-11T07:03:15Z",
+          "updatedAt": "2023-04-11T07:03:15Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "Discussion of UTF-16 is off-topic for this specification.\r\n(I also don't know what the \"test in question\" is; several tests have been offered to lay bare the implementation limitations involved in certain platforms.)",
+          "createdAt": "2023-04-11T07:57:34Z",
+          "updatedAt": "2023-04-11T07:57:34Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "body": "> Discussion of UTF-16 is off-topic for this specification.\n\nHow so?  The spec clearly states \"full Unicode.\"  I take that to mean UTF-16 is included.\n\n> I also don't know what the \"test in question\" is\n\nThe test in question is the test I linked to in the opening comment (the \"Ref\").",
+          "createdAt": "2023-04-11T12:25:53Z",
+          "updatedAt": "2023-04-11T12:25:53Z"
+        },
+        {
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Carsten, if UTF-16 surrogates \"do not exist\" in UTF-8, why would I-JSON\nexplicitly forbid them?  It is perfectly easy to imagine a scenario where\nsuch things are accidentally generated. Lots of people write their own\nUTF-8 encoders because it's \"easy\". Also, because of Java's annoying 16-bit\n\"char\" data type, it has been well-known for people to do stupid things\nlike \"just take the first ten characters of this string for display in a\nfixed size column via s.substring(0, 10) - oops!\n\nOn the face of it, I think it's perfectly reasonable to say that both the\nJSONpath expression and the JSON value to which it's applied MUST NOT\ncontain any surrogate codepoints.\n\nOn Mon, Apr 10, 2023 at 10:27\u202fPM cabo ***@***.***> wrote:\n\n> the problem is that specifically UTF-16 is not supported\n>\n> Nobody needs UTF-16.\n>\n> Both JSON and JSONPath are UTF-8.\n> Surrogate pairs do not exist in UTF-8 (and definitely not individual\n> surrogates).\n>\n> Can you explain the problem in a way that somebody familiar with Unicode\n> could understand?\n>\n> \u2014\n> Reply to this email directly, view it on GitHub\n> <https://github.com/ietf-wg-jsonpath/iregexp/issues/22#issuecomment-1502707727>,\n> or unsubscribe\n> <https://github.com/notifications/unsubscribe-auth/AAAEJE7XEDUCTELBBOB5HW3XATTVXANCNFSM6AAAAAAWZQ3W4Q>\n> .\n> You are receiving this because you commented.Message ID:\n> ***@***.***>\n>\n",
+          "createdAt": "2023-04-11T16:17:47Z",
+          "updatedAt": "2023-04-11T16:17:47Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "> Carsten, if UTF-16 surrogates \"do not exist\" in UTF-8, why would I-JSON explicitly forbid them? \r\n\r\nI don't know why you did this, but I expect the reason was \"Because people don't read\".\r\n\r\nhttps://datatracker.ietf.org/doc/html/rfc3629#page-5\r\nNote that this is a full Internet Standard from 2003.\r\n\r\n> It is perfectly easy to imagine a scenario where such things are accidentally generated. Lots of people write their own UTF-8 encoders because it's \"easy\". Also, because of Java's annoying 16-bit \"char\" data type, it has been well-known for people to do stupid things like \"just take the first ten characters of this string for display in a fixed size column via s.substring(0, 10) - oops! \r\n\r\nI am fully aware of the ways to generate non-Unicode in languages with legacy 16-bit text string models.\r\n(You can do the same with UTF-8, but then it is way more obvious when you do, so most people don't.)\r\n\r\n> On the face of it, I think it's perfectly reasonable to say that both the JSONpath expression and the JSON value to which it's applied MUST NOT contain any surrogate codepoints.\r\n\r\nSee, this is how I-JSON confused you.  This is called the restatement antipattern.  Restating a normative statement from a reference *as if it were a new statement* makes people believe the reference didn't already say this, or, worse, the new document says something new and different from the reference.\r\n\r\nWhen you need to restate, you need to qualify the restatement very explicitly as such.\r\nI don't think page 5 of RFC 3629 needs a lot of restating, though.\r\n",
+          "createdAt": "2023-04-11T19:52:58Z",
+          "updatedAt": "2023-04-11T19:52:58Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "> > Discussion of UTF-16 is off-topic for this specification.\r\n> \r\n> How so? The spec clearly states \"full Unicode.\" I take that to mean UTF-16 is included.\r\n\r\nThe UTFs are Unicode transformation formats, there are weird ones you don't need to support.\r\nIf people think that \"full Unicode support\" needs to include every single specification of the Unicode organization, then maybe we need to be more explicit.\r\n\r\n> > I also don't know what the \"test in question\" is\r\n> \r\n> The test in question is the test I linked to in the opening comment (the \"Ref\").\r\n\r\nAh.  You said something about surrogate pairs.  There are no surrogate pairs here.\r\n(You might confuse JSON's abominable hex escape syntax for non-BMP characters with surrogate pairs, but they aren't.)\r\n\r\nInterestingly, ChatGPT tells me C# doesn't have any problem with non-BMP characters.\r\n\r\nIt offers code like\r\n\r\n~~~ csharp\r\nRegex regex = new Regex(@\"[\\x{1F914}\\x{1F602}]\");\r\n~~~\r\n\r\nto match either a Thinking Face or a Face With Tears of Joy, which is not possible if these aren't characters in C#.\r\nIs ChatGPT hallucinating (as it something does)?",
+          "createdAt": "2023-04-11T20:01:53Z",
+          "updatedAt": "2023-04-11T20:01:53Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "I created PR #23 to clarify \"full Unicode support\".\r\nAnything else that needs to be clarified from this issue?",
+          "createdAt": "2023-04-12T08:21:39Z",
+          "updatedAt": "2023-04-12T08:21:39Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "body": "> Interestingly, ChatGPT tells me C# doesn't have any problem with non-BMP characters.\r\n> \r\n> It offers code like\r\n> \r\n> ```c#\r\n> Regex regex = new Regex(@\"[\\x{1F914}\\x{1F602}]\");\r\n> ```\r\n> \r\n> to match either a Thinking Face or a Face With Tears of Joy, which is not possible if these aren't characters in C#.\r\n> Is ChatGPT hallucinating (as it something does)?\r\n\r\nFirst, that regex isn't valid.\r\n\r\n![image](https://user-images.githubusercontent.com/2676804/232348868-e4183e3a-3a70-4489-8d4b-236033f65456.png)\r\n\r\nIt compiles, but running that line produces an exception:\r\n\r\n```\r\nSystem.Text.RegularExpressions.RegexParseException : Invalid pattern '[\\x{1F914}\\x{1F602}]' at offset 4. Insufficient hexadecimal digits.\r\n   at System.Text.RegularExpressions.RegexParser.ScanHex(Int32 c)\r\n   at System.Text.RegularExpressions.RegexParser.ScanCharEscape()\r\n   at System.Text.RegularExpressions.RegexParser.ScanCharClass(Boolean caseInsensitive, Boolean scanOnly)\r\n   at System.Text.RegularExpressions.RegexParser.CountCaptures()\r\n   at System.Text.RegularExpressions.RegexParser.Parse(String pattern, RegexOptions options, CultureInfo culture)\r\n   at System.Text.RegularExpressions.Regex..ctor(String pattern, RegexOptions options, TimeSpan matchTimeout, Boolean addToCache)\r\n   at System.Text.RegularExpressions.Regex..ctor(String pattern)\r\n   at ...\r\n```\r\n\r\nYes, non-BMP chars are supported _in C#_.  I can include that char directly in a regex and it works:\r\n\r\n```c#\r\nvar regex = new Regex(@\"\ud83d\ude01\");\r\nvar text = @\"\ud83d\ude01\";\r\nAssert.IsTrue(regex.IsMatch(text));\r\n```\r\n\r\nIt even matches it as a single char (for `.` anyway):\r\n\r\n```c#\r\nvar regex = new Regex(@\".\");\r\nvar text = @\"\ud83d\ude01\";\r\nAssert.IsTrue(regex.IsMatch(text));\r\n```\r\n\r\nIt looks like .Net's `Regex` engine might just be buggy.\r\n\r\nThis passes\r\n\r\n```c#\r\nvar regex = new Regex(@\"^\ud83d\udc32*$\");\r\nvar jsonText = JsonNode.Parse(\"\\\"\ud83d\udc32\\\"\");\r\nvar text = jsonText.GetValue<string>();\r\nAssert.IsTrue(regex.IsMatch(text));\r\n```\r\n\r\nbut this doesn't\r\n\r\n```c#\r\nvar regex = new Regex(@\"^\ud83d\udc32*$\");\r\nvar jsonText = JsonNode.Parse(\"\\\"\ud83d\udc32\ud83d\udc32\\\"\");\r\nvar text = jsonText.GetValue<string>();\r\nAssert.IsTrue(regex.IsMatch(text));\r\n```\r\n\r\nBasically, the `*` doesn't match on the multiple bytes correctly.  The behavior is the same whether the \ud83d\udc32 is explicit as I have above or hex-encoded with a surrogate pair.\r\n\r\nProbably just a .Net issue.  Still I can't fully support i-regexp for this limitation.  I expect it's probablly sufficient to call that out in my docs.",
+          "createdAt": "2023-04-16T23:42:50Z",
+          "updatedAt": "2023-04-16T23:42:50Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "> ```cs\r\n> var regex = new Regex(@\"^\ud83d\udc32*$\");\r\n> var jsonText = JsonNode.Parse(\"\\\"\ud83d\udc32\ud83d\udc32\\\"\");\r\n> ```\r\n\r\nThat can be fixed by replacing \ud83d\udc32 with (\ud83d\udc32).\r\nHowever, a fix is not quite as easy with characters in character classes, [abc\ud83d\udc32] would need to be replaced by ([abc]|\ud83d\udc32).  Doing negative character classes probably requires using lookahead assertions.  This all can be done by taking apart and putting back together the RE, but is a far cry from the relatively simple textual substitutions that PCRE or ECMAScript require.",
+          "createdAt": "2023-04-16T23:53:10Z",
+          "updatedAt": "2023-04-16T23:53:10Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "body": "> That can be fixed by replacing \ud83d\udc32 with (\ud83d\udc32).\r\n\r\nIt's fine that there is a workaround, but if just \ud83d\udc32 is expected to work, then I can't expect my users to know to use (\ud83d\udc32).",
+          "createdAt": "2023-04-17T00:00:50Z",
+          "updatedAt": "2023-04-17T00:00:50Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "body": "Didn't mean to close.",
+          "createdAt": "2023-04-17T00:05:33Z",
+          "updatedAt": "2023-04-17T00:05:33Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "> > That can be fixed by replacing \ud83d\udc32 with (\ud83d\udc32).\r\n> \r\n> It's fine that there is a workaround, but if just \ud83d\udc32 is expected to work, then I can't expect my users to know to use (\ud83d\udc32).\r\n\r\nThis is not for specifiers of iregexp REs -- they do not have to know that certain platforms have certain problems.\r\nIt would be something that an iregexp to dotnet RE translator would do (just like how an iregexp to ECMAscript RE translator would translate unescaped dots).",
+          "createdAt": "2023-04-17T00:09:10Z",
+          "updatedAt": "2023-04-17T00:09:10Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "body": "> That can be fixed by replacing \ud83d\udc32 with (\ud83d\udc32).\r\n\r\nIt can't be fixed for the problem in question, though.\r\n\r\nThe test is checking that `a.b` matches (e.g.) `a\ud83d\udc32b`.  .Net's `Regex` can't do this because the `.` won't match on the `\ud83d\udc32`.  There's no workaround that I can think of for this.  There's no translation of `.` that will make .Net's `Regex` accept a non-BMP char.  (It seems to work fine when the `.` is on its own, though, which is weird.)",
+          "createdAt": "2023-04-17T00:27:43Z",
+          "updatedAt": "2023-04-17T00:27:43Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "> .Net's Regex can't do this because the . won't match on the \ud83d\udc32\r\n\r\nSo your iregexp to dotnet translator needs to turn (unescaped, outside character classes) `.` into `(\\P{Cs}|\\p{Cs}\\p{Cs})` with a little bit of lookahead assertion added to remove `\\r` and `\\n`.\r\n\r\nI still can't believe dotnet doesn't have a `/re/u` equivalent.",
+          "createdAt": "2023-04-17T00:48:09Z",
+          "updatedAt": "2023-04-17T00:48:09Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "body": "> So your iregexp to dotnet translator needs to turn (unescaped, outside character classes) . into (\\P{Cs}|\\p{Cs}\\p{Cs}) with a little bit of lookahead assertion added to remove \\r and \\n.\r\n\r\nI don't think that most developers (specifically implementors of JSON Path) are going to be well-versed enough in regular expressions to be able to figure this kind of thing out.  It works, but I don't understand what `\\P{Cs}` is.  This seems like a rather advanced regex use to me.",
+          "createdAt": "2023-04-17T01:07:38Z",
+          "updatedAt": "2023-04-17T01:07:38Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "> I don't understand what `\\P{Cs}` is\r\n\r\nYou are excused, because that is not part of iregexp (surrogate code points are irrelevant to iregexp).\r\n\r\n(`\\p{..}` and `\\P{..}` are important when regular expressions are used with Unicode, as they express concepts such as numbers, letters, symbols etc.)\r\n\r\nI'm afraid there is no way to remove the complexity of basing an iregexp implementation on a regex flavor with limited Unicode support.  Fortunately, iregexp is easy to parse (= take apart), and a tool to put back together the iregexp in another flavor is not that complex either.  I would prefer to be able to point to mine here, but I haven't done the work yet...",
+          "createdAt": "2023-04-17T01:14:49Z",
+          "updatedAt": "2023-04-17T01:14:49Z"
+        }
+      ]
+    }
+  ],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOFeByHs4xON27",
+      "title": "Reorganization for usability",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/1",
+      "state": "MERGED",
+      "author": "timbray",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This has had the motivation and background material moved into new sections after the syntax and semantics. The opening section have been RFC-i-fied a bit, with one MUST each for syntax and semantics. ",
+      "createdAt": "2022-01-18T19:29:02Z",
+      "updatedAt": "2022-01-19T17:02:49Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "f4570c213ba804fb7c561160068d7886ade6c241",
+      "headRepository": "timbray/iregexp",
+      "headRefName": "main",
+      "headRefOid": "1678b5ca152f9d89f27fdcb799bcc4aed7b4af4c",
+      "closedAt": "2022-01-19T17:02:48Z",
+      "mergedAt": "2022-01-19T17:02:48Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "4e67486dcf8bb06135c278edd09cb0040ced3919"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOFeByHs4xRzjX",
+      "title": "Fix nits remaining after merging PR #1.",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/2",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-01-19T17:41:57Z",
+      "updatedAt": "2022-01-19T18:58:41Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "4e67486dcf8bb06135c278edd09cb0040ced3919",
+      "headRepository": "ietf-wg-jsonpath/iregexp",
+      "headRefName": "pr-1-nits",
+      "headRefOid": "613d7cbbd2b56280073d4dccbbb568564a616b21",
+      "closedAt": "2022-01-19T18:58:41Z",
+      "mergedAt": "2022-01-19T18:58:41Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "e994173722bb6b4cd6836147b0ec629debd8663a"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOFeByHs4zGB7N",
+          "commit": {
+            "abbreviatedOid": "73fd93d"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-01-19T18:53:59Z",
+          "updatedAt": "2022-01-19T18:54:13Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "It would be slightly more idiomatic to say \"what are usually called regular expressions\"",
+              "createdAt": "2022-01-19T18:53:59Z",
+              "updatedAt": "2022-01-19T18:54:13Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "PR_kwDOFeByHs4xStjp",
+      "title": "Mention XSD 1.1 and the errata fixes there.",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/3",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-01-19T23:24:46Z",
+      "updatedAt": "2022-01-21T16:34:34Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "036e2b1b89ed5ad90c8b32bfb6590e24ae7a2ae8",
+      "headRepository": "ietf-wg-jsonpath/iregexp",
+      "headRefName": "xsd11",
+      "headRefOid": "0a5859ad9035cb06a159bf80081d9c4ca7fd3933",
+      "closedAt": "2022-01-21T16:33:45Z",
+      "mergedAt": "2022-01-21T16:33:45Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "ea5ca8ddfdc9981ea059067a7ece6afadc8bb956"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOFeByHs4zN78J",
+          "commit": {
+            "abbreviatedOid": "0a5859a"
+          },
+          "author": "glyn",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-01-21T09:23:51Z",
+          "updatedAt": "2022-01-21T09:23:51Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDOFeByHs4xZQB_",
+      "title": "Add informational advice on MCE substitution",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/4",
+      "state": "CLOSED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "(how to substitute multi-character escapes in order to obtain an\r\nI-Regexp).",
+      "createdAt": "2022-01-21T16:35:28Z",
+      "updatedAt": "2022-06-13T17:02:38Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "ea5ca8ddfdc9981ea059067a7ece6afadc8bb956",
+      "headRepository": "ietf-wg-jsonpath/iregexp",
+      "headRefName": "mce-subs",
+      "headRefOid": "74c5bc255cc1dc093fe75f5b34d907063eba7aca",
+      "closedAt": "2022-06-13T17:02:38Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "Given #8, I think we'll keep this as useful information, but don't include it in the specification.",
+          "createdAt": "2022-06-13T17:02:38Z",
+          "updatedAt": "2022-06-13T17:02:38Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOFeByHs44kQtI",
+          "commit": {
+            "abbreviatedOid": "74c5bc2"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T18:05:44Z",
+          "updatedAt": "2022-04-21T18:09:53Z",
+          "comments": [
+            {
+              "originalPosition": 33,
+              "body": "typo",
+              "createdAt": "2022-04-21T18:05:44Z",
+              "updatedAt": "2022-04-21T18:09:53Z"
+            },
+            {
+              "originalPosition": 27,
+              "body": "that contains a",
+              "createdAt": "2022-04-21T18:06:23Z",
+              "updatedAt": "2022-04-21T18:09:53Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "id": "PR_kwDOFeByHs40Cu-s",
+      "title": "Prepare \u201303",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/5",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-03-07T13:40:50Z",
+      "updatedAt": "2022-03-07T23:22:10Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "ea5ca8ddfdc9981ea059067a7ece6afadc8bb956",
+      "headRepository": "ietf-wg-jsonpath/iregexp",
+      "headRefName": "prepare-03",
+      "headRefOid": "a2282588be0e67d2c9753b39942c3af256f02999",
+      "closedAt": "2022-03-07T23:22:10Z",
+      "mergedAt": "2022-03-07T23:22:10Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "723b4e1fa1de0be0e5f364a005c7996ac12ae429"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOFeByHs41wwPN",
+          "commit": {
+            "abbreviatedOid": "682b1be"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "I need to carefully review the language around non-ASCII unicode characters, since I assume that regexes would be applied to the values of string fields, and in 2022 it would be completely unacceptable to limit those to have any ASCII-flavored limitations.",
+          "createdAt": "2022-03-07T16:54:33Z",
+          "updatedAt": "2022-03-07T17:00:05Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "comma is un-idiomatic",
+              "createdAt": "2022-03-07T16:54:34Z",
+              "updatedAt": "2022-03-07T17:00:05Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs41xWq_",
+          "commit": {
+            "abbreviatedOid": "682b1be"
+          },
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-07T19:05:15Z",
+          "updatedAt": "2022-03-07T19:05:15Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "Well, the RFC editor will put it in anyway (CMOS requires it).\r\n\r\nRe non-ASCII Unicode:\r\nSo far, ASCII is only mentioned in conjunction with the intentions some regexp writers have when writing \\d, w, which we don't support.\r\nSo I hope there is no ASCII-related blunder in the document; everything is Unicode.\r\n\r\n4 hours 50 minutes left...",
+              "createdAt": "2022-03-07T19:05:15Z",
+              "updatedAt": "2022-03-07T19:05:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs41xYoK",
+          "commit": {
+            "abbreviatedOid": "682b1be"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-07T19:13:18Z",
+          "updatedAt": "2022-03-07T19:13:19Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "Having read the draft (getting pretty good!) I'd really like to be a little more militant: implementations MUST NOT limit themselves to ASCII characters and MUST support the Unicode character property set. Is that reasonable?",
+              "createdAt": "2022-03-07T19:13:18Z",
+              "updatedAt": "2022-03-07T19:13:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs41xtEB",
+          "commit": {
+            "abbreviatedOid": "682b1be"
+          },
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-07T20:34:35Z",
+          "updatedAt": "2022-03-07T20:34:35Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "Certainly outside the constrained space.  On a simple device, it may be harder to provide all the tables needed.  I think the discussion under \"Unicode\" in 6.1 may be misleading; toning this down now.",
+              "createdAt": "2022-03-07T20:34:35Z",
+              "updatedAt": "2022-03-07T20:34:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs41xwQV",
+          "commit": {
+            "abbreviatedOid": "682b1be"
+          },
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-07T20:48:23Z",
+          "updatedAt": "2022-03-07T20:48:24Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "Not sure that I completely agree with what I wrote in a228258, but this is at least the right direction.",
+              "createdAt": "2022-03-07T20:48:23Z",
+              "updatedAt": "2022-03-07T20:48:24Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "id": "PR_kwDOFeByHs40E0zm",
+      "title": "typo, attacked for attacker",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/6",
+      "state": "MERGED",
+      "author": "timbray",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-03-08T00:02:13Z",
+      "updatedAt": "2022-03-08T00:14:15Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "723b4e1fa1de0be0e5f364a005c7996ac12ae429",
+      "headRepository": "timbray/iregexp",
+      "headRefName": "main",
+      "headRefOid": "61e25080a86bc53b0c7fa6737bcc1f001f5f63a7",
+      "closedAt": "2022-03-08T00:12:45Z",
+      "mergedAt": "2022-03-08T00:12:45Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "78739129b586bb15d69179dc6d7b2cfdea8ac6f7"
+      },
+      "comments": [
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "Thanks!\r\n\r\n(This was two minutes after the deadline :-)",
+          "createdAt": "2022-03-08T00:14:15Z",
+          "updatedAt": "2022-03-08T00:14:15Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 8,
+      "id": "PR_kwDOFeByHs42lj5b",
+      "title": "remove explanatory text, fix a few nits",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/8",
+      "state": "MERGED",
+      "author": "timbray",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Implemented the changes as suggested in Issue #7",
+      "createdAt": "2022-04-21T21:50:02Z",
+      "updatedAt": "2022-04-25T16:03:06Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "78739129b586bb15d69179dc6d7b2cfdea8ac6f7",
+      "headRepository": "timbray/iregexp",
+      "headRefName": "main",
+      "headRefOid": "b78d3d4c7ed5c23401fdf44a160c6bd87824b79c",
+      "closedAt": "2022-04-25T16:03:05Z",
+      "mergedAt": "2022-04-25T16:03:05Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "9d196e4df3472ad21864671ae1623637897fa5d2"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOFeByHs44lJxL",
+          "commit": {
+            "abbreviatedOid": "b78d3d4"
+          },
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T22:10:18Z",
+          "updatedAt": "2022-04-21T22:10:19Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "Actually, the current ABNF needs RFC 7405 (case-sensitive %s...) as well.",
+              "createdAt": "2022-04-21T22:10:18Z",
+              "updatedAt": "2022-04-21T22:10:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs44lSUC",
+          "commit": {
+            "abbreviatedOid": "b78d3d4"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T23:13:57Z",
+          "updatedAt": "2022-04-21T23:13:57Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "Heh, I had no idea 7405 even existed.  OK.",
+              "createdAt": "2022-04-21T23:13:57Z",
+              "updatedAt": "2022-04-21T23:13:57Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs44lSrc",
+          "commit": {
+            "abbreviatedOid": "b78d3d4"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T23:16:29Z",
+          "updatedAt": "2022-04-21T23:16:30Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "Having read 7405, it's a delta against 5234 so strictly I guess only 7405 need be referenced but it seems more polite to reference both.",
+              "createdAt": "2022-04-21T23:16:29Z",
+              "updatedAt": "2022-04-21T23:16:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs44lUDs",
+          "commit": {
+            "abbreviatedOid": "b78d3d4"
+          },
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T23:28:50Z",
+          "updatedAt": "2022-04-21T23:28:50Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "Indeed, that's what I usually do.",
+              "createdAt": "2022-04-21T23:28:50Z",
+              "updatedAt": "2022-04-21T23:28:50Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "id": "PR_kwDOFeByHs42xnkp",
+      "title": "Allow strict parsing",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/9",
+      "state": "CLOSED",
+      "author": "glyn",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-04-26T06:11:16Z",
+      "updatedAt": "2022-04-30T23:52:05Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "a0135279585d7b25eab9cc45e094fe486d05a14c",
+      "headRepository": "glyn/iregexp",
+      "headRefName": "lax-parsing",
+      "headRefOid": "f8130a55668f06cc93ef3fa8c7e488ac00dd9800",
+      "closedAt": "2022-04-30T23:52:05Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "glyn",
+          "authorAssociation": "NONE",
+          "body": "> MAY is overly lenient, I think. It allows implementations to support additional syntaxes at a whim. It's my preference that support outside of the specification be discouraged unless the user has to explicitly configure the implementation to provide such support.\r\n> \r\n> > This word, or the adjective \"OPTIONAL\", mean that an item is truly optional. - [RFC 2119, Section 5](https://www.rfc-editor.org/rfc/rfc2119#section-5)\r\n> \r\n> Saying that \"additional behavior is OPTIONAL\" is an open door to a lot of extra functionality. When users start relying on that extra functionality, we lose interoperability, which is the entire purpose of this spec.\r\n> \r\n> Default behavior should be strict adherence to the specification. Additional behavior should be explicitly configurable.\r\n\r\nThat was my thinking initially, but I was persuaded to back off because of the likely implementation cost. Even if an implementer decided to police the syntax strictly, they would need a good test suite. Without a full test suite of all cases of syntactically invalid strings (is such a thing even theoretically feasible?), implementations' syntax checking would probably vary, impacting interoperation.",
+          "createdAt": "2022-04-26T06:38:40Z",
+          "updatedAt": "2022-04-26T06:38:40Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "I think iregexp should limit itself to describing the format.\r\nThe using specification (here: JSONPath) should specify the strictness requirements and the extensibility approach.\r\n\r\n",
+          "createdAt": "2022-04-26T06:40:53Z",
+          "updatedAt": "2022-04-26T06:40:53Z"
+        },
+        {
+          "author": "glyn",
+          "authorAssociation": "NONE",
+          "body": "> I think iregexp should limit itself to describing the format. The using specification (here: JSONPath) should specify the strictness requirements and the extensibility approach.\r\n\r\nDo we therefore need to disallow I-Regexp from being used as a stand-alone specification? If not and someone implements the specification, they could be unaware of the considerations in this PR.",
+          "createdAt": "2022-04-26T06:45:52Z",
+          "updatedAt": "2022-04-26T06:46:10Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "I'm not sure I understand that concern.\r\nShould we disallow the use of ASCII \"as a standalone specification\" then, too?\r\n\r\niregexp defines a regex format and its semantics.\r\nI can use this specification in any context I want.\r\nThe context should probably say how it wants to use this specification, as a strict target or as a minimum feature set.",
+          "createdAt": "2022-04-26T06:50:39Z",
+          "updatedAt": "2022-04-26T06:50:39Z"
+        },
+        {
+          "author": "glyn",
+          "authorAssociation": "NONE",
+          "body": "> I'm not sure I understand that concern. Should we disallow the use of ASCII \"as a standalone specification\" then, too?\r\n> \r\n> iregexp defines a regex format and its semantics. I can use this specification in any context I want. The context should probably say how it wants to use this specification, as a strict target or as a minimum feature set.\r\n\r\nI-Regexp already talks about implementation considerations, e.g. \"An I-Regexp implementation MUST be a complete implementation of this limited subset.\" My concern is the silence in the I-Regexp spec about regular expressions outside this subset and what to do about them.",
+          "createdAt": "2022-04-26T07:12:07Z",
+          "updatedAt": "2022-04-26T07:12:07Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "OK, so maybe we should make it easier to reference iregexp by defining terms such as:\r\n\r\n> A *strict* I-Regexp implementation does not accept regexps outside that subset.\r\n\r\n(Today's YANG and CDDL, for instance, will continue to allow all W3C regexps, so they can't use a strict implementation and be fully compliant.\r\nBut they can accept YANG/CDDL models that use I-Regexps only, which is where we want to be in the future.)\r\n",
+          "createdAt": "2022-04-26T07:52:35Z",
+          "updatedAt": "2022-04-26T07:52:35Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "body": "> My concern is the silence in the I-Regexp spec about regular expressions outside this subset and what to do about them.\r\n\r\nThis is my concern as well.",
+          "createdAt": "2022-04-26T09:10:03Z",
+          "updatedAt": "2022-04-26T09:10:03Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "Maybe I want to try implementing what Tim said from scratch...  Will get to this later today.\r\n",
+          "createdAt": "2022-04-26T10:44:42Z",
+          "updatedAt": "2022-04-26T10:44:42Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "body": "I'll probably also do a version of this in .Net.  My first approach will be to check the syntax (strict), then defer to .Net's Regex types to do the actual processing.  If that doesn't work, I'll need to actually implement something.",
+          "createdAt": "2022-04-26T11:54:57Z",
+          "updatedAt": "2022-04-26T11:54:57Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "I think that this will indeed be a common implementation strategy.",
+          "createdAt": "2022-04-26T11:56:40Z",
+          "updatedAt": "2022-04-26T11:56:40Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "This should now be covered by PR #11 (merged).",
+          "createdAt": "2022-04-30T23:52:05Z",
+          "updatedAt": "2022-04-30T23:52:05Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOFeByHs44yskD",
+          "commit": {
+            "abbreviatedOid": "8494adb"
+          },
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "state": "CHANGES_REQUESTED",
+          "body": "MAY is overly lenient, I think.  It allows implementations to support additional syntaxes at a whim.  It's my preference that support outside of the specification be discouraged unless the user has to explicitly configure the implementation to provide such support.\r\n\r\n> This word, or the adjective \"OPTIONAL\", mean that an item is truly optional. - [RFC 2119, Section 5](https://www.rfc-editor.org/rfc/rfc2119#section-5)\r\n\r\nSaying that \"additional behavior is OPTIONAL\" is an open door to a lot of extra functionality.  When users start relying on that extra functionality, we lose interoperability, which is the entire purpose of this spec.\r\n\r\nDefault behavior should be strict adherence to the specification.  Additional behavior should be explicitly configurable.",
+          "createdAt": "2022-04-26T06:18:50Z",
+          "updatedAt": "2022-04-26T06:23:28Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOFeByHs44z3ki",
+          "commit": {
+            "abbreviatedOid": "33cb27b"
+          },
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2022-04-26T10:13:01Z",
+          "updatedAt": "2022-04-26T10:15:37Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "```suggestion\r\nThe advantages of strictness are improved interoperability with other strict\r\n```",
+              "createdAt": "2022-04-26T10:13:01Z",
+              "updatedAt": "2022-04-26T10:15:37Z"
+            },
+            {
+              "originalPosition": 30,
+              "body": "Should we be stronger than MAY here?  What is the alternative action if a strict implementation receives an expression that's not iregexp?\r\n\r\nAlso later (line 241) you assert that strict implementations definitely raise errors.",
+              "createdAt": "2022-04-26T10:14:18Z",
+              "updatedAt": "2022-04-26T10:15:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs44z4iG",
+          "commit": {
+            "abbreviatedOid": "33cb27b"
+          },
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-26T10:16:15Z",
+          "updatedAt": "2022-04-26T10:16:15Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "too quick for me \ud83d\ude04 ",
+              "createdAt": "2022-04-26T10:16:15Z",
+              "updatedAt": "2022-04-26T10:16:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs44z7QL",
+          "commit": {
+            "abbreviatedOid": "33cb27b"
+          },
+          "author": "glyn",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-26T10:24:59Z",
+          "updatedAt": "2022-04-26T10:24:59Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "Not sure. I was trying to give plenty of leeway to implementations. A strict implementation _could_ choose to return `false` (i.e., no match) instead of returning an error. That wouldn't be my personal choice, but it might suit some.\r\n\r\nIf we can agree on this, I'll sort out the later anomaly on line 241.",
+              "createdAt": "2022-04-26T10:24:59Z",
+              "updatedAt": "2022-04-26T10:24:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs440CAI",
+          "commit": {
+            "abbreviatedOid": "33cb27b"
+          },
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-26T10:45:24Z",
+          "updatedAt": "2022-04-26T10:45:24Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "No, returning false is *not* acceptable for a checking (\"strict\") implementation.",
+              "createdAt": "2022-04-26T10:45:24Z",
+              "updatedAt": "2022-04-26T10:45:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs440GSd",
+          "commit": {
+            "abbreviatedOid": "33cb27b"
+          },
+          "author": "glyn",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-26T11:00:47Z",
+          "updatedAt": "2022-04-26T11:00:47Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "> No, returning false is _not_ acceptable for a checking (\"strict\") implementation.\r\n\r\nI tend to agree. But why not?",
+              "createdAt": "2022-04-26T11:00:47Z",
+              "updatedAt": "2022-04-26T11:00:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs440Ic0",
+          "commit": {
+            "abbreviatedOid": "33cb27b"
+          },
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-26T11:08:46Z",
+          "updatedAt": "2022-04-26T11:08:47Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "The point about \"checking\" is that non-conforming input is not silently accepted.\r\nSo things should be blowing up (during the syntax checking phase), not fail silently (during the matching phase).",
+              "createdAt": "2022-04-26T11:08:46Z",
+              "updatedAt": "2022-04-26T11:08:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs440JEl",
+          "commit": {
+            "abbreviatedOid": "33cb27b"
+          },
+          "author": "glyn",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-26T11:11:03Z",
+          "updatedAt": "2022-04-26T11:11:03Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "Erroring is good for interop and security. Failing silently might be ok for some aspects of security, such as preventing a CPU attack. Depends on your goals, but I'm not going to push this.",
+              "createdAt": "2022-04-26T11:11:03Z",
+              "updatedAt": "2022-04-26T11:20:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs440VyY",
+          "commit": {
+            "abbreviatedOid": "33cb27b"
+          },
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-26T11:53:02Z",
+          "updatedAt": "2022-04-26T11:53:02Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "Exceptions can be caught in those cases where silently failing is needed, but that's an application concern, not the concern of an implementation.  The implementation's concern should be, \"I received something wrong, and I need to tell _everyone_.\"",
+              "createdAt": "2022-04-26T11:53:02Z",
+              "updatedAt": "2022-04-26T11:53:03Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "id": "PR_kwDOFeByHs43GQAm",
+      "title": "Introduce the concept of a \"checking\" implementation",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/11",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-04-29T20:03:18Z",
+      "updatedAt": "2022-04-30T23:50:49Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "f612fc9e0ed6c239748b258463871a0b76338a46",
+      "headRepository": "ietf-wg-jsonpath/iregexp",
+      "headRefName": "checking",
+      "headRefOid": "2dfd1e56db2fdfffe08f22fc80e77dbf72dfd744",
+      "closedAt": "2022-04-30T23:50:49Z",
+      "mergedAt": "2022-04-30T23:50:48Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "bd64625e29e07d317ce4e79e8753233cf265900c"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOFeByHs45IcOp",
+          "commit": {
+            "abbreviatedOid": "79ca9df"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2022-04-30T19:22:03Z",
+          "updatedAt": "2022-04-30T19:26:27Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "\"I-Regexp\" superfluous, suggest \"Checking Implementations\"  for title",
+              "createdAt": "2022-04-30T19:22:03Z",
+              "updatedAt": "2022-04-30T19:26:27Z"
+            },
+            {
+              "originalPosition": 6,
+              "body": "This is OK, but I think the real goal is to be informed of potential problems.  You might choose to go ahead with a nonconforming regexp anyhow. So another definition could be \"A checking I-Regexp implementation is one that has the capability of checking a submitted regexp for compliance with this specification and reporting any problems.\"",
+              "createdAt": "2022-04-30T19:25:25Z",
+              "updatedAt": "2022-04-30T19:26:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs45Ickq",
+          "commit": {
+            "abbreviatedOid": "79ca9df"
+          },
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-30T19:47:22Z",
+          "updatedAt": "2022-04-30T19:47:22Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "OK, this exposes the fact that even  checking implementation might not be configured to check, if we define it along its capabilities; I'd like to reserve the term for one that actually does.\r\n(And I'm not so hot about \"submitted\".)\r\n\r\n\u2794 how about:\r\n\r\nA *checking* I-Regexp implementation is one that checks a supplied regexp for compliance with this specification and reports any problems.",
+              "createdAt": "2022-04-30T19:47:22Z",
+              "updatedAt": "2022-04-30T19:47:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs45Idk_",
+          "commit": {
+            "abbreviatedOid": "350c278"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-30T20:54:35Z",
+          "updatedAt": "2022-04-30T20:54:35Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "Works for me.",
+              "createdAt": "2022-04-30T20:54:35Z",
+              "updatedAt": "2022-04-30T20:54:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs45Ifef",
+          "commit": {
+            "abbreviatedOid": "2dfd1e5"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-04-30T23:43:46Z",
+          "updatedAt": "2022-04-30T23:43:46Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "id": "PR_kwDOFeByHs45k6Km",
+      "title": "Fix #10",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/12",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-06-13T17:01:32Z",
+      "updatedAt": "2022-07-11T21:53:17Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "bd64625e29e07d317ce4e79e8753233cf265900c",
+      "headRepository": "ietf-wg-jsonpath/iregexp",
+      "headRefName": "no-blocks",
+      "headRefOid": "d249ec32f89eb2069b26756418b8b23cdeef3c3f",
+      "closedAt": "2022-07-11T21:53:17Z",
+      "mergedAt": "2022-07-11T21:53:17Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "277cf4531b3498987fc958e61e27b91b77698898"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOFeByHs477XEr",
+          "commit": {
+            "abbreviatedOid": "03e41f2"
+          },
+          "author": "glyn",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-06-14T08:06:38Z",
+          "updatedAt": "2022-06-14T08:06:38Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOFeByHs48JPuP",
+          "commit": {
+            "abbreviatedOid": "03e41f2"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "1. Assuming you have used a tool for verifying the grammar? LGTM.\r\n2. We are likely going to get the question \"why not include unicode scripts?\" Our answer is \"not XSD compatible\". Next question \"Why is XSD compatibility important, just say XSD minus X plus Y?\"  Personally I am in favor of leaving out the scripts because, as you pointed out, not really a mainstream use, but still, what's a good answer to that question?\r\n",
+          "createdAt": "2022-06-16T13:38:00Z",
+          "updatedAt": "2022-06-16T13:48:46Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "just curious why \\S is being highlighted in dark red in GitHub diffs",
+              "createdAt": "2022-06-16T13:38:00Z",
+              "updatedAt": "2022-06-16T13:48:47Z"
+            },
+            {
+              "originalPosition": 24,
+              "body": "s/executing on constructs/executing constructs/ - the \"on\" isn't idiomatic",
+              "createdAt": "2022-06-16T13:44:54Z",
+              "updatedAt": "2022-06-16T13:48:47Z"
+            },
+            {
+              "originalPosition": 31,
+              "body": "Is this still true with the removal of unicode blocks?",
+              "createdAt": "2022-06-16T13:45:55Z",
+              "updatedAt": "2022-06-16T13:48:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs49qSm3",
+          "commit": {
+            "abbreviatedOid": "03e41f2"
+          },
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-11T15:02:20Z",
+          "updatedAt": "2022-07-11T15:02:20Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "It is probably recognized as a syntax error, but I don't know for what syntax.",
+              "createdAt": "2022-07-11T15:02:20Z",
+              "updatedAt": "2022-07-11T15:02:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs49qXam",
+          "commit": {
+            "abbreviatedOid": "03e41f2"
+          },
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-11T15:14:14Z",
+          "updatedAt": "2022-07-11T15:14:15Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "Yes.  Turns out that my homework assignment proving this was done already:\r\n\r\nhttps://github.com/CESNET/libyang/blob/87375f15159545a87a1e0de200f5d9d67e9091d7/src/schema_compile_node.c#L1023\r\n\r\nThis is a bit icky, as we don't have a \\x or \\u in iregexp, so you would have to include the actual unicode characters.\r\n",
+              "createdAt": "2022-07-11T15:14:15Z",
+              "updatedAt": "2022-07-11T15:14:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs49qY1J",
+          "commit": {
+            "abbreviatedOid": "03e41f2"
+          },
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-11T15:17:48Z",
+          "updatedAt": "2022-07-11T15:17:49Z",
+          "comments": [
+            {
+              "originalPosition": 24,
+              "body": "Fixed in d249ec3",
+              "createdAt": "2022-07-11T15:17:49Z",
+              "updatedAt": "2022-07-11T15:17:49Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "id": "PR_kwDOFeByHs5A8xxf",
+      "title": "Address Document Shepherd feedback.",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/13",
+      "state": "MERGED",
+      "author": "timbray",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Signed-off-by: Tim Bray <tbray@textuality.com>\r\n\r\nBased on our email thread with James, and a couple of minor editorial touch-ups.",
+      "createdAt": "2022-10-17T17:28:31Z",
+      "updatedAt": "2022-10-18T04:25:15Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "277cf4531b3498987fc958e61e27b91b77698898",
+      "headRepository": "timbray/iregexp",
+      "headRefName": "main",
+      "headRefOid": "c9b7f01dba89162b063f68b999a81813bfc411be",
+      "closedAt": "2022-10-18T04:25:15Z",
+      "mergedAt": "2022-10-18T04:25:14Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "c9b7f01dba89162b063f68b999a81813bfc411be"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOFeByHs5EOSUS",
+          "commit": {
+            "abbreviatedOid": "c9b7f01"
+          },
+          "author": "glyn",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "LGTM, thanks.",
+          "createdAt": "2022-10-17T18:00:40Z",
+          "updatedAt": "2022-10-17T18:00:40Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "PR_kwDOFeByHs5A-ztn",
+      "title": "small editorial update to Pr 13 (kept in this repo)",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/14",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-10-18T04:24:43Z",
+      "updatedAt": "2022-10-18T04:25:13Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "277cf4531b3498987fc958e61e27b91b77698898",
+      "headRepository": "ietf-wg-jsonpath/iregexp",
+      "headRefName": "pr-13",
+      "headRefOid": "df8f63e37d605a2a339d35c62aa5511dcddafb15",
+      "closedAt": "2022-10-18T04:25:13Z",
+      "mergedAt": "2022-10-18T04:25:13Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "7af8f4c3756a7cd5c569fe20d0ce8f3521fb9e9a"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 16,
+      "id": "PR_kwDOFeByHs5JQuGD",
+      "title": "Address WGLC comments",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/16",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Clarifications in conversion to platform regexps.",
+      "createdAt": "2023-02-04T14:00:27Z",
+      "updatedAt": "2023-03-27T18:33:36Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "79cd9e102fa428cd486395252f5f3eea4e6c7b0b",
+      "headRepository": "ietf-wg-jsonpath/iregexp",
+      "headRefName": "post-wglc",
+      "headRefOid": "d025511a39625613d4ee71257fa6d78a4a6d5396",
+      "closedAt": "2023-03-27T18:33:35Z",
+      "mergedAt": "2023-03-27T18:33:35Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "a72d3f0931b4d7ca6a35a37b1ca1237685fc3957"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOFeByHs5Mib00",
+          "commit": {
+            "abbreviatedOid": "d025511"
+          },
+          "author": "glyn",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "Looks plausible but I don't know these regexps well enough to approve.",
+          "createdAt": "2023-02-04T17:24:14Z",
+          "updatedAt": "2023-02-04T17:24:14Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "id": "PR_kwDOFeByHs5MtBYi",
+      "title": "Add informative reference to JSONPath draft",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/17",
+      "state": "MERGED",
+      "author": "timbray",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-03-23T06:21:35Z",
+      "updatedAt": "2023-03-31T22:31:20Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "79cd9e102fa428cd486395252f5f3eea4e6c7b0b",
+      "headRepository": "timbray/iregexp",
+      "headRefName": "main",
+      "headRefOid": "507ec6618e3d631fa562b4147d1b8dca85705d3f",
+      "closedAt": "2023-03-31T22:31:20Z",
+      "mergedAt": "2023-03-31T22:31:20Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "16950160922158acff8741d23702426f1cdc19e2"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOFeByHs5QtFw5",
+          "commit": {
+            "abbreviatedOid": "a58d15d"
+          },
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2023-03-23T07:34:42Z",
+          "updatedAt": "2023-03-23T07:35:26Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "We generally let bib.ietf.org do the work, reducing this to:\r\n\r\n```\r\ninformative:\r\n  I-D.ietf-jsonpath-base: -jsonpath\r\n```\r\n",
+              "createdAt": "2023-03-23T07:34:43Z",
+              "updatedAt": "2023-03-23T07:35:26Z"
+            },
+            {
+              "originalPosition": 16,
+              "body": "```suggestion\r\nin its specification {{-jsonpath}} support for the use of regular expressions in JSONPath filters, but was unable to find a useful\r\n```",
+              "createdAt": "2023-03-23T07:34:46Z",
+              "updatedAt": "2023-03-23T07:35:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs5RCWjr",
+          "commit": {
+            "abbreviatedOid": "a58d15d"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-03-27T17:38:43Z",
+          "updatedAt": "2023-03-27T17:38:44Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "OK",
+              "createdAt": "2023-03-27T17:38:43Z",
+              "updatedAt": "2023-03-27T17:38:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs5RCWoJ",
+          "commit": {
+            "abbreviatedOid": "a58d15d"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-03-27T17:38:55Z",
+          "updatedAt": "2023-03-27T17:38:55Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "OK\r\n",
+              "createdAt": "2023-03-27T17:38:55Z",
+              "updatedAt": "2023-03-27T17:38:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs5RCa5F",
+          "commit": {
+            "abbreviatedOid": "a58d15d"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-03-27T17:50:32Z",
+          "updatedAt": "2023-03-27T17:50:32Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "Doesn't seem to work. I get this:\r\n\r\nDraft now has:\r\n```\r\ninformative:\r\n  I-D.draft-ietf-jsonpath-base: -jsonpath\r\n  RE2:\r\n(continues)\r\n```\r\n\r\n```\r\ncat draft-ietf-jsonpath-iregexp.md  | kramdown-rfc2629 --v3 | lib/add-note.py | xml2rfc -q -s 'Setting consensus=\"true\" for IETF STD document' --rfc-base-url https://www.rfc-editor.org/rfc/ --id-base-url https://datatracker.ietf.org/doc/html/ --cache=/Users/timothybray/.cache/xml2rfc --v2v3 /dev/stdin -o /dev/stdout >draft-ietf-jsonpath-iregexp.xml\r\n*** no alias replacement for {{-jsonpath}}\r\n/Users/timothybray/.cache/xml2rfc/reference.I-D.draft-ietf-jsonpath-base.xml: fetching from https://datatracker.ietf.org/doc/bibxml3/draft-ietf-jsonpath-base.xml\r\nxml2rfc -q -s 'Setting consensus=\"true\" for IETF STD document' --rfc-base-url https://www.rfc-editor.org/rfc/ --id-base-url https://datatracker.ietf.org/doc/html/ --cache=/Users/timothybray/.cache/xml2rfc draft-ietf-jsonpath-iregexp.xml -o draft-ietf-jsonpath-iregexp.txt --text --no-pagination\r\ndraft-ietf-jsonpath-iregexp.xml(0): Error: IDREF attribute target references an unknown ID \"_jsonpath\", at None\r\n/Users/timothybray/dev/iregexp/draft-ietf-jsonpath-iregexp.xml(10): Error: Invalid document before running preptool.\r\nUnable to complete processing draft-ietf-jsonpath-iregexp.xml\r\nmake: *** [draft-ietf-jsonpath-iregexp.txt] Error 1\r\nrm draft-ietf-jsonpath-iregexp.xml\r\n```",
+              "createdAt": "2023-03-27T17:50:32Z",
+              "updatedAt": "2023-03-27T17:50:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs5RCvOB",
+          "commit": {
+            "abbreviatedOid": "a58d15d"
+          },
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-03-27T18:38:05Z",
+          "updatedAt": "2023-03-27T18:38:05Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "Sorry, this needs to be:\r\n\r\n```\r\ninformative: \r\n  I-D.draft-ietf-jsonpath-base:   jsonpath\r\n```\r\n\r\n(The `-` is at the reference, not here.)\r\nApparently, I typed this from an airport...\r\n\r\n",
+              "createdAt": "2023-03-27T18:38:05Z",
+              "updatedAt": "2023-03-27T18:38:06Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 23,
+      "id": "PR_kwDOFeByHs5OG-4O",
+      "title": "Clarify \"full Unicode support\"",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/23",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Close #22",
+      "createdAt": "2023-04-12T08:20:56Z",
+      "updatedAt": "2023-04-26T18:11:00Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "f5a50e1a3944ebdf43e5036fd55080abd1bc50ea",
+      "headRepository": "ietf-wg-jsonpath/iregexp",
+      "headRefName": "full-unicode",
+      "headRefOid": "3b55b895841db1247385ebb922f252ed9de77031",
+      "closedAt": "2023-04-26T18:11:00Z",
+      "mergedAt": "2023-04-26T18:11:00Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "564cf79d8b229c070cc9d2d8d38e1c42f2c5dbe7"
+      },
+      "comments": [
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "> I don't see how this clarifies what \"full support\" means. The point of #22 is support of surrogate pairs.\r\n\r\nIt clarifies that we don't expect \"full Unicode support\" in the sense of including every bell and whistle of any document of the Unicode Consortium ever written, but support for the features specified in this document.\r\n(Surrogate pairs are not relevant for this document.)",
+          "createdAt": "2023-04-16T23:29:10Z",
+          "updatedAt": "2023-04-16T23:29:10Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "body": "> Surrogate pairs are not relevant for this document.\r\n\r\nThis.  Where does the document say this?",
+          "createdAt": "2023-04-16T23:59:22Z",
+          "updatedAt": "2023-04-16T23:59:22Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "> > Surrogate pairs are not relevant for this document.\r\n> \r\n> This. Where does the document say this?\r\n\r\nIt also doesn't say that borscht recipes are not relevant for this document.\r\n\r\nIf you want to dig a bit deeper, search for \"surrogate\" in [XSD11-2] (or [XSD-2].\r\n ",
+          "createdAt": "2023-04-17T00:04:56Z",
+          "updatedAt": "2023-04-17T00:04:56Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "body": "> If you want to dig a bit deeper, search for \"surrogate\" in [XSD11-2] (or [XSD-2].\r\n\r\n(I still don't understand why a spec essentially created for _JSON_ Path is referencing XML specs.)\r\n\r\nI think it's worth explicitly mentioning that surrogate pairs aren't included, unless you're expecting every reader to be familiar with every nuance contained in every referenced document.",
+          "createdAt": "2023-04-17T00:07:58Z",
+          "updatedAt": "2023-04-17T00:07:58Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "> > If you want to dig a bit deeper, search for \"surrogate\" in [XSD11-2] (or [XSD-2].\r\n> \r\n> (I still don't understand why a spec essentially created for _JSON_ Path is referencing XML specs.)\r\n\r\nBecause they did their homework, so they are useful specs to reference.\r\n\r\n> I think it's worth explicitly mentioning that surrogate pairs aren't included, unless you're expecting every reader to be familiar with every nuance contained in every referenced document.\r\n\r\n\"surrogate pairs aren't included\" is not a meaningful way to say \"hey, we are not inheriting the problems platforms with legacy 16-bit string models might have with Unicode handling\".  I still can't believe that dotnet didn't do what ECMAScript did in 2015; are you sure about that?",
+          "createdAt": "2023-04-17T00:14:59Z",
+          "updatedAt": "2023-04-17T00:14:59Z"
+        },
+        {
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> I think it's worth explicitly mentioning that surrogate pairs aren't included\r\n\r\nHmm. I can still see a case for forbidding surrogates but not just pairs. Remember that we say nothing about how the JSON text is actually encoded, just that we work on a JSON value. I don't think RFC8259 makes it impossible for surrogates (solo or in pairs) to appear in member names and string values, so I do see value in ruling that out.\r\n\r\nHmm, having said that, I looked at the draft, and especially \"2.1.1 Syntax\" and I don't see an assertion that a JSONPath expression MUST be a sequence of Unicode scalar values. It's perfectly possible I missed that but if I didn't, probably we should add that?\r\n\r\n",
+          "createdAt": "2023-04-17T00:20:08Z",
+          "updatedAt": "2023-04-17T00:20:08Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "> > I think it's worth explicitly mentioning that surrogate pairs aren't included\r\n> \r\n> Hmm. I can still see a case for forbidding surrogates but not just pairs. Remember that we say nothing about how the JSON text is actually encoded, just that we work on a JSON value. I don't think RFC8259 makes it impossible for surrogates (solo or in pairs) to appear in member names and string values, so I do see value in ruling that out.\r\n\r\nBeing more explicit about the character model (text string = sequence of Unicode Scalar Values) is a good thing.\r\nNote that iregexp is not necessarily tied to JSON, so I'm assuming your comment is more about JSONPath, but a clarification about iregexp's character model would also be good.\r\n\r\n> Hmm, having said that, I looked at the draft, and especially \"2.1.1 Syntax\" and I don't see an assertion that a JSONPath expression MUST be a sequence of Unicode scalar values. It's perfectly possible I missed that but if I didn't, probably we should add that?\r\n\r\nThat would be a comment on the other draft.\r\n\r\n(The syntax of JSONPath expressions is described in ABNF, which this PR clarifies to be in terms of Unicode Scalar Values.  So there is no way to describe a JSONPath expression that is not a sequence of Unicode Scalar Values.  But, yes, being more explicit can help.)\r\n",
+          "createdAt": "2023-04-17T00:28:02Z",
+          "updatedAt": "2023-04-17T00:28:02Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "[5d2ef98](https://github.com/ietf-wg-jsonpath/iregexp/pull/23/commits/5d2ef980b2be0392674d9551d4a261d9133204ce) made more explicit that both the iregexp strings and the strings iregexps operate on are built of Unicode scalar values.",
+          "createdAt": "2023-04-17T00:36:09Z",
+          "updatedAt": "2023-04-17T00:36:09Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "body": "> Unicode scalar values\r\n\r\nI had to look this up.  I found https://stackoverflow.com/a/48465266/878701.  Specifically (quoted from the spec):\r\n\r\n> the set of Unicode scalar values consists of the ranges 0 to D7FF16 and E00016 to 10FFFF16, inclusive.\r\n\r\nI don't understand how this translates to the hex values present in surrogate pairs (I had to look up the algorithms over a decade ago when I created my JSON parser, and any understanding has since left me.), so I don't know whether this includes the `\\uD800\\uDD01` present in the [proposed test](https://github.com/jsonpath-standard/jsonpath-compliance-test-suite/pull/30).",
+          "createdAt": "2023-04-17T00:51:58Z",
+          "updatedAt": "2023-04-17T00:51:58Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "> > Unicode scalar values\r\n> \r\n> I had to look this up. \r\n\r\nWe have a definition over in JSONPath.  \r\nI don't think we want to have another one here.\r\n\r\n> I found https://stackoverflow.com/a/48465266/878701. Specifically (quoted from the spec):\r\n> \r\n> > the set of Unicode scalar values consists of the ranges 0 to D7FF16 and E00016 to 10FFFF16, inclusive.\r\n> \r\n> I don't understand how this translates to the hex values present in surrogate pairs (I had to look up the algorithms over a decade ago when I created my JSON parser, and any understanding has since left me.), so I don't know whether this includes the `\\uD800\\uDD01` present in the [proposed test](https://github.com/jsonpath-standard/jsonpath-compliance-test-suite/pull/30).\r\n\r\n D800 and DD01 are between D7FF and E000, so they are not Unicode scalar values.\r\nHowever, \"\\uD800\\uDD01\" is just the JSON way for representing what more modern languages would express as \"\\u{10101}\".  No surrogate pairs involved.\r\n\r\n*** Aegean Numbers (Common)\r\n\ud800\udd01: U+10101    1 AEGEAN WORD SEPARATOR DOT\r\n\r\n",
+          "createdAt": "2023-04-17T01:09:16Z",
+          "updatedAt": "2023-04-17T01:09:16Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "body": "> D800 and DD01 are between D7FF and E000, so they are not Unicode scalar values.\r\n\r\nOh... It's a formatting error.  They had the `16` as a subscript indicating hex, and it pasted weird here.  Should be\r\n\r\n> ranges 0 to D7FF<sub>16</sub> and E000<sub>16</sub> to 10FFFF<sub>16</sub>, inclusive\r\n\r\nNow I see it.\r\n\r\n---\r\n\r\n> We have a definition over in JSONPath.\r\n> I don't think we want to have another one here.\r\n\r\nBut JSON Path depends on this.  If anything, we'd want it here.",
+          "createdAt": "2023-04-17T01:15:14Z",
+          "updatedAt": "2023-04-17T01:15:26Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "> But JSON Path depends on this. If anything, we'd want it here.\r\n\r\nI don't think every specification that uses Unicode has to repeat all of the Unicode specifications.\r\n\r\nFirst google hit for me leads to:\r\nhttp://www.unicode.org/glossary/#unicode_scalar_value\r\n\r\nGr\u00fc\u00dfe, Carsten\r\n",
+          "createdAt": "2023-04-17T01:20:18Z",
+          "updatedAt": "2023-04-17T01:20:18Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOFeByHs5SrVTq",
+          "commit": {
+            "abbreviatedOid": "3a9f2b1"
+          },
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-04-16T23:10:47Z",
+          "updatedAt": "2023-04-16T23:10:48Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "Is Section 2.3 right?  Maybe I followed it wrong, but I get https://www.rfc-editor.org/rfc/rfc5234#section-2.3, which is titled \"Termination Values.\"",
+              "createdAt": "2023-04-16T23:10:47Z",
+              "updatedAt": "2023-04-16T23:10:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs5SrVdT",
+          "commit": {
+            "abbreviatedOid": "3a9f2b1"
+          },
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "state": "CHANGES_REQUESTED",
+          "body": "I don't see how this clarifies what \"full support\" means.  The point of #22 is support of surrogate pairs.",
+          "createdAt": "2023-04-16T23:12:19Z",
+          "updatedAt": "2023-04-16T23:12:19Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOFeByHs5SrV_S",
+          "commit": {
+            "abbreviatedOid": "3a9f2b1"
+          },
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-04-16T23:23:29Z",
+          "updatedAt": "2023-04-16T23:23:30Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "It's \"Terminal Values\", and the first paragraph explains that these used to be ASCII characters, and the new text explains that the terminal values are Unicode scalar values.",
+              "createdAt": "2023-04-16T23:23:30Z",
+              "updatedAt": "2023-04-16T23:23:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs5SrgRp",
+          "commit": {
+            "abbreviatedOid": "3a9f2b1"
+          },
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-04-17T01:33:37Z",
+          "updatedAt": "2023-04-17T01:33:37Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "okay.  (not sure why I can't mark this resolved)",
+              "createdAt": "2023-04-17T01:33:37Z",
+              "updatedAt": "2023-04-17T01:33:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOFeByHs5SrgX-",
+          "commit": {
+            "abbreviatedOid": "5d2ef98"
+          },
+          "author": "gregsdennis",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2023-04-17T01:33:59Z",
+          "updatedAt": "2023-04-17T01:33:59Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOFeByHs5TmPk7",
+          "commit": {
+            "abbreviatedOid": "3b55b89"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2023-04-26T18:01:35Z",
+          "updatedAt": "2023-04-26T18:01:35Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 24,
+      "id": "PR_kwDOFeByHs5OHD5Z",
+      "title": "Clarify dot replacement rule",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/24",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Close #20",
+      "createdAt": "2023-04-12T08:36:59Z",
+      "updatedAt": "2023-04-26T18:09:20Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "f5a50e1a3944ebdf43e5036fd55080abd1bc50ea",
+      "headRepository": "ietf-wg-jsonpath/iregexp",
+      "headRefName": "unescaped-dots",
+      "headRefOid": "aa2da8ad31c0189377730f08440fa561765fd152",
+      "closedAt": "2023-04-26T18:09:19Z",
+      "mergedAt": "2023-04-26T18:09:19Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "1c6aa3096e4d3e3763510e019bcc64e816d1e8b8"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOFeByHs5TmPtd",
+          "commit": {
+            "abbreviatedOid": "aa2da8a"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2023-04-26T18:01:58Z",
+          "updatedAt": "2023-04-26T18:01:58Z",
+          "comments": []
+        }
+      ]
+    }
+  ]
+}
