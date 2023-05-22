@@ -5,7 +5,7 @@ title: >
   I-Regexp: An Interoperable Regexp Format
 abbrev: I-Regexp
 docname: draft-ietf-jsonpath-iregexp-latest
-date: 2023-05-04
+date: 2023-05-22
 
 keyword: Internet-Draft
 cat: std
@@ -266,7 +266,7 @@ exceptions:
   support accesses to Unicode tables that enable
   executing constructs such as `\p{Nd}`,
   although the `\p`/`\P` feature in general is now quite
-  widely available. While in principle it’s possible to
+  widely available. While in principle it is possible to
   translate these into character-class matches, this also requires
   access to those tables. Thus, regexp libraries in severely
   constrained environments may not be able to support I-Regexp
