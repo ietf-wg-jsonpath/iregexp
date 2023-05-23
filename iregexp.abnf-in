@@ -1,8 +1,8 @@
 i-regexp = branch *( "|" branch )
 branch = *piece
 piece = atom [quantifier]
-quantifier = <<?*+>> / ( "{" quantity "}" )
-quantity = QuantExact [ "," [ QuantExact ] ]
+quantifier = <<?*+>> / range-quantifier
+range-quantifier = "{" QuantExact [ "," [ QuantExact ] ] "}"
 QuantExact = <<0-9>>+
 atom = NormalChar / charClass / ( "(" i-regexp ")" )
 NormalChar = <<^.\?*+{}()|[\\]>>

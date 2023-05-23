@@ -85,6 +85,13 @@ puts spec.gsub!(
       cmpl << 0x10FFFF.chr(Encoding::UTF_8)
       r = cmpl
     end
+    r = r.each_slice(2).flat_map {|l, r|
+      if r.ord == l.ord + 1             # Martin Dürst's comment
+        [l, l, r, r]
+      else
+        [l, r]
+      end
+    }
     if r.size == 2
       ccl = ccl1(r)
     else
