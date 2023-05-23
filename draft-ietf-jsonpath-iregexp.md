@@ -296,6 +296,30 @@ security limitations of any regexp engine they use, which may be less
 problematic if that engine has been built with security considerations
 in mind (e.g., {{RE2}}); a checking implementation is still RECOMMENDED.
 
+Implementations that specifically implement the I-Regexp subset can,
+with care, be designed to generally run in linear time and space in
+the input, and to detect when that would not be the case (see below).
+
+Existing regexp engines should be able to easily handle most I-Regexps
+(after the adjustments discussed in Section 5), but may consume
+excessive resources for some types of I-Regexps or outright reject
+them because they cannot guarantee efficient execution.
+
+Specifically, range quantifiers (as in `a{2,4}`) provide specific
+challenges for both existing and I-Regexp specific implementations.
+These may therefore limit range quantifiers in composability
+(disallowing nested range quantifiers such as `(a{2,4}){2,4}`) or
+range (disallowing very large ranges such as `a{20,200000}`), or detect
+and reject any excessive resource consumption caused by them.
+Note that different versions of the same regexp library may be more or
+less vulnerable to excessive resource consumption for these cases.
+
+Implementations that are used to evaluate regexps from untrusted
+sources need to be robust to these cases, and I-Regexp implementers
+using regexp libraries are encouraged to check their documentation to
+see if mitigations are configurable, such as limits in resource
+consumption, and to document their own resulting degree of robustness.
+
 --- back
 
 Regexps and Similar Constructs in Recent Published RFCs {#rfcs}
