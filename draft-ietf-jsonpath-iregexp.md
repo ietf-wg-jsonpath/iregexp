@@ -80,7 +80,9 @@ I-Regexp does not provide advanced regular expression features such as capture g
 It supports only a Boolean matching capability, i.e., testing whether a given regular expression matches a given piece of text.
 
 I-Regexp supports the entire repertoire of Unicode characters (Unicode
-scalar values).
+scalar values); both the I-Regexp strings themselves and the strings
+they are matched against are sequences of Unicode scalar values (often
+represented in UTF-8 encoding form for interchange).
 
 I-Regexp is a subset of XSD regular expressions {{XSD-2}}.
 
