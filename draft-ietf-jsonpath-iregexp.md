@@ -319,10 +319,10 @@ Acknowledgements
 ================
 {:unnumbered}
 
-This draft has been motivated by the discussion in the IETF JSONPATH
+This specification has been motivated by the discussion in the IETF JSONPATH
 WG about whether to include a regexp mechanism into the JSONPath query
 expression specification, as well as by previous discussions about the
 YANG `pattern` and CDDL `.regexp` features.
 
-The basic approach for this draft was inspired by {{?RFC7493 (The
+The basic approach for this specification was inspired by {{?RFC7493 (The
 I-JSON Message Format)}}.
