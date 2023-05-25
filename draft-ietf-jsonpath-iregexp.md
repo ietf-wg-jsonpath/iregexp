@@ -301,7 +301,7 @@ with care, be designed to generally run in linear time and space in
 the input, and to detect when that would not be the case (see below).
 
 Existing regexp engines should be able to easily handle most I-Regexps
-(after the adjustments discussed in Section 5), but may consume
+(after the adjustments discussed in {{mapping}}), but may consume
 excessive resources for some types of I-Regexps or outright reject
 them because they cannot guarantee efficient execution.
 
@@ -314,11 +314,12 @@ and reject any excessive resource consumption caused by them.
 Note that different versions of the same regexp library may be more or
 less vulnerable to excessive resource consumption for these cases.
 
-Implementations that are used to evaluate regexps from untrusted
-sources need to be robust to these cases, and I-Regexp implementers
-using regexp libraries are encouraged to check their documentation to
-see if mitigations are configurable, such as limits in resource
-consumption, and to document their own resulting degree of robustness.
+I-Regexp implementations that are used to evaluate regexps from
+untrusted sources need to be robust to these cases.
+Implementers using existing regexp libraries are encouraged to check
+their documentation to see if mitigations are configurable, such as
+limits in resource consumption, and to document their own degree of
+robustness resulting from employing such mitigations.
 
 --- back
 
