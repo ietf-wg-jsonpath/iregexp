@@ -37,6 +37,9 @@ normative:
   RFC7405: abnf-cs
 
 informative:
+  RFC3629:
+    -: utf8
+    display: STD63
   I-D.ietf-jsonpath-base: jsonpath
   UNICODE-GLOSSARY:
     title: Glossary of Unicode Terms
@@ -82,7 +85,7 @@ It supports only a Boolean matching capability, i.e., testing whether a given re
 I-Regexp supports the entire repertoire of Unicode characters (Unicode
 scalar values); both the I-Regexp strings themselves and the strings
 they are matched against are sequences of Unicode scalar values (often
-represented in UTF-8 encoding form for interchange).
+represented in UTF-8 encoding form {{-utf8}} for interchange).
 
 I-Regexp is a subset of XSD regular expressions {{XSD-2}}.
 
@@ -282,6 +285,13 @@ This document makes no requests of IANA.
 
 Security considerations
 =======================
+
+While technically out of scope of this specification, {{Section 10
+(Security Considerations) of -utf8}} applies to almost any practical
+implementation.
+Particular note needs to be taken of the last paragraph of {{Section 3
+(UTF-8 definition) of -utf8}}; an I-Regexp implementation may need to
+mitigate any limitations of the platform implementation in this regard.
 
 As discussed in {{background}}, more complex regexp libraries may
 contain exploitable bugs leading to crashes and remote code
