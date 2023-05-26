@@ -17,7 +17,7 @@ regular-expression libraries.
 <meta content="draft-ietf-jsonpath-iregexp-latest" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.17.1
-    Python 3.10.11
+    Python 3.11.3
     appdirs 1.4.4
     ConfigArgParse 1.5.3
     google-i18n-address 2.5.2
@@ -26,8 +26,8 @@ regular-expression libraries.
     lxml 4.9.2
     pycountry 22.3.5
     PyYAML 6.0
-    requests 2.28.1
-    setuptools 65.6.0
+    requests 2.30.0
+    setuptools 67.7.2
     six 1.16.0
     wcwidth 0.2.6
 -->
@@ -153,6 +153,14 @@ regular-expression libraries.
   font-weight: 700;
   font-display: swap;
   src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Lora SemiBold'), local('Lora-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-semibold-latin.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
@@ -336,7 +344,7 @@ ol, ul {
   padding: 0;
   margin: 0 0 0.5em 2em;
 }
-ol ol, ul ul, ol ul, ul ol {
+:is(ol, ul) :is(ol, ul) {
   margin-left: 1em;
 }
 li {
@@ -351,31 +359,50 @@ ul.empty, .ulEmpty {
 ul.empty li, .ulEmpty li {
   margin-top: 0.5em;
 }
-ul.compact, .ulCompact,
-ol.compact, .olCompact {
-  line-height: 100%;
+:is(ul, ol).compact, .ulCompact, .olCompact {
+  line-height: 1;
   margin: 0 0 0 2em;
 }
 
 /* definition lists */
 dl {
+  clear: left;
+  --indent: 3ch;
+  /* --indent: attr(indent ch); not supported in any browser, but we can dream */
+}
+dl.olPercent {
+  --indent: 5ch;
 }
 dl > dt {
   float: left;
-  margin-right: 1em;
+  margin-right: 2ch;
+  min-width: 8ch;
+}
+dl.dlNewline > dt {
+  float: none;
 }
 dl > dd {
   margin-bottom: .8em;
-  min-height: 1.3em;
+  margin-left: var(--indent) !important; /* stupid element overrides */
+  min-height: 2ex;
 }
-dl.compact > dd, .dlCompact > dd {
-  margin-bottom: 0em;
+dl.olPercent > dt {
+  min-width: calc(var(--indent) - 2ch);
+}
+:is(dl.compact, .dlCompact) > dd {
+  margin-bottom: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:first-child, .break:first-child + *) {
+  margin-top: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:last-child) {
+  margin-bottom: 0;
 }
 dl > dd > dl {
   margin-top: 0.5em;
-  margin-bottom: 0em;
+  margin-bottom: 0;
 }
-dd.break {
+:is(dd, span).break {
   display: none;
 }
 
@@ -383,11 +410,11 @@ dd.break {
 a, a[href].selfRef:hover {
   text-decoration: none;
 }
-a[href].selfRef {
-  color: var(--text-color);
-}
 a[href] {
   color: var(--link-color);
+}
+a[href].selfRef, .iref + a[href].internal {
+  color: var(--text-color);
 }
 a[href]:hover {
   text-decoration: underline;
@@ -395,7 +422,7 @@ a[href]:hover {
 a[href].selfRef:hover {
   background-color: var(--highlight-color);
 }
-a.xref {
+a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
   white-space: nowrap;
 }
 
@@ -407,8 +434,13 @@ tt, code, pre {
 tt, code {
   /* changing the font for inline elements leads to different ascender
      and descender heights; as we want to retain baseline alignment,
-     remove leading to avoid altering the final height of lines */
+     remove leading to avoid altering the final height of lines
+     note: this fails if these blocks take an entire line,
+     a different solution would be great */
   line-height: 0;
+}
+:is(h1, h2, h3, h4, h5, h6) :is(tt, code) {
+  font-size: 84%;
 }
 pre {
   border: 1px solid var(--line-color);
@@ -434,6 +466,19 @@ figcaption, caption {
   text-align: left;
 }
 @media screen {
+  /* Auto-collapse boilerplate. */
+  :is(#status-of-memo, #copyright) p {
+    margin: -2px 0;
+    max-height: 0;
+    transition: max-height 2s ease, margin 0.5s ease 0.5s;
+    overflow: hidden;
+  }
+  :is(#status-of-memo, #copyright):hover p,
+  :is(#status-of-memo, #copyright) h2:target ~ p {
+    margin: 0.5em 0;
+    max-height: 500px;
+    overflow: auto;
+  }
   pre, svg {
     display: inline-block;
     overflow-x: auto;
@@ -449,7 +494,7 @@ figcaption, caption {
     display: block;
     width: calc(100% - 25px);
   }
-  pre + .pilcrow, svg + .pilcrow {
+  :is(pre, svg) + .pilcrow {
     display: inline-block;
     vertical-align: text-bottom;
     padding-bottom: 8px;
@@ -498,17 +543,11 @@ th, td {
 th {
   background-color: var(--line-color);
 }
-tr:nth-child(2n) > td {
+:is(tr:nth-child(2n), thead+tbody > tr:nth-child(2n+1)) > td {
   background-color: var(--background-color);
 }
-tr:nth-child(2n+1) > td {
+:is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
   background-color: var(--highlight-color);
-}
-thead+tbody > tr:nth-child(2n) > td {
-  background-color: var(--highlight-color);
-}
-thead+tbody > tr:nth-child(2n+1) > td {
-  background-color: var(--background-color);
 }
 table caption {
   margin: 0;
@@ -548,10 +587,15 @@ hr {
 }
 .bcp14 {
   font-variant: small-caps;
+  font-weight: 600;
+  font-size: var(--small-font-size);
 }
-
 .role {
   font-variant: all-small-caps;
+}
+sub, sup {
+  line-height: 1;
+  font-size: 80%;
 }
 
 /* info block */
@@ -559,17 +603,18 @@ hr {
   margin: 0;
   font-size: var(--small-font-size);
   line-height: 18px;
-  --identifier-width: 8em;
+  --identifier-width: 15ch;
 }
 #identifiers dt {
   width: var(--identifier-width);
-  margin: 0;
+  min-width: var(--identifier-width);
   clear: left;
   float: left;
   text-align: right;
 }
 #identifiers dd {
-  margin: 0 0 0 calc(1em + var(--identifier-width));
+  margin: 0;
+  margin-left: calc(1em + var(--identifier-width)) !important;
   min-width: 5em;
 }
 #identifiers .authors .author {
@@ -617,10 +662,16 @@ hr {
 .references dt {
   text-align: right;
   font-weight: bold;
-  min-width: 7em;
+  min-width: 10ch;
+  margin-right: 1.5ch;
+}
+.references dt:target::before {
+  content: "⇒";
+  width: 15px;
+  margin: 0 10px 0 -25px;
 }
 .references dd {
-  margin-left: 8em;
+  margin-left: 12ch !important;
   overflow: auto;
 }
 
@@ -633,36 +684,8 @@ hr {
 }
 
 /* index */
-.index ul {
-  margin: 0 0 0 1em;
-  padding: 0;
-  list-style: none;
-}
-.index ul ul {
-  margin: 0;
-}
-.index li {
-  margin: 0;
-  text-indent: -2em;
-  padding-left: 2em;
-  padding-bottom: 5px;
-}
-.indexIndex {
-  margin: 0.5em 0 1em;
-}
-.index a {
-  font-weight: 700;
-}
-/* make the index two-column on all but the smallest screens */
-@media (min-width: 500px) {
-  .index ul {
-    column-count: 2;
-    column-gap: 20px;
-  }
-  .index ul ul {
-    column-count: 1;
-    column-gap: 0;
-  }
+#rfc\.index\.index + ul {
+  margin-left: 0;
 }
 
 /* authors */
@@ -816,7 +839,7 @@ hr.addr {
     margin: 0 0 0 4px;
     font-size: var(--small-font-size);
   }
-  #toc ul p, #toc ul li {
+  #toc ul :is(p, li) {
     margin: 2px 0;
     line-height: 22px;
   }
@@ -915,24 +938,14 @@ a.toplink {
   margin: 8px 0.5em 0;
 }
 
-/* Fix the dl styling to match the RFC 7992 attributes */
-dl > dt,
-dl.dlParallel > dt {
-  float: left;
-  margin-right: 1em;
-}
-dl.dlNewline > dt {
-  float: none;
-}
-
 /* Provide styling for table cell text alignment */
-table .text-left, table .text-left {
+table .text-left {
   text-align: left;
 }
-table .text-center, table .text-center {
+table .text-center {
   text-align: center;
 }
-table .text-right, table .text-right {
+table .text-right {
   text-align: right;
 }
 
@@ -999,12 +1012,6 @@ address div.right {
   }
 
 }
-/* Tweak the bcp14 keyword presentation */
-.bcp14 {
-  font-variant: small-caps;
-  font-weight: bold;
-  font-size: 0.9em;
-}
 
 /* Dark mode. */
 @media (prefers-color-scheme: dark) {
@@ -1019,19 +1026,20 @@ address div.right {
   --pilcrow-strong: #666;
   scrollbar-color: #777 #333;
 }
-/* Trick: a prefix match works because only black and white are allowed */
-svg [stroke="black"], svg [stroke^="#000"] {
+}
+
+/* SVG Trick: a prefix match works because only black and white are allowed */
+svg :is([stroke="black"], [stroke^="#000"]) {
   stroke: var(--text-color);
 }
-svg [stroke="white"], svg [stroke^="#fff"] {
+svg :is([stroke="white"], [stroke^="#fff"]) {
   stroke: var(--background-color);
 }
-svg [fill="black"], svg [fill^="#000"], svg :not([fill]) {
+svg :is([fill="black"], [fill^="#000"], :not([fill])) {
   fill: var(--text-color);
 }
-svg [stroke="fill"], svg [fill^="#fff"] {
+svg :is([fill="white"], [fill^="#fff"]) {
   fill: var(--background-color);
-}
 }
 </style>
 
@@ -1045,7 +1053,7 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Bormann &amp; Bray</td>
-<td class="center">Expires 5 November 2023</td>
+<td class="center">Expires 23 November 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1058,12 +1066,12 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <dd class="internet-draft">draft-ietf-jsonpath-iregexp-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-05-04" class="published">4 May 2023</time>
+<time datetime="2023-05-22" class="published">22 May 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-11-05">5 November 2023</time></dd>
+<dd class="expires"><time datetime="2023-11-23">23 November 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1118,7 +1126,7 @@ regular-expression libraries.<a href="#section-abstract-1" class="pilcrow">¶</a
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 5 November 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 23 November 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1233,7 +1241,9 @@ regular-expression libraries.<a href="#section-abstract-1" class="pilcrow">¶</a
 <p id="section-1-2">I-Regexp does not provide advanced regular expression features such as capture groups, lookahead, or backreferences.
 It supports only a Boolean matching capability, i.e., testing whether a given regular expression matches a given piece of text.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">I-Regexp supports the entire repertoire of Unicode characters (Unicode
-scalar values).<a href="#section-1-3" class="pilcrow">¶</a></p>
+scalar values); both the I-Regexp strings themselves and the strings
+they are matched against are sequences of Unicode scalar values (often
+represented in UTF-8 encoding form <span>[<a href="#RFC3629" class="cite xref">STD63</a>]</span> for interchange).<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">I-Regexp is a subset of XSD regular expressions <span>[<a href="#XSD-2" class="cite xref">XSD-2</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5">This document includes guidance for converting I-Regexps for use with several well-known regular expression idioms.<a href="#section-1-5" class="pilcrow">¶</a></p>
 <p id="section-1-6">The development of I-Regexp was motivated by the work of the JSONPath Working Group. The Working Group wanted to include
@@ -1291,21 +1301,18 @@ workaround guidance is provided in <a href="#mapping" class="auto internal xref"
 i-regexp = branch *( "|" branch )
 branch = *piece
 piece = atom [ quantifier ]
-quantifier = ( %x2A-2B ; '*'-'+'
- / "?" ) / ( "{" quantity "}" )
-quantity = QuantExact [ "," [ QuantExact ] ]
+quantifier = ( "*" / "+" / "?" ) / range-quantifier
+range-quantifier = "{" QuantExact [ "," [ QuantExact ] ] "}"
 QuantExact = 1*%x30-39 ; '0'-'9'
 
 atom = NormalChar / charClass / ( "(" i-regexp ")" )
-NormalChar = ( %x00-27 / %x2C-2D ; ','-'-'
- / %x2F-3E ; '/'-'&gt;'
+NormalChar = ( %x00-27 / "," / "-" / %x2F-3E ; '/'-'&gt;'
  / %x40-5A ; '@'-'Z'
  / %x5E-7A ; '^'-'z'
  / %x7E-10FFFF )
 charClass = "." / SingleCharEsc / charClassEsc / charClassExpr
 SingleCharEsc = "\" ( %x28-2B ; '('-'+'
- / %x2D-2E ; '-'-'.'
- / "?" / %x5B-5E ; '['-'^'
+ / "-" / "." / "?" / %x5B-5E ; '['-'^'
  / %s"n" / %s"r" / %s"t" / %x7B-7D ; '{'-'}'
  )
 charClassEsc = catEsc / complEsc
@@ -1318,17 +1325,14 @@ complEsc = %s"\P{" charProp "}"
 charProp = IsCategory
 IsCategory = Letters / Marks / Numbers / Punctuation / Separators /
     Symbols / Others
-Letters = %s"L" [ ( %x6C-6D ; 'l'-'m'
- / %s"o" / %x74-75 ; 't'-'u'
- ) ]
+Letters = %s"L" [ ( %s"l" / %s"m" / %s"o" / %s"t" / %s"u" ) ]
 Marks = %s"M" [ ( %s"c" / %s"e" / %s"n" ) ]
 Numbers = %s"N" [ ( %s"d" / %s"l" / %s"o" ) ]
 Punctuation = %s"P" [ ( %x63-66 ; 'c'-'f'
  / %s"i" / %s"o" / %s"s" ) ]
 Separators = %s"Z" [ ( %s"l" / %s"p" / %s"s" ) ]
 Symbols = %s"S" [ ( %s"c" / %s"k" / %s"m" / %s"o" ) ]
-Others = %s"C" [ ( %s"c" / %s"f" / %x6E-6F ; 'n'-'o'
- ) ]
+Others = %s"C" [ ( %s"c" / %s"f" / %s"n" / %s"o" ) ]
 </pre>
 </div>
 <figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
@@ -1535,7 +1539,7 @@ omitted from I-Regexp.<a href="#section-6.1-2.2" class="pilcrow">¶</a>
 support accesses to Unicode tables that enable
 executing constructs such as <code>\p{Nd}</code>,
 although the <code>\p</code>/<code>\P</code> feature in general is now quite
-widely available. While in principle it's possible to
+widely available. While in principle it is possible to
 translate these into character-class matches, this also requires
 access to those tables. Thus, regexp libraries in severely
 constrained environments may not be able to support I-Regexp
@@ -1559,19 +1563,22 @@ conformance.<a href="#section-6.1-2.3" class="pilcrow">¶</a>
       <h2 id="name-security-considerations">
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-security-considerations" class="section-name selfRef">Security considerations</a>
       </h2>
-<p id="section-8-1">As discussed in <a href="#background" class="auto internal xref">Section 6</a>, more complex regexp libraries may
+<p id="section-8-1">While technically out of scope of this specification, Section <span><a href="https://rfc-editor.org/rfc/rfc3629#section-10" class="relref">10</a> (<a href="https://rfc-editor.org/rfc/rfc3629#section-10" class="relref">Security Considerations</a>)</span> of <span>[<a href="#RFC3629" class="cite xref">STD63</a>]</span> applies to implementations.
+Particular note needs to be taken of the last paragraph of Section <span><a href="https://rfc-editor.org/rfc/rfc3629#section-3" class="relref">3</a> (<a href="https://rfc-editor.org/rfc/rfc3629#section-3" class="relref">UTF-8 definition</a>)</span> of <span>[<a href="#RFC3629" class="cite xref">STD63</a>]</span>; an I-Regexp implementation may need to
+mitigate limitations of the platform implementation in this regard.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-2">As discussed in <a href="#background" class="auto internal xref">Section 6</a>, more complex regexp libraries may
 contain exploitable bugs leading to crashes and remote code
 execution.  There is also the problem that such libraries often have
 hard-to-predict performance characteristics, leading to attacks
 that overload an implementation by matching against an expensive
-attacker-controlled regexp.<a href="#section-8-1" class="pilcrow">¶</a></p>
-<p id="section-8-2">I-Regexps have been designed to allow implementation in a way that is
+attacker-controlled regexp.<a href="#section-8-2" class="pilcrow">¶</a></p>
+<p id="section-8-3">I-Regexps have been designed to allow implementation in a way that is
 resilient to both threats; this objective needs to be addressed
 throughout the implementation effort.
 Non-checking implementations (see <a href="#checking" class="auto internal xref">Section 3.1</a>) are likely to expose
 security limitations of any regexp engine they use, which may be less
 problematic if that engine has been built with security considerations
-in mind (e.g., <span>[<a href="#RE2" class="cite xref">RE2</a>]</span>); a checking implementation is still <span class="bcp14">RECOMMENDED</span>.<a href="#section-8-2" class="pilcrow">¶</a></p>
+in mind (e.g., <span>[<a href="#RE2" class="cite xref">RE2</a>]</span>); a checking implementation is still <span class="bcp14">RECOMMENDED</span>.<a href="#section-8-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <section id="section-9">
@@ -1633,6 +1640,10 @@ in mind (e.g., <span>[<a href="#RE2" class="cite xref">RE2</a>]</span>); a check
 <dt id="RFC7493">[RFC7493]</dt>
         <dd>
 <span class="refAuthor">Bray, T., Ed.</span>, <span class="refTitle">"The I-JSON Message Format"</span>, <span class="seriesInfo">RFC 7493</span>, <span class="seriesInfo">DOI 10.17487/RFC7493</span>, <time datetime="2015-03" class="refDate">March 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7493">https://www.rfc-editor.org/rfc/rfc7493</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3629">[STD63]</dt>
+        <dd>
+<span class="refAuthor">Yergeau, F.</span>, <span class="refTitle">"UTF-8, a transformation format of ISO 10646"</span>, <span class="seriesInfo">STD 63</span>, <span class="seriesInfo">RFC 3629</span>, <span class="seriesInfo">DOI 10.17487/RFC3629</span>, <time datetime="2003-11" class="refDate">November 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3629">https://www.rfc-editor.org/rfc/rfc3629</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="UNICODE-GLOSSARY">[UNICODE-GLOSSARY]</dt>
       <dd>
@@ -1729,11 +1740,11 @@ rfc8944.txt  596 [0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){7}
       <h2 id="name-acknowledgements">
 <a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
       </h2>
-<p id="appendix-B-1">This draft has been motivated by the discussion in the IETF JSONPATH
+<p id="appendix-B-1">This specification has been motivated by the discussion in the IETF JSONPATH
 WG about whether to include a regexp mechanism into the JSONPath query
 expression specification, as well as by previous discussions about the
 YANG <code>pattern</code> and CDDL <code>.regexp</code> features.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
-<p id="appendix-B-2">The basic approach for this draft was inspired by <span><a href="#RFC7493" class="internal xref">The
+<p id="appendix-B-2">The basic approach for this specification was inspired by <span><a href="#RFC7493" class="internal xref">The
 I-JSON Message Format</a> [<a href="#RFC7493" class="cite xref">RFC7493</a>]</span>.<a href="#appendix-B-2" class="pilcrow">¶</a></p>
 </section>
 </div>

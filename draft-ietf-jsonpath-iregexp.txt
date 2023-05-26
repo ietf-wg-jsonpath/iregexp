@@ -5,8 +5,8 @@
 Network Working Group                                         C. Bormann
 Internet-Draft                                    Universität Bremen TZI
 Intended status: Standards Track                                 T. Bray
-Expires: 5 November 2023                                      Textuality
-                                                              4 May 2023
+Expires: 23 November 2023                                     Textuality
+                                                             22 May 2023
 
 
                 I-Regexp: An Interoperable Regexp Format
@@ -48,7 +48,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 November 2023.
+   This Internet-Draft will expire on 23 November 2023.
 
 Copyright Notice
 
@@ -100,7 +100,10 @@ Table of Contents
    expression matches a given piece of text.
 
    I-Regexp supports the entire repertoire of Unicode characters
-   (Unicode scalar values).
+   (Unicode scalar values); both the I-Regexp strings themselves and the
+   strings they are matched against are sequences of Unicode scalar
+   values (often represented in UTF-8 encoding form [STD63] for
+   interchange).
 
    I-Regexp is a subset of XSD regular expressions [XSD-2].
 
@@ -154,21 +157,18 @@ Table of Contents
    i-regexp = branch *( "|" branch )
    branch = *piece
    piece = atom [ quantifier ]
-   quantifier = ( %x2A-2B ; '*'-'+'
-    / "?" ) / ( "{" quantity "}" )
-   quantity = QuantExact [ "," [ QuantExact ] ]
+   quantifier = ( "*" / "+" / "?" ) / range-quantifier
+   range-quantifier = "{" QuantExact [ "," [ QuantExact ] ] "}"
    QuantExact = 1*%x30-39 ; '0'-'9'
 
    atom = NormalChar / charClass / ( "(" i-regexp ")" )
-   NormalChar = ( %x00-27 / %x2C-2D ; ','-'-'
-    / %x2F-3E ; '/'-'>'
+   NormalChar = ( %x00-27 / "," / "-" / %x2F-3E ; '/'-'>'
     / %x40-5A ; '@'-'Z'
     / %x5E-7A ; '^'-'z'
     / %x7E-10FFFF )
    charClass = "." / SingleCharEsc / charClassEsc / charClassExpr
    SingleCharEsc = "\" ( %x28-2B ; '('-'+'
-    / %x2D-2E ; '-'-'.'
-    / "?" / %x5B-5E ; '['-'^'
+    / "-" / "." / "?" / %x5B-5E ; '['-'^'
     / %s"n" / %s"r" / %s"t" / %x7B-7D ; '{'-'}'
     )
    charClassEsc = catEsc / complEsc
@@ -181,17 +181,14 @@ Table of Contents
    charProp = IsCategory
    IsCategory = Letters / Marks / Numbers / Punctuation / Separators /
        Symbols / Others
-   Letters = %s"L" [ ( %x6C-6D ; 'l'-'m'
-    / %s"o" / %x74-75 ; 't'-'u'
-    ) ]
+   Letters = %s"L" [ ( %s"l" / %s"m" / %s"o" / %s"t" / %s"u" ) ]
    Marks = %s"M" [ ( %s"c" / %s"e" / %s"n" ) ]
    Numbers = %s"N" [ ( %s"d" / %s"l" / %s"o" ) ]
    Punctuation = %s"P" [ ( %x63-66 ; 'c'-'f'
     / %s"i" / %s"o" / %s"s" ) ]
    Separators = %s"Z" [ ( %s"l" / %s"p" / %s"s" ) ]
    Symbols = %s"S" [ ( %s"c" / %s"k" / %s"m" / %s"o" ) ]
-   Others = %s"C" [ ( %s"c" / %s"f" / %x6E-6F ; 'n'-'o'
-    ) ]
+   Others = %s"C" [ ( %s"c" / %s"f" / %s"n" / %s"o" ) ]
 
                      Figure 1: I-Regexp Syntax in ABNF
 
@@ -334,7 +331,7 @@ Table of Contents
    *  Not all regexp implementations support accesses to Unicode tables
       that enable executing constructs such as \p{Nd}, although the
       \p/\P feature in general is now quite widely available.  While in
-      principle it's possible to translate these into character-class
+      principle it is possible to translate these into character-class
       matches, this also requires access to those tables.  Thus, regexp
       libraries in severely constrained environments may not be able to
       support I-Regexp conformance.
@@ -344,6 +341,12 @@ Table of Contents
    This document makes no requests of IANA.
 
 8.  Security considerations
+
+   While technically out of scope of this specification, Section 10
+   (Security Considerations) of [STD63] applies to implementations.
+   Particular note needs to be taken of the last paragraph of Section 3
+   (UTF-8 definition) of [STD63]; an I-Regexp implementation may need to
+   mitigate limitations of the platform implementation in this regard.
 
    As discussed in Section 6, more complex regexp libraries may contain
    exploitable bugs leading to crashes and remote code execution.  There
@@ -419,6 +422,10 @@ Table of Contents
    [RFC7493]  Bray, T., Ed., "The I-JSON Message Format", RFC 7493,
               DOI 10.17487/RFC7493, March 2015,
               <https://www.rfc-editor.org/rfc/rfc7493>.
+
+   [STD63]    Yergeau, F., "UTF-8, a transformation format of ISO
+              10646", STD 63, RFC 3629, DOI 10.17487/RFC3629, November
+              2003, <https://www.rfc-editor.org/rfc/rfc3629>.
 
    [UNICODE-GLOSSARY]
               Unicode, Inc., "Glossary of Unicode Terms",
@@ -499,13 +506,13 @@ Appendix A.  Regexps and Similar Constructs in Recent Published RFCs
 
 Acknowledgements
 
-   This draft has been motivated by the discussion in the IETF JSONPATH
-   WG about whether to include a regexp mechanism into the JSONPath
-   query expression specification, as well as by previous discussions
-   about the YANG pattern and CDDL .regexp features.
+   This specification has been motivated by the discussion in the IETF
+   JSONPATH WG about whether to include a regexp mechanism into the
+   JSONPath query expression specification, as well as by previous
+   discussions about the YANG pattern and CDDL .regexp features.
 
-   The basic approach for this draft was inspired by The I-JSON Message
-   Format [RFC7493].
+   The basic approach for this specification was inspired by The I-JSON
+   Message Format [RFC7493].
 
 Authors' Addresses
 
