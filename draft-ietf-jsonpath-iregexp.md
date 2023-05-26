@@ -287,8 +287,7 @@ Security considerations
 =======================
 
 While technically out of scope of this specification, {{Section 10
-(Security Considerations) of -utf8}} applies to almost any practical
-implementation.
+(Security Considerations) of -utf8}} applies to implementations.
 Particular note needs to be taken of the last paragraph of {{Section 3
 (UTF-8 definition) of -utf8}}; an I-Regexp implementation may need to
 mitigate limitations of the platform implementation in this regard.
