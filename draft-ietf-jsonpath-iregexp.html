@@ -1579,6 +1579,27 @@ Non-checking implementations (see <a href="#checking" class="auto internal xref"
 security limitations of any regexp engine they use, which may be less
 problematic if that engine has been built with security considerations
 in mind (e.g., <span>[<a href="#RE2" class="cite xref">RE2</a>]</span>); a checking implementation is still <span class="bcp14">RECOMMENDED</span>.<a href="#section-8-3" class="pilcrow">¶</a></p>
+<p id="section-8-4">Implementations that specifically implement the I-Regexp subset can,
+with care, be designed to generally run in linear time and space in
+the input, and to detect when that would not be the case (see below).<a href="#section-8-4" class="pilcrow">¶</a></p>
+<p id="section-8-5">Existing regexp engines should be able to easily handle most I-Regexps
+(after the adjustments discussed in <a href="#mapping" class="auto internal xref">Section 5</a>), but may consume
+excessive resources for some types of I-Regexps or outright reject
+them because they cannot guarantee efficient execution.<a href="#section-8-5" class="pilcrow">¶</a></p>
+<p id="section-8-6">Specifically, range quantifiers (as in <code>a{2,4}</code>) provide specific
+challenges for both existing and I-Regexp specific implementations.
+These may therefore limit range quantifiers in composability
+(disallowing nested range quantifiers such as <code>(a{2,4}){2,4}</code>) or
+range (disallowing very large ranges such as <code>a{20,200000}</code>), or detect
+and reject any excessive resource consumption caused by them.
+Note that different versions of the same regexp library may be more or
+less vulnerable to excessive resource consumption for these cases.<a href="#section-8-6" class="pilcrow">¶</a></p>
+<p id="section-8-7">I-Regexp implementations that are used to evaluate regexps from
+untrusted sources need to be robust to these cases.
+Implementers using existing regexp libraries are encouraged to check
+their documentation to see if mitigations are configurable, such as
+limits in resource consumption, and to document their own degree of
+robustness resulting from employing such mitigations.<a href="#section-8-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <section id="section-9">
