@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-04-27T01:04:28.479161+00:00",
+  "timestamp": "2023-05-28T01:11:19.589994+00:00",
   "repo": "ietf-wg-jsonpath/iregexp",
   "labels": [
     {
@@ -2104,6 +2104,225 @@
           "body": "",
           "createdAt": "2023-04-26T18:01:58Z",
           "updatedAt": "2023-04-26T18:01:58Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 25,
+      "id": "PR_kwDOFeByHs5RCXMy",
+      "title": "Secdir discussion: non-seccons",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/25",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Address comments from Martin D\u00fcrst that came up in the secdir discussion and are not about the seccons Section",
+      "createdAt": "2023-05-22T16:48:53Z",
+      "updatedAt": "2023-05-23T17:04:21Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "d789a05dba6249a8fa262199a3e0e11486d429db",
+      "headRepository": "ietf-wg-jsonpath/iregexp",
+      "headRefName": "secdir-discussion",
+      "headRefOid": "e46e5c960450b923c4eeb960c454b5b0cf64d357",
+      "closedAt": "2023-05-23T17:04:21Z",
+      "mergedAt": "2023-05-23T17:04:21Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "d5a1a4848a9b299f67ccdfd1d09d0422bedc319f"
+      },
+      "comments": [
+        {
+          "author": "duerst",
+          "authorAssociation": "NONE",
+          "body": "@cabo Looks good to me!",
+          "createdAt": "2023-05-23T12:10:05Z",
+          "updatedAt": "2023-05-23T12:10:05Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOFeByHs5V1j9A",
+          "commit": {
+            "abbreviatedOid": "e46e5c9"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2023-05-23T16:08:38Z",
+          "updatedAt": "2023-05-23T16:08:38Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 26,
+      "id": "PR_kwDOFeByHs5RKilj",
+      "title": "Potential PR to clarify the Unicode scalar value nature some more",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/26",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "(Based on Rob Sayre's comment in the secdir thread.)\r\n\r\nThis is adding redundant information, but it is not too easy to extract this information from the references, so it may be missed.",
+      "createdAt": "2023-05-23T16:22:05Z",
+      "updatedAt": "2023-05-26T09:25:44Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "d789a05dba6249a8fa262199a3e0e11486d429db",
+      "headRepository": "ietf-wg-jsonpath/iregexp",
+      "headRefName": "rob-sayre-unicode",
+      "headRefOid": "8dbe195550e0bbffe2b98f6655c198599002c29b",
+      "closedAt": "2023-05-26T09:25:44Z",
+      "mergedAt": "2023-05-26T09:25:44Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "b6477e0452b3f7d9db55394344ca52b1bd5564f7"
+      },
+      "comments": [
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "I added a paragraph to the start of the security considerations that points to the UTF-8 STD (STD63).  I don't think we need to provide a full set of UTF-8 security considerations ourselves, but I think the pointer is useful.",
+          "createdAt": "2023-05-25T10:32:31Z",
+          "updatedAt": "2023-05-25T10:32:31Z"
+        },
+        {
+          "author": "sayrer",
+          "authorAssociation": "NONE",
+          "body": "I think this text covers the concern, but you don't need to say \"any limitations\". Just \"limitations\" will work.\r\n\r\nThe security considerations additions are specific to UTF-8, but that's enough to sketch out the problem space, and I'm not sure there's a better reference. Anyone that has to deal with WTF-8* etc will pick up on it.\r\n\r\n* http://simonsapin.github.io/wtf-8/",
+          "createdAt": "2023-05-25T18:48:00Z",
+          "updatedAt": "2023-05-25T18:48:00Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOFeByHs5V1wrU",
+          "commit": {
+            "abbreviatedOid": "772ec8b"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "I'm OK with this change, but Rob also pointed out that the security considerations could benefit from pointing out that some implementations might not defend themselves well from malformed input strings and an attacker could potentially cause crashes.",
+          "createdAt": "2023-05-23T16:29:28Z",
+          "updatedAt": "2023-05-23T16:29:28Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOFeByHs5WGO7S",
+          "commit": {
+            "abbreviatedOid": "dc6883d"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-05-25T18:50:40Z",
+          "updatedAt": "2023-05-25T18:50:49Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "I'd cut this back to just \"applies to implementations\".  I'm a bit allergic to unspecific language like \"almost any\" and \"practical\".",
+              "createdAt": "2023-05-25T18:50:40Z",
+              "updatedAt": "2023-05-25T18:50:49Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 27,
+      "id": "PR_kwDOFeByHs5RKtEf",
+      "title": "Address secdir review comment on DoS susceptibility",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/27",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "by summarizing input from Martin D\u00fcrst.\r\n\r\nThis might need a bit more editorial attention.",
+      "createdAt": "2023-05-23T16:57:33Z",
+      "updatedAt": "2023-05-28T00:29:55Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "d789a05dba6249a8fa262199a3e0e11486d429db",
+      "headRepository": "ietf-wg-jsonpath/iregexp",
+      "headRefName": "secdir-seccons",
+      "headRefOid": "e19b930dafd9b569f5d8b98e139ab5e9df075359",
+      "closedAt": "2023-05-26T20:59:52Z",
+      "mergedAt": "2023-05-26T20:59:52Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "b53fbe31de0b2537d6e37c2784b30217af7a6ba1"
+      },
+      "comments": [
+        {
+          "author": "ounsworth",
+          "authorAssociation": "NONE",
+          "body": "Thank you for adding these paragraphs.\r\n\r\nTo me, the value-add to these paragraphs is that you say:\r\n\r\n> As discussed in [Section 6](https://www.ietf.org/archive/id/draft-ietf-jsonpath-iregexp-07.html#background), more complex regexp libraries may contain exploitable bugs leading to crashes and remote code execution. There is also the problem that such libraries often have hard-to-predict performance characteristics, leading to attacks that overload an implementation by matching against an expensive attacker-controlled regexp.\r\n> I-Regexps have been designed to allow implementation in a way that is resilient to both threats;\r\n\r\nOne could read that as \"If you use I-Regexp then you are immune\", which I think is misleading, so I appreciate adding the extra discussion.",
+          "createdAt": "2023-05-28T00:29:54Z",
+          "updatedAt": "2023-05-28T00:29:54Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOFeByHs5WPJSv",
+          "commit": {
+            "abbreviatedOid": "e19b930"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "This is well-written and AFAICT correct. I'm unconvinced of the value-add to the spec, but if the feedback is that we need it, I'm not going to object.",
+          "createdAt": "2023-05-26T19:12:57Z",
+          "updatedAt": "2023-05-26T19:12:57Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 28,
+      "id": "PR_kwDOFeByHs5RKuy7",
+      "title": "Nit: Not a \"draft\" forever",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/28",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-05-23T17:03:12Z",
+      "updatedAt": "2023-05-23T17:35:33Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "d789a05dba6249a8fa262199a3e0e11486d429db",
+      "headRepository": "ietf-wg-jsonpath/iregexp",
+      "headRefName": "nit-draft",
+      "headRefOid": "1b920de4fb3293e474d860672e28a9ca839fe54d",
+      "closedAt": "2023-05-23T17:35:32Z",
+      "mergedAt": "2023-05-23T17:35:32Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "79d84d9ec951b28fc19baafd7550f3214a3a8414"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOFeByHs5V2I3P",
+          "commit": {
+            "abbreviatedOid": "1b920de"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2023-05-23T17:32:15Z",
+          "updatedAt": "2023-05-23T17:32:15Z",
           "comments": []
         }
       ]
