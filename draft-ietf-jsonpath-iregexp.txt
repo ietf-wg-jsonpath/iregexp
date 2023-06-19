@@ -5,8 +5,8 @@
 Network Working Group                                         C. Bormann
 Internet-Draft                                    Universität Bremen TZI
 Intended status: Standards Track                                 T. Bray
-Expires: 23 November 2023                                     Textuality
-                                                             22 May 2023
+Expires: 28 November 2023                                     Textuality
+                                                             27 May 2023
 
 
                 I-Regexp: An Interoperable Regexp Format
@@ -48,7 +48,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 November 2023.
+   This Internet-Draft will expire on 28 November 2023.
 
 Copyright Notice
 
@@ -370,16 +370,16 @@ Table of Contents
    Existing regexp engines should be able to easily handle most
    I-Regexps (after the adjustments discussed in Section 5), but may
    consume excessive resources for some types of I-Regexps or outright
-   reject them because they cannot guarantee efficient execution.
+   reject them because they cannot guarantee efficient execution.  (Note
+   that different versions of the same regexp library may be more or
+   less vulnerable to excessive resource consumption for these cases.)
 
-   Specifically, range quantifiers (as in a{2,4}) provide specific
-   challenges for both existing and I-Regexp specific implementations.
+   Specifically, range quantifiers (as in a{2,4}) provide particular
+   challenges for both existing and I-Regexp focused implementations.
    These may therefore limit range quantifiers in composability
    (disallowing nested range quantifiers such as (a{2,4}){2,4}) or range
    (disallowing very large ranges such as a{20,200000}), or detect and
-   reject any excessive resource consumption caused by them.  Note that
-   different versions of the same regexp library may be more or less
-   vulnerable to excessive resource consumption for these cases.
+   reject any excessive resource consumption caused by them.
 
    I-Regexp implementations that are used to evaluate regexps from
    untrusted sources need to be robust to these cases.  Implementers
@@ -432,9 +432,9 @@ Table of Contents
    [I-D.ietf-jsonpath-base]
               Gössner, S., Normington, G., and C. Bormann, "JSONPath:
               Query expressions for JSON", Work in Progress, Internet-
-              Draft, draft-ietf-jsonpath-base-13, 15 April 2023,
+              Draft, draft-ietf-jsonpath-base-14, 10 June 2023,
               <https://datatracker.ietf.org/doc/html/draft-ietf-
-              jsonpath-base-13>.
+              jsonpath-base-14>.
 
    [PCRE2]    "Perl-compatible Regular Expressions (revised API:
               PCRE2)", n.d., <http://pcre.org/current/doc/html/>.
