@@ -5,7 +5,7 @@ title: >
   I-Regexp: An Interoperable Regexp Format
 abbrev: I-Regexp
 docname: draft-ietf-jsonpath-iregexp-latest
-date: 2023-05-22
+date: 2023-05-27
 
 keyword: Internet-Draft
 cat: std
@@ -315,15 +315,15 @@ Existing regexp engines should be able to easily handle most I-Regexps
 (after the adjustments discussed in {{mapping}}), but may consume
 excessive resources for some types of I-Regexps or outright reject
 them because they cannot guarantee efficient execution.
+(Note that different versions of the same regexp library may be more or
+less vulnerable to excessive resource consumption for these cases.)
 
-Specifically, range quantifiers (as in `a{2,4}`) provide specific
-challenges for both existing and I-Regexp specific implementations.
+Specifically, range quantifiers (as in `a{2,4}`) provide particular
+challenges for both existing and I-Regexp focused implementations.
 These may therefore limit range quantifiers in composability
 (disallowing nested range quantifiers such as `(a{2,4}){2,4}`) or
 range (disallowing very large ranges such as `a{20,200000}`), or detect
 and reject any excessive resource consumption caused by them.
-Note that different versions of the same regexp library may be more or
-less vulnerable to excessive resource consumption for these cases.
 
 I-Regexp implementations that are used to evaluate regexps from
 untrusted sources need to be robust to these cases.
