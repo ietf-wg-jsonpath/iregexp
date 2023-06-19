@@ -5,7 +5,7 @@ title: >
   I-Regexp: An Interoperable Regexp Format
 abbrev: I-Regexp
 docname: draft-ietf-jsonpath-iregexp-latest
-date: 2023-05-27
+date: 2023-06-19
 
 keyword: Internet-Draft
 cat: std
@@ -63,6 +63,10 @@ informative:
     date: 2020-06
     seriesinfo:
       ECMA: Standard ECMA-262, 11th Edition
+  iregexp:
+    title: A Tool for working with I-Regexp
+    target: https://github.com/cabo/iregexp
+
 
 --- abstract
 
@@ -350,6 +354,25 @@ regular expressions validate against the ABNF in {{iregexp-abnf}}.
 ~~~
 {: #iregexp-examples title="Example regular expressions extracted from
 RFCs"}
+
+A Tool for Working with I-Regexp {#tool}
+================================
+
+This appendix is for information only.
+
+A rough tool for working with I-Regexp is available:
+
+~~~~ shell
+gem install iregexp
+~~~~
+{: #tool-install title="I-Regexp tool installation"}
+
+It can syntax check an I-Regexp, generate an abstract syntax tree in
+JSON form from an I-Regexp, generate some example strings that match an
+I-Regexp, and run small test sets (including a provided one).
+
+Please see the source code repository {{iregexp}} for usage instructions, the
+source code, and a wiki for collecting additional information.
 
 Acknowledgements
 ================
