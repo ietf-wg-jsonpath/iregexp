@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-05-28T01:11:19.589994+00:00",
+  "timestamp": "2023-06-20T01:08:13.609724+00:00",
   "repo": "ietf-wg-jsonpath/iregexp",
   "labels": [
     {
@@ -2323,6 +2323,96 @@
           "body": "",
           "createdAt": "2023-05-23T17:32:15Z",
           "updatedAt": "2023-05-23T17:32:15Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 29,
+      "id": "PR_kwDOFeByHs5TWRvd",
+      "title": "(Editorial) post-07",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/29",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Minor editorial comments:\r\n\r\nMartin D\u00fcrst 2023-05-27\r\n",
+      "createdAt": "2023-06-19T14:26:32Z",
+      "updatedAt": "2023-06-19T18:10:13Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "b53fbe31de0b2537d6e37c2784b30217af7a6ba1",
+      "headRepository": "ietf-wg-jsonpath/iregexp",
+      "headRefName": "editorial-post-07",
+      "headRefOid": "18820fdaca4f123ad55a89c03429e14298e15c1d",
+      "closedAt": "2023-06-19T18:10:12Z",
+      "mergedAt": "2023-06-19T18:10:12Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "213972c49d77e646f1d5267556e0ae3a592e1fb0"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOFeByHs5Ym_la",
+          "commit": {
+            "abbreviatedOid": "18820fd"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2023-06-19T17:31:26Z",
+          "updatedAt": "2023-06-19T17:31:26Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 30,
+      "id": "PR_kwDOFeByHs5TXgBp",
+      "title": "Potential appendix about iregexp tool",
+      "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/30",
+      "state": "OPEN",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "(In response to Rob Wilton's IESG comment.)",
+      "createdAt": "2023-06-19T18:44:44Z",
+      "updatedAt": "2023-06-19T19:00:28Z",
+      "baseRepository": "ietf-wg-jsonpath/iregexp",
+      "baseRefName": "main",
+      "baseRefOid": "213972c49d77e646f1d5267556e0ae3a592e1fb0",
+      "headRepository": "ietf-wg-jsonpath/iregexp",
+      "headRefName": "tool-appendix",
+      "headRefOid": "db76844efbfffe980fc6b7ef5562f68dc3151336",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "I mentioned\r\nhttps://www.rfc-editor.org/rfc/rfc8610#appendix-F\r\nhttps://www.rfc-editor.org/rfc/rfc9052#appendix-C\r\nThere is a tradeoff between providing help to earlier implementers quickly and staying up-to-date for decades.\r\nFor 8610 and 9052, we made the decision that the former was worth it.\r\n9052 even is at Internet Standard level...\r\nBut we should make the decision consciously here as well.\r\n",
+          "createdAt": "2023-06-19T19:00:27Z",
+          "updatedAt": "2023-06-19T19:00:27Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOFeByHs5YnXAe",
+          "commit": {
+            "abbreviatedOid": "db76844"
+          },
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "I have issues with this. RFCs are immutable, as close as anything on the Internet can be. Software tools are fragile, subject to bitrot, forks, human sabotage, etc etc etc.  It feels deeply weird to have a particular software tool called out in an RFC.  Or am I just out of date, has this become a common practice?",
+          "createdAt": "2023-06-19T18:48:16Z",
+          "updatedAt": "2023-06-19T18:48:16Z",
           "comments": []
         }
       ]
