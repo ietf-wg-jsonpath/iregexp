@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-06-20T01:08:13.609724+00:00",
+  "timestamp": "2023-06-22T01:11:56.542266+00:00",
   "repo": "ietf-wg-jsonpath/iregexp",
   "labels": [
     {
@@ -2374,21 +2374,21 @@
       "id": "PR_kwDOFeByHs5TXgBp",
       "title": "Potential appendix about iregexp tool",
       "url": "https://github.com/ietf-wg-jsonpath/iregexp/pull/30",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "cabo",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "(In response to Rob Wilton's IESG comment.)",
       "createdAt": "2023-06-19T18:44:44Z",
-      "updatedAt": "2023-06-19T19:00:28Z",
+      "updatedAt": "2023-06-20T15:59:56Z",
       "baseRepository": "ietf-wg-jsonpath/iregexp",
       "baseRefName": "main",
       "baseRefOid": "213972c49d77e646f1d5267556e0ae3a592e1fb0",
       "headRepository": "ietf-wg-jsonpath/iregexp",
       "headRefName": "tool-appendix",
       "headRefOid": "db76844efbfffe980fc6b7ef5562f68dc3151336",
-      "closedAt": null,
+      "closedAt": "2023-06-20T15:59:55Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -2399,6 +2399,34 @@
           "body": "I mentioned\r\nhttps://www.rfc-editor.org/rfc/rfc8610#appendix-F\r\nhttps://www.rfc-editor.org/rfc/rfc9052#appendix-C\r\nThere is a tradeoff between providing help to earlier implementers quickly and staying up-to-date for decades.\r\nFor 8610 and 9052, we made the decision that the former was worth it.\r\n9052 even is at Internet Standard level...\r\nBut we should make the decision consciously here as well.\r\n",
           "createdAt": "2023-06-19T19:00:27Z",
           "updatedAt": "2023-06-19T19:00:27Z"
+        },
+        {
+          "author": "glyn",
+          "authorAssociation": "NONE",
+          "body": "I'd be concerned about RFCs containing ephemeral information such as links to implementations, test suites, etc. Even the likes of github.com may not persist indefinitely. Then's there's the bitrot etc. mentioned above.\r\n\r\nI wonder if a different solution has been considered. Why not place such information on a page at (datatracker.)ietf.org which could then be edited over time and then link to that page from the spec?",
+          "createdAt": "2023-06-20T07:27:57Z",
+          "updatedAt": "2023-06-20T07:27:57Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "The problem with such a page being an IETF product is that we'd need a process for maintaining it, with all the conflict resolution mechanisms (appeals, escalation, ...) that such a process needs.\r\nPointing to an external resource leaves no doubt that this page is not the result of an IETF consensus process.\r\n\r\nThis is not the first time we have thought about that.\r\n[RFC 7942](https://www.rfc-editor.org/rfc/rfc7942) describes an Implementation Status section that is intended to be removed before publication.  This is appropriate for a list of actual implementations, which is likely to grow and mature over the first few years of an RFC being available, so it gets outdated quickly.\r\n\r\nThe two appendices I'm citing from RFC 8610 and RFC 9052 (was in its predecessor RFC 8152 as well) are pointing to tools that have specifically been written to support the development and use of the standard.  RFC 8949 has a resource (cbor.io) that lists actual implementations; this is a bit harder to maintain after 10 years of implementation activity, but it is still alive.  RFC 8949 also has cbor.me that is a playground for converting instances between interchange and diagnostic form.  Both are not referenced from the standard.\r\n\r\nGiven that there are multiple valid ways this has been done in the past, I'd prefer not to discuss this in general terms (as if this were something new for the IETF that we need to approach in a trail-blazing way, setting the example for others to follow), but to look at the specific outcome we might be able to attain by including (or not including) such an appendix for this particular specification.",
+          "createdAt": "2023-06-20T08:07:51Z",
+          "updatedAt": "2023-06-20T08:07:51Z"
+        },
+        {
+          "author": "timbray",
+          "authorAssociation": "COLLABORATOR",
+          "body": "At this point, my position is that the proposed appendix does not add sufficient value, and that the ABNF is a sufficient basis for building a checker. ",
+          "createdAt": "2023-06-20T15:56:38Z",
+          "updatedAt": "2023-06-20T15:56:38Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "Thank you.  Closing this PR now.",
+          "createdAt": "2023-06-20T15:59:55Z",
+          "updatedAt": "2023-06-20T15:59:55Z"
         }
       ],
       "reviews": [
