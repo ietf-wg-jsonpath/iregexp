@@ -112,7 +112,7 @@ The grammatical rules in this document are to be interpreted as ABNF,
 as described in {{-abnf}} and {{-abnf-cs}}, where the "characters" of
 {{Section 2.3 of -abnf}} are Unicode scalar values.
 
-# Requirements
+# Objectives
 
 I-Regexps should handle the vast majority of practical cases where a
 matching regexp is needed in a data model specification or a query
